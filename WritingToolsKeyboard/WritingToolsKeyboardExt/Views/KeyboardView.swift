@@ -13,23 +13,11 @@ struct KeyboardView: View {
     @State private var showAITools = false
     @State private var selectedText: String?
     
-    // Toggles from shared defaults
-    @AppStorage("show_number_row", store: UserDefaults(suiteName: "group.com.aryamirsepasi.writingtools"))
-    private var showNumberRow = true
-    
-    @AppStorage("enable_suggestions", store: UserDefaults(suiteName: "group.com.aryamirsepasi.writingtools"))
-    private var enableSuggestions = true
-    
     @AppStorage("enable_haptics", store: UserDefaults(suiteName: "group.com.aryamirsepasi.writingtools"))
     private var enableHaptics = true
     
-    // SHIFT + Symbols
     @State private var shiftState: ShiftState = .lower
     @State private var showSymbols = false
-    
-    // Suggestions
-    @State private var suggestions: [String] = []
-    private let keyboardManager = KeyboardManager()
     
     // Key sizing
     private let letterKeyWidth: CGFloat  = 34
@@ -42,35 +30,8 @@ struct KeyboardView: View {
     
     var body: some View {
         VStack(spacing: 0) {
-            // Add a little top padding to separate from the host app's content
+            // Some top padding
             Spacer(minLength: 6)
-            
-            // Always show suggestions row if suggestions are enabled
-            if enableSuggestions {
-                HStack(spacing: 8) {
-                    if suggestions.isEmpty {
-                        Text(" ")
-                            .frame(height: 1) // invisible placeholder to keep row height
-                    } else {
-                        ForEach(suggestions, id: \.self) { suggestion in
-                            Button {
-                                insertSuggestion(suggestion)
-                            } label: {
-                                Text(suggestion)
-                                    .font(.system(size: 16))
-                                    .foregroundColor(.primary)
-                                    .padding(.horizontal, 8)
-                                    .padding(.vertical, 6)
-                                    .background(Color(UIColor.systemGray6))
-                                    .cornerRadius(5)
-                            }
-                        }
-                    }
-                    Spacer()
-                }
-                .padding(.horizontal, 8)
-                .padding(.bottom, 6)
-            }
             
             if showAITools {
                 AIToolsView(selectedText: $selectedText) {
@@ -79,8 +40,9 @@ struct KeyboardView: View {
             } else {
                 // Main keyboard
                 VStack(spacing: 6) {
-                    // Number row, only if toggled on and not in symbol mode
-                    if showNumberRow && !showSymbols {
+                    
+                    // Only show the separate number row when NOT in symbol mode
+                    if !showSymbols {
                         HStack(spacing: 4) {
                             ForEach(numberRow, id: \.self) { key in
                                 KeyButton(
@@ -90,14 +52,12 @@ struct KeyboardView: View {
                                     enableHaptics: enableHaptics
                                 ) {
                                     viewController?.insertText(key)
-                                    updateSuggestions()
                                 }
                             }
                         }
-                        .frame(maxWidth: .infinity)
                     }
                     
-                    // Main rows: either letters or symbols
+                    // Main rows (alphabetic or symbols)
                     ForEach(currentRows, id: \.self) { row in
                         HStack(spacing: 4) {
                             ForEach(row, id: \.self) { key in
@@ -115,7 +75,6 @@ struct KeyboardView: View {
                                 }
                             }
                         }
-                        .frame(maxWidth: .infinity)
                     }
                     
                     // Bottom row
@@ -154,7 +113,6 @@ struct KeyboardView: View {
                             enableHaptics: enableHaptics
                         ) {
                             viewController?.handleSpace()
-                            updateSuggestions()
                         }
                         
                         KeyButton(
@@ -164,15 +122,12 @@ struct KeyboardView: View {
                             enableHaptics: enableHaptics
                         ) {
                             viewController?.handleReturn()
-                            updateSuggestions()
                         }
                     }
-                    .frame(maxWidth: .infinity)
                 }
-                .frame(maxWidth: .infinity)
             }
         }
-        // Make sure the background is fully clear to reveal the blur
+        // Make sure the background is clear to reveal the blur behind it
         .background(Color.clear)
         .ignoresSafeArea(.container, edges: .all)
     }
@@ -189,6 +144,7 @@ extension KeyboardView {
         ]
     }
     
+    // Symbol layout already includes numbers in its top row
     private var symbolRows: [[String]] {
         [
             ["1","2","3","4","5","6","7","8","9","0"],
@@ -199,13 +155,10 @@ extension KeyboardView {
     }
     
     private var currentRows: [[String]] {
-        if showSymbols {
-            return symbolRows
-        } else {
-            return displayLetterRows()
-        }
+        showSymbols ? symbolRows : displayLetterRows()
     }
     
+    // This is the separate number row for alphabetical mode only
     private var numberRow: [String] {
         ["1","2","3","4","5","6","7","8","9","0"]
     }
@@ -215,10 +168,7 @@ extension KeyboardView {
         case .lower:
             return baseLetterRows.map { row in
                 row.map { char in
-                    if char == "⇧" || char == "⌫" {
-                        return char
-                    }
-                    return char.lowercased()
+                    (char == "⇧" || char == "⌫") ? char : char.lowercased()
                 }
             }
         case .once, .locked:
@@ -243,7 +193,6 @@ extension KeyboardView {
         default:
             insertCharacter(key)
         }
-        updateSuggestions()
     }
     
     private func handleShift() {
@@ -271,49 +220,5 @@ extension KeyboardView {
         } else {
             viewController?.insertText(key)
         }
-    }
-}
-
-// MARK: - SUGGESTIONS
-
-extension KeyboardView {
-    private func updateSuggestions() {
-        if !enableSuggestions || showSymbols {
-            suggestions = []
-            return
-        }
-        
-        if let proxy = viewController?.textDocumentProxy,
-           let text = proxy.documentContextBeforeInput {
-            
-            suggestions = keyboardManager.getSuggestions(for: text)
-            
-            // Possibly auto-correct
-            if let correction = keyboardManager.getAutocorrectSuggestion(for: text) {
-                let words = text.components(separatedBy: .whitespaces)
-                if let lastWord = words.last {
-                    for _ in 0..<lastWord.count {
-                        viewController?.deleteBackward()
-                    }
-                }
-                viewController?.insertText(correction)
-            }
-        } else {
-            suggestions = []
-        }
-    }
-    
-    private func insertSuggestion(_ suggestion: String) {
-        if let proxy = viewController?.textDocumentProxy,
-           let text = proxy.documentContextBeforeInput {
-            let words = text.components(separatedBy: .whitespaces)
-            if let lastWord = words.last {
-                for _ in 0..<lastWord.count {
-                    viewController?.deleteBackward()
-                }
-            }
-        }
-        viewController?.insertText(suggestion + " ")
-        updateSuggestions()
     }
 }

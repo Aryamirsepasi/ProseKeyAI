@@ -29,8 +29,17 @@ enum OpenAIModel: String, CaseIterable {
 
 class OpenAIProvider: ObservableObject, AIProvider {
     @Published var isProcessing = false
+    
     private var config: OpenAIConfig
     private var currentTask: URLSessionDataTask?
+    
+    // Use of ephemeral session to reduce memory/disk usage
+    private let urlSession: URLSession = {
+        let configuration = URLSessionConfiguration.ephemeral
+        configuration.timeoutIntervalForRequest = 20
+        configuration.timeoutIntervalForResource = 20
+        return URLSession(configuration: configuration)
+    }()
     
     init(config: OpenAIConfig) {
         self.config = config
@@ -44,7 +53,9 @@ class OpenAIProvider: ObservableObject, AIProvider {
         let truncatedUserPrompt = userPrompt.count > 8000 ? String(userPrompt.prefix(8000)) : userPrompt
         
         let baseURL = config.baseURL.isEmpty ? OpenAIConfig.defaultBaseURL : config.baseURL
-        let url = URL(string: "\(baseURL)/chat/completions")!
+        guard let url = URL(string: "\(baseURL)/chat/completions") else {
+            throw AIError.serverError
+        }
         
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
@@ -69,7 +80,9 @@ class OpenAIProvider: ObservableObject, AIProvider {
         let jsonData = try JSONSerialization.data(withJSONObject: requestBody)
         request.httpBody = jsonData
         
-        let (data, response) = try await URLSession.shared.data(for: request)
+        isProcessing = true
+        let (data, response) = try await urlSession.data(for: request)
+        isProcessing = false
         
         guard let httpResponse = response as? HTTPURLResponse,
               httpResponse.statusCode == 200 else {

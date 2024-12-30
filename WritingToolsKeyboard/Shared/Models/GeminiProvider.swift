@@ -21,8 +21,17 @@ enum GeminiModel: String, CaseIterable {
 
 class GeminiProvider: ObservableObject, AIProvider {
     @Published var isProcessing = false
+    
     private var config: GeminiConfig
     private var currentTask: URLSessionDataTask?
+    
+    // Use of ephemeral session to reduce memory/disk usage
+    private let urlSession: URLSession = {
+        let configuration = URLSessionConfiguration.ephemeral
+        configuration.timeoutIntervalForRequest = 20
+        configuration.timeoutIntervalForResource = 20
+        return URLSession(configuration: configuration)
+    }()
     
     init(config: GeminiConfig) {
         self.config = config
@@ -55,7 +64,9 @@ class GeminiProvider: ObservableObject, AIProvider {
         let jsonData = try JSONSerialization.data(withJSONObject: requestBody)
         request.httpBody = jsonData
         
-        let (data, response) = try await URLSession.shared.data(for: request)
+        isProcessing = true
+        let (data, response) = try await urlSession.data(for: request)
+        isProcessing = false
         
         guard let httpResponse = response as? HTTPURLResponse,
               httpResponse.statusCode == 200 else {

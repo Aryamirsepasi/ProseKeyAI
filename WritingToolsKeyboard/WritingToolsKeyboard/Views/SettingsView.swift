@@ -4,15 +4,6 @@ struct SettingsView: View {
     @ObservedObject var appState: AppState
     @AppStorage("keyboard_enabled") private var keyboardEnabled = false
     
-    @AppStorage("show_number_row", store: UserDefaults(suiteName: "group.com.aryamirsepasi.writingtools"))
-    private var showNumberRow = true
-    
-    @AppStorage("enable_autocorrect", store: UserDefaults(suiteName: "group.com.aryamirsepasi.writingtools"))
-    private var enableAutocorrect = true
-    
-    @AppStorage("enable_suggestions", store: UserDefaults(suiteName: "group.com.aryamirsepasi.writingtools"))
-    private var enableSuggestions = true
-    
     @AppStorage("enable_haptics", store: UserDefaults(suiteName: "group.com.aryamirsepasi.writingtools"))
     private var enableHaptics = true
     
@@ -67,10 +58,8 @@ struct SettingsView: View {
                     }
                 }
                 
+                // Keyboard Preferences: only Haptics remains
                 Section(header: Text("Keyboard Preferences")) {
-                    Toggle("Show Number Row", isOn: $showNumberRow)
-                    Toggle("Enable Autocorrect", isOn: $enableAutocorrect)
-                    Toggle("Enable Suggestions", isOn: $enableSuggestions)
                     Toggle("Enable Haptics", isOn: $enableHaptics)
                 }
                 
