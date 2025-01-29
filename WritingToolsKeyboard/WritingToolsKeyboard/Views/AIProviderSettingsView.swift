@@ -12,6 +12,7 @@ struct GeminiSettingsView: View {
     private let models = [
         ("gemini-1.5-pro-latest", "Gemini 1.5 Pro (Most Capable)"),
         ("gemini-1.5-flash-latest", "Gemini 1.5 Flash (Fast)"),
+        ("gemini-2.0-flash-exp", "Gemini 2.0 Flash (extremely intelligent & fast, recommended)"),
     ]
     
     var body: some View {
@@ -55,9 +56,11 @@ struct OpenAISettingsView: View {
     private var organization = ""
     
     @AppStorage("openai_model", store: UserDefaults(suiteName: "group.com.aryamirsepasi.writingtools"))
-    private var model = "gpt-4"
+    private var model = "gpt-4o"
     
     private let models = [
+        "gpt-4o": "GPT-4o (Optimized)",
+        "gpt-4o-mini": "GPT-4o Mini (Lightweight)",
         "gpt-4": "GPT-4 (Most Capable)",
         "gpt-3.5-turbo": "GPT-3.5 Turbo (Faster)"
     ]
@@ -106,6 +109,68 @@ struct OpenAISettingsView: View {
             apiKey: apiKey,
             baseURL: baseURL,
             organization: organization,
+            model: model
+        )
+    }
+}
+
+struct MistralSettingsView: View {
+    @ObservedObject var appState: AppState
+    
+    @AppStorage("mistral_api_key", store: UserDefaults(suiteName: "group.com.aryamirsepasi.writingtools"))
+    private var apiKey = ""
+    
+    @AppStorage("mistral_base_url", store: UserDefaults(suiteName: "group.com.aryamirsepasi.writingtools"))
+    private var baseURL = "https://api.mistral.ai/v1"
+    
+    @AppStorage("mistral_model", store: UserDefaults(suiteName: "group.com.aryamirsepasi.writingtools"))
+    private var model = "mistral-small-latest"
+    
+    private let models = [
+        "mistral-small-latest": "Mistral Small (Fast)",
+        "mistral-medium-latest": "Mistral Medium (Balanced)",
+        "mistral-large-latest": "Mistral Large (Most Capable)",
+    ]
+    
+    var body: some View {
+        Group {
+            // Show as plain text
+            TextField("API Key", text: $apiKey)
+                .autocapitalization(.none)
+                .disableAutocorrection(true)
+            
+            TextField("Base URL", text: $baseURL)
+                .autocapitalization(.none)
+            
+            
+            Picker("Model", selection: $model) {
+                ForEach(Array(models.keys.sorted()), id: \.self) { key in
+                    Text(models[key] ?? key).tag(key)
+                }
+            }
+            
+            Button("Get API Key") {
+                if let url = URL(string: "https://console.mistral.ai/api-keys/") {
+                    UIApplication.shared.open(url)
+                }
+            }
+        }
+        .onChange(of: apiKey) { _, _ in
+            updateConfig()
+        }
+        .onChange(of: baseURL) { _, _ in
+            updateConfig()
+        }
+
+        .onChange(of: model) { _, _ in
+            updateConfig()
+        }
+    }
+    
+    private func updateConfig() {
+        appState.updateMistralConfig(
+            apiKey: apiKey,
+            baseURL: baseURL,
             model: model
         )
     }

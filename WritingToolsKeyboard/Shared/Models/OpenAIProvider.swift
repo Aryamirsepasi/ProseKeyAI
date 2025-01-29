@@ -27,10 +27,11 @@ enum OpenAIModel: String, CaseIterable {
     }
 }
 
+@MainActor
 class OpenAIProvider: ObservableObject, AIProvider {
     @Published var isProcessing = false
     
-    private var config: OpenAIConfig
+     var config: OpenAIConfig
     private var currentTask: URLSessionDataTask?
     
     // Use of ephemeral session to reduce memory/disk usage

@@ -9,20 +9,23 @@ enum GeminiModel: String, CaseIterable {
     case flash8b = "gemini-1.5-flash-8b-latest"
     case flash   = "gemini-1.5-flash-latest"
     case pro     = "gemini-1.5-pro-latest"
-    
+    case twoflash = "gemini-2.0-flash-exp"
+
     var displayName: String {
         switch self {
         case .flash8b: return "Gemini 1.5 Flash 8B (fast)"
         case .flash:   return "Gemini 1.5 Flash (fast & more intelligent, recommended)"
         case .pro:     return "Gemini 1.5 Pro (very intelligent, but slower & lower rate limit)"
+        case .twoflash: return "Gemini 2.0 Flash (extremely intelligent & fast, recommended)"
         }
     }
 }
 
+@MainActor
 class GeminiProvider: ObservableObject, AIProvider {
     @Published var isProcessing = false
     
-    private var config: GeminiConfig
+    var config: GeminiConfig
     private var currentTask: URLSessionDataTask?
     
     // Use of ephemeral session to reduce memory/disk usage

@@ -1,73 +1,53 @@
-# Xcode
-#
-# gitignore contributors: remember to update Global/Xcode.gitignore, Objective-C.gitignore & Swift.gitignore
+# macOS system files
+.DS_Store
+.AppleDouble
+.LSOverride
 
-## User settings
-xcuserdata/
+# Build and Derived Data
+build/
+DerivedData/
 
-## Obj-C/Swift specific
-*.hmap
+# Xcode files
+*.xcworkspace
+*.xcuserdata
+*.xcuserstate
+*.xcarchive
+*.log
 
-## App packaging
-*.ipa
-*.dSYM.zip
-*.dSYM
-
-## Playgrounds
-timeline.xctimeline
-playground.xcworkspace
-
-# Swift Package Manager
-#
-# Add this line if you want to avoid checking in source code from Swift Package Manager dependencies.
- Packages/
- Package.pins
- Package.resolved
- *.xcodeproj
-#
-# Xcode automatically generates this directory with a .xcworkspacedata file and xcuserdata
-# hence it is not needed unless you have added a package configuration file to your project
-# .swiftpm
-
-.build/
+### Xcode Patch ###
+*.xcodeproj/*
+!*.xcodeproj/project.pbxproj
+!*.xcodeproj/xcshareddata/
+!*.xcodeproj/project.xcworkspace/
+!*.xcworkspace/contents.xcworkspacedata
+/*.gcno
+**/xcshareddata/WorkspaceSettings.xcsettings
 
 # CocoaPods
-#
-# We recommend against adding the Pods directory to your .gitignore. However
-# you should judge for yourself, the pros and cons are mentioned at:
-# https://guides.cocoapods.org/using/using-cocoapods.html#should-i-check-the-pods-directory-into-source-control
-#
-# Pods/
-#
-# Add this line if you want to avoid checking in source code from the Xcode workspace
-# *.xcworkspace
+Pods/
+Podfile.lock
 
 # Carthage
-#
-# Add this line if you want to avoid checking in source code from Carthage dependencies.
-# Carthage/Checkouts
-
 Carthage/Build/
 
-# fastlane
-#
-# It is recommended to not store the screenshots in the git repo.
-# Instead, use fastlane to re-generate the screenshots whenever they are needed.
-# For more information about the recommended setup visit:
-# https://docs.fastlane.tools/best-practices/source-control/#source-control
+# Swift Package Manager
+.swiftpm
+Package.resolved
+.build/
 
+# Fastlane
 fastlane/report.xml
 fastlane/Preview.html
-fastlane/screenshots/**/*.png
+fastlane/screenshots
 fastlane/test_output
-.aidigestignore
-codebase.md 
 
+# Archives
+*.xcarchive
 
-WritingToolsKeyboardTests/
-WritingToolsKeyboardUITests/
-WritingToolsKeyboard.xcodeproj
-WritingToolsKeyboard.xcworkspace
+# Secrets
+*.keychain
+*.mobileprovision
 
-.DS_Store
-*.entitlements
+# Temporary files
+*.swp
+*.lock

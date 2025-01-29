@@ -6,6 +6,7 @@ enum AIError: LocalizedError {
     case invalidResponse
     case networkError
     case invalidSelection
+    case modelNotLoaded
     
     var errorDescription: String? {
         switch self {
@@ -19,6 +20,8 @@ enum AIError: LocalizedError {
             return "Network error. Please check your connection."
         case .invalidSelection:
             return "No text selected. Please select some text first."
+        case .modelNotLoaded:
+            return "Model is not loaded. Please download and load the model first."
         }
     }
 }

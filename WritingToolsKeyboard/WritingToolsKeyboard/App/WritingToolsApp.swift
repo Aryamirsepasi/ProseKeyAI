@@ -1,12 +1,24 @@
 import SwiftUI
+import SwiftData
 
 @main
 struct WritingToolsApp: App {
-    @StateObject private var appState = AppState.shared
-    
     var body: some Scene {
         WindowGroup {
-            SettingsView(appState: appState)
+            TabView {
+                MainChatView()
+                    .modelContainer(for: [Thread.self, Message.self])
+                    .tabItem {
+                        Label("Chat", systemImage: "bubble.left.and.bubble.right")
+                    }
+                
+                NavigationView {
+                    SettingsView(appState: AppState.shared)
+                }
+                .tabItem {
+                    Label("Settings", systemImage: "gear")
+                }
+            }
         }
     }
 }

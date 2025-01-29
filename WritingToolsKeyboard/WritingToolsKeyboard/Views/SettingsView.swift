@@ -49,13 +49,19 @@ struct SettingsView: View {
                     Picker("Provider", selection: $appState.currentProvider) {
                         Text("Gemini AI").tag("gemini")
                         Text("OpenAI").tag("openai")
+                        Text("Mistral").tag("mistral")
+                        //Text("Local LLM").tag("local")
                     }
                     
                     if appState.currentProvider == "gemini" {
                         GeminiSettingsView(appState: appState)
-                    } else {
+                    } else if appState.currentProvider == "openai"{
                         OpenAISettingsView(appState: appState)
-                    }
+                    } else if appState.currentProvider == "mistral"{
+                        MistralSettingsView(appState: appState)
+                    } /*else{
+                        LocalLLMSettingsView(evaluator: appState.localLLMProvider)
+                    }*/
                 }
                 
                 // Keyboard Preferences: only Haptics remains
