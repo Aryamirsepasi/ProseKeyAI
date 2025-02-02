@@ -9,8 +9,24 @@ struct SettingsView: View {
     
     @StateObject private var commandsManager = CustomCommandsManager()
     
+    init(appState: AppState) {
+        self.appState = appState
+        let appearance = UINavigationBarAppearance()
+        appearance.configureWithOpaqueBackground()
+        appearance.backgroundColor = UIColor.systemBackground
+        appearance.titleTextAttributes = [.foregroundColor: UIColor.label]
+        appearance.largeTitleTextAttributes = [
+            .foregroundColor: UIColor.label,
+            .font: UIFont.boldSystemFont(ofSize: 34)
+        ]
+        UINavigationBar.appearance().standardAppearance = appearance
+        UINavigationBar.appearance().compactAppearance = appearance
+        UINavigationBar.appearance().scrollEdgeAppearance = appearance
+        UINavigationBar.appearance().prefersLargeTitles = true
+    }
+    
     var body: some View {
-        NavigationView {
+        NavigationStack {
             List {
                 Section(header: Text("Keyboard Status")) {
                     HStack {
@@ -32,13 +48,13 @@ struct SettingsView: View {
                                 .font(.caption)
                                 .foregroundColor(.secondary)
                             
-                            Text("1. Open Settings > General > Keyboard")
+                            Text("1. Press the above button")
                                 .font(.caption)
-                            Text("2. Tap 'Keyboards' > 'Add New Keyboard'")
+                            Text("2. Tap 'Keyboards' > Enable 'Writing Tools'")
                                 .font(.caption)
-                            Text("3. Select 'Writing Tools'")
+                            Text("3. Enable 'Allow Full Access'")
                                 .font(.caption)
-                            Text("4. Enable 'Allow Full Access'")
+                            Text("4. For more convenience, also allow pasting from other apps.")
                                 .font(.caption)
                         }
                         .padding(.vertical, 4)
@@ -50,21 +66,17 @@ struct SettingsView: View {
                         Text("Gemini AI").tag("gemini")
                         Text("OpenAI").tag("openai")
                         Text("Mistral").tag("mistral")
-                        //Text("Local LLM").tag("local")
                     }
                     
                     if appState.currentProvider == "gemini" {
                         GeminiSettingsView(appState: appState)
-                    } else if appState.currentProvider == "openai"{
+                    } else if appState.currentProvider == "openai" {
                         OpenAISettingsView(appState: appState)
-                    } else if appState.currentProvider == "mistral"{
+                    } else if appState.currentProvider == "mistral" {
                         MistralSettingsView(appState: appState)
-                    } /*else{
-                        LocalLLMSettingsView(evaluator: appState.localLLMProvider)
-                    }*/
+                    }
                 }
                 
-                // Keyboard Preferences: only Haptics remains
                 Section(header: Text("Keyboard Preferences")) {
                     Toggle("Enable Haptics", isOn: $enableHaptics)
                 }
@@ -76,12 +88,17 @@ struct SettingsView: View {
                 }
                 
                 Section(header: Text("About")) {
-                    Link("View on GitHub", destination: URL(string: "https://github.com/Aryamirsepasi/writing-tools-keyboard")!)
+                    Link("View on GitHub", destination: URL(string: "https://github.com/Aryamirsepasi/WritingToolsKeyboard")!)
                     Text("Version 1.0.0")
                         .foregroundColor(.secondary)
+                    Text("Developed by Arya Mirsepasi")
+                        .foregroundColor(.secondary)
+                    Link("Website", destination: URL(string: "https://aryamirsepasi.com")!)
                 }
             }
+            .listStyle(.insetGrouped)
             .navigationTitle("Writing Tools")
+            .navigationBarTitleDisplayMode(.large)
         }
     }
     

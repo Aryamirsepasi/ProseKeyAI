@@ -179,7 +179,9 @@ struct AIToolsView: View {
                 let truncatedText = userText.count > 8000 ? String(userText.prefix(8000)) : userText
                 let result = try await AppState.shared.activeProvider.processText(
                     systemPrompt: option.systemPrompt,
-                    userPrompt: truncatedText
+                    userPrompt: truncatedText,
+                    images: [],
+                    streaming: false
                 )
                 await MainActor.run {
                     aiResult = result
@@ -205,7 +207,9 @@ struct AIToolsView: View {
                 let truncatedText = userText.count > 8000 ? String(userText.prefix(8000)) : userText
                 let result = try await AppState.shared.activeProvider.processText(
                     systemPrompt: customPrompt,
-                    userPrompt: truncatedText
+                    userPrompt: truncatedText,
+                    images: [],
+                    streaming: false
                 )
                 await MainActor.run {
                     aiResult = result

@@ -11,6 +11,13 @@ struct ChatsListView: View {
     @Query(sort: \Thread.timestamp, order: .reverse) var threads: [Thread]
     @State var search = ""
     @State var selection: Thread?
+    
+    @State private var showClearHistoryAlert = false
+
+    // Use ProcessInfo to check if we’re running in an extension.
+    private var isExtension: Bool {
+        return ProcessInfo.processInfo.environment["NSExtension"] != nil
+    }
 
     var body: some View {
         NavigationStack {
@@ -48,9 +55,9 @@ struct ChatsListView: View {
                 }
                 .listStyle(.insetGrouped)
                 
-                if filteredThreads.count == 0 {
+                if filteredThreads.isEmpty {
                     ContentUnavailableView {
-                        Label(threads.count == 0 ? "No chats yet" : "No results", systemImage: "message")
+                        Label(threads.isEmpty ? "No chats yet" : "No results", systemImage: "message")
                     }
                 }
             }
@@ -65,8 +72,9 @@ struct ChatsListView: View {
                         }
                     }
                 }
-
-                ToolbarItem(placement: .topBarTrailing) {
+                // Group multiple items on the trailing side.
+                ToolbarItemGroup(placement: .topBarTrailing) {
+                    // Plus button to create a new chat.
                     Button(action: {
                         selection = nil
                         setCurrentThread(nil)
@@ -74,6 +82,7 @@ struct ChatsListView: View {
                         Image(systemName: "plus")
                     }
                     .keyboardShortcut("N", modifiers: [.command])
+                    
                 }
             }
         }
@@ -90,10 +99,8 @@ struct ChatsListView: View {
     private func deleteThreads(at offsets: IndexSet) {
         for offset in offsets {
             let thread = threads[offset]
-            if let currentThread = currentThread {
-                if currentThread.id == thread.id {
-                    setCurrentThread(nil)
-                }
+            if let currentThread = currentThread, currentThread.id == thread.id {
+                setCurrentThread(nil)
             }
             DispatchQueue.main.async {
                 modelContext.delete(thread)
@@ -102,10 +109,8 @@ struct ChatsListView: View {
     }
 
     private func deleteThread(_ thread: Thread) {
-        if let currentThread = currentThread {
-            if currentThread.id == thread.id {
-                setCurrentThread(nil)
-            }
+        if let currentThread = currentThread, currentThread.id == thread.id {
+            setCurrentThread(nil)
         }
         modelContext.delete(thread)
     }
@@ -118,4 +123,5 @@ struct ChatsListView: View {
         }
         appManager.playHaptic()
     }
+    
 }

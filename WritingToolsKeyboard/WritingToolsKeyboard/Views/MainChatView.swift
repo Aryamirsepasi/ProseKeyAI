@@ -41,7 +41,6 @@ struct MainChatView: View {
                 if appManager.installedModels.isEmpty {
                     showOnboarding.toggle()
                 } else {
-                    isPromptFocused = true
                     if let modelName = appManager.currentModelName {
                         _ = try? await llm.load(modelName: modelName)
                     }

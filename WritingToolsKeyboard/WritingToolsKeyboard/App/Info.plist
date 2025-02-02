@@ -39,24 +39,6 @@
         <string>UIInterfaceOrientationLandscapeLeft</string>
         <string>UIInterfaceOrientationLandscapeRight</string>
     </array>
-    <key>NSExtension</key>
-    <dict>
-        <key>NSExtensionAttributes</key>
-        <dict>
-            <key>IsASCIICapable</key>
-            <true/>
-            <key>PrefersRightToLeft</key>
-            <false/>
-            <key>PrimaryLanguage</key>
-            <string>en-US</string>
-            <key>RequestsOpenAccess</key>
-            <true/>
-        </dict>
-        <key>NSExtensionPointIdentifier</key>
-        <string>com.apple.keyboard-service</string>
-        <key>NSExtensionPrincipalClass</key>
-        <string>$(PRODUCT_MODULE_NAME).KeyboardViewController</string>
-    </dict>
     <key>com.apple.security.application-groups</key>
 	<array>
     	<string>group.com.aryamirsepasi.writingtools</string>

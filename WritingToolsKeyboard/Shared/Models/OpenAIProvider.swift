@@ -27,11 +27,10 @@ enum OpenAIModel: String, CaseIterable {
     }
 }
 
-@MainActor
 class OpenAIProvider: ObservableObject, AIProvider {
     @Published var isProcessing = false
     
-     var config: OpenAIConfig
+    var config: OpenAIConfig
     private var currentTask: URLSessionDataTask?
     
     // Use of ephemeral session to reduce memory/disk usage
@@ -46,9 +45,25 @@ class OpenAIProvider: ObservableObject, AIProvider {
         self.config = config
     }
     
-    func processText(systemPrompt: String? = nil, userPrompt: String) async throws -> String {
+    func processText(systemPrompt: String? = "You are a helpful writing assistant.",
+                     userPrompt: String,
+                     images: [Data],
+                     streaming: Bool = false) async throws -> String {
+        
         guard !config.apiKey.isEmpty else {
-            throw AIError.missingAPIKey
+        throw AIError.missingAPIKey
+    }
+        // Run OCR on any attached images.
+        var ocrExtractedText = ""
+        for image in images {
+            do {
+                let recognized = try await OCRManager.shared.performOCR(on: image)
+                if !recognized.isEmpty {
+                    ocrExtractedText += recognized + "\n"
+                }
+            } catch {
+                print("OCR error (OpenAI): \(error.localizedDescription)")
+            }
         }
         
         let truncatedUserPrompt = userPrompt.count > 8000 ? String(userPrompt.prefix(8000)) : userPrompt
@@ -67,9 +82,11 @@ class OpenAIProvider: ObservableObject, AIProvider {
             request.setValue(organization, forHTTPHeaderField: "OpenAI-Organization")
         }
         
-        let messages: [[String: String]] = [
+        let combinedUserPrompt = ocrExtractedText.isEmpty ? truncatedUserPrompt : "\(truncatedUserPrompt)\n\nOCR Extracted Text:\n\(ocrExtractedText)"
+        
+        let messages: [[String: Any]] = [
             ["role": "system", "content": systemPrompt ?? "You are a helpful writing assistant."],
-            ["role": "user", "content": truncatedUserPrompt]
+            ["role": "user", "content": combinedUserPrompt]
         ]
         
         let requestBody: [String: Any] = [

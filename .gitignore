@@ -22,6 +22,8 @@ DerivedData/
 !*.xcworkspace/contents.xcworkspacedata
 /*.gcno
 **/xcshareddata/WorkspaceSettings.xcsettings
+.aidigestignore
+WritingToolsKeyboard/WritingToolsKeyboard.xcodeproj/xcuserdata/
 
 # CocoaPods
 Pods/

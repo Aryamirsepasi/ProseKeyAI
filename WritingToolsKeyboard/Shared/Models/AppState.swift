@@ -16,6 +16,8 @@ class AppState: ObservableObject {
     @Published var geminiProvider: GeminiProvider
     @Published var openAIProvider: OpenAIProvider
     @Published var mistralProvider: MistralProvider
+    @Published var selectedImages: [Data] = []  // Store selected image data
+
     
     var activeProvider: any AIProvider {
         if currentProvider == "openai" {

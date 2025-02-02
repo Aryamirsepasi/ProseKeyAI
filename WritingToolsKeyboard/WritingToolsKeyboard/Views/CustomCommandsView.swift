@@ -62,14 +62,14 @@ struct CustomCommandsView: View {
         .sheet(item: $editingCommand) { cmd in
             CustomCommandEditorView(
                 commandsManager: commandsManager,
-                isPresented: .constant(true),
+                onDismiss: { editingCommand = nil },
                 existingCommand: cmd
             )
         }
         .sheet(isPresented: $isShowingEditor) {
             CustomCommandEditorView(
                 commandsManager: commandsManager,
-                isPresented: $isShowingEditor
+                onDismiss: { isShowingEditor = false }
             )
         }
     }
@@ -78,7 +78,7 @@ struct CustomCommandsView: View {
 // Editor to create or update a CustomCommand
 struct CustomCommandEditorView: View {
     @ObservedObject var commandsManager: CustomCommandsManager
-    @Binding var isPresented: Bool
+    let onDismiss: () -> Void
     
     var existingCommand: CustomCommand? = nil
     
@@ -135,7 +135,7 @@ struct CustomCommandEditorView: View {
             .navigationTitle(existingCommand == nil ? "New Command" : "Edit Command")
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel") { isPresented = false }
+                    Button("Cancel") { onDismiss() }
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Save") {
@@ -150,7 +150,7 @@ struct CustomCommandEditorView: View {
                         } else {
                             commandsManager.addCommand(cmd)
                         }
-                        isPresented = false
+                        onDismiss()
                     }
                     .disabled(name.trimmingCharacters(in: .whitespaces).isEmpty ||
                               prompt.trimmingCharacters(in: .whitespaces).isEmpty)

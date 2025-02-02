@@ -21,7 +21,6 @@ enum MistralModel: String, CaseIterable {
     }
 }
 
-@MainActor
 class MistralProvider: ObservableObject, AIProvider {
     @Published var isProcessing = false
     var config: MistralConfig
@@ -30,8 +29,10 @@ class MistralProvider: ObservableObject, AIProvider {
         self.config = config
     }
     
-    func processText(systemPrompt: String? = "You are a helpful writing assistant.", userPrompt: String) async throws -> String {
-        
+    func processText(systemPrompt: String? = "You are a helpful writing assistant.",
+                     userPrompt: String,
+                     images: [Data],
+                     streaming: Bool = false) async throws -> String {
         isProcessing = true
         defer { isProcessing = false }
         
@@ -44,11 +45,26 @@ class MistralProvider: ObservableObject, AIProvider {
             throw NSError(domain: "MistralAPI", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid URL."])
         }
         
+        // Run OCR on any attached images.
+        var ocrExtractedText = ""
+        for image in images {
+            do {
+                let recognized = try await OCRManager.shared.performOCR(on: image)
+                if !recognized.isEmpty {
+                    ocrExtractedText += recognized + "\n"
+                }
+            } catch {
+                print("OCR error (Mistral): \(error.localizedDescription)")
+            }
+        }
+        
+        let combinedUserPrompt = ocrExtractedText.isEmpty ? userPrompt : "\(userPrompt)\n\nOCR Extracted Text:\n\(ocrExtractedText)"
+        
         var messages: [[String: Any]] = []
         if let systemPrompt = systemPrompt {
             messages.append(["role": "system", "content": systemPrompt])
         }
-        messages.append(["role": "user", "content": userPrompt])
+        messages.append(["role": "user", "content": combinedUserPrompt])
         
         let requestBody: [String: Any] = [
             "model": config.model,

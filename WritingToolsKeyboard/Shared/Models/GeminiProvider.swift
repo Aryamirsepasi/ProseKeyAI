@@ -10,7 +10,7 @@ enum GeminiModel: String, CaseIterable {
     case flash   = "gemini-1.5-flash-latest"
     case pro     = "gemini-1.5-pro-latest"
     case twoflash = "gemini-2.0-flash-exp"
-
+    
     var displayName: String {
         switch self {
         case .flash8b: return "Gemini 1.5 Flash 8B (fast)"
@@ -21,7 +21,6 @@ enum GeminiModel: String, CaseIterable {
     }
 }
 
-@MainActor
 class GeminiProvider: ObservableObject, AIProvider {
     @Published var isProcessing = false
     
@@ -40,14 +39,33 @@ class GeminiProvider: ObservableObject, AIProvider {
         self.config = config
     }
     
-    func processText(systemPrompt: String? = nil, userPrompt: String) async throws -> String {
-        guard !config.apiKey.isEmpty else {
-            throw AIError.missingAPIKey
+    func processText(systemPrompt: String? = "You are a helpful writing assistant.",
+                     userPrompt: String,
+                     images: [Data],
+                     streaming: Bool = false) async throws -> String {        guard !config.apiKey.isEmpty else {
+        throw AIError.missingAPIKey
+    }
+        
+        // Run OCR on any attached images.
+        var ocrExtractedText = ""
+        for image in images {
+            do {
+                let recognized = try await OCRManager.shared.performOCR(on: image)
+                if !recognized.isEmpty {
+                    ocrExtractedText += recognized + "\n"
+                }
+            } catch {
+                print("OCR error (Mistral): \(error.localizedDescription)")
+            }
         }
         
         // Truncate user prompt to avoid extremely large requests
         let truncatedPrompt = userPrompt.count > 8000 ? String(userPrompt.prefix(8000)) : userPrompt
-        let finalPrompt = systemPrompt.map { "\($0)\n\n\(truncatedPrompt)" } ?? truncatedPrompt
+        
+        // Combine system prompt and user prompt
+        let combinedUserPrompt = ocrExtractedText.isEmpty ? truncatedPrompt : "\(truncatedPrompt)\n\nOCR Extracted Text:\n\(ocrExtractedText)"
+        let finalPrompt = systemPrompt.map { "\($0)\n\n\(combinedUserPrompt)" } ?? combinedUserPrompt
+        
         
         let urlString = "https://generativelanguage.googleapis.com/v1beta/models/\(config.modelName):generateContent?key=\(config.apiKey)"
         guard let url = URL(string: urlString) else {
