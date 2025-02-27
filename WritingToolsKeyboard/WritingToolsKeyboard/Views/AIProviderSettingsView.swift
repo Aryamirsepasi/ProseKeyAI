@@ -7,12 +7,14 @@ struct GeminiSettingsView: View {
     private var apiKey = ""
     
     @AppStorage("gemini_model", store: UserDefaults(suiteName: "group.com.aryamirsepasi.writingtools"))
-    private var modelName = "gemini-1.5-pro-latest"
+    private var modelName = "gemini-2.0-flash-exp"
     
     private let models = [
-        ("gemini-1.5-pro-latest", "Gemini 1.5 Pro (Most Capable)"),
-        ("gemini-1.5-flash-latest", "Gemini 1.5 Flash (Fast)"),
-        ("gemini-2.0-flash-exp", "Gemini 2.0 Flash (extremely intelligent & fast, recommended)"),
+        ("gemini-2.0-flash-lite-preview-02-05", "Gemini 2.0 Flash Lite"),
+        ("gemini-2.0-flash-exp", "Gemini 2.0 Flash"),
+        ("gemini-2.0-pro-exp-02-05", "Gemini 2.0 Pro"),
+        ("gemini-2.0-flash-thinking-exp-01-21", "Gemini 2.0 Flash Thinking"),
+        
     ]
     
     var body: some View {
@@ -161,7 +163,7 @@ struct MistralSettingsView: View {
         .onChange(of: baseURL) { _, _ in
             updateConfig()
         }
-
+        
         .onChange(of: model) { _, _ in
             updateConfig()
         }

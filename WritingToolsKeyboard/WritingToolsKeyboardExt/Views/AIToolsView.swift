@@ -57,37 +57,37 @@ struct AIToolsView: View {
     
     private var toolListView: some View {
         VStack(spacing: 10) {
-            
-            // 1) Use Copied Text
-            Button("Use Copied Text") {
-                vm.handleCopiedText()
+            // 1) Two-column layout for copied text section
+            HStack(spacing: 12) {
+                // Left column: Button
+                Button("Use Copied Text") {
+                    vm.handleCopiedText()
+                }
+                .buttonStyle(.bordered)
+                .scaleEffect(0.9)
+                
+                // Right column: Text preview
+                Text(vm.selectedText.map {
+                    $0.count > 50 ? String($0.prefix(50)) + "..." : $0
+                } ?? "None")
+                    .font(.footnote)
+                    .foregroundColor(.secondary)
+                    .lineLimit(1)
+                    .truncationMode(.tail)
+                    .frame(maxWidth: .infinity, alignment: .leading)
             }
-            .buttonStyle(.bordered)
-            .scaleEffect(0.9)
-            
-            let truncated = vm.selectedText.map {
-                $0.count > 50 ? String($0.prefix(50)) + "..." : $0
-            } ?? "None"
-            
-            Text("Current Text: \(truncated)")
-                .font(.footnote)
-                .foregroundColor(.secondary)
-                .lineLimit(1)
-                .truncationMode(.tail)
+            .padding(.horizontal)
             
             // 2) AI Tools Grid
             ScrollView {
                 LazyVGrid(
                     columns: [GridItem(.adaptive(minimum: 80))],
-                    
                     spacing: 8
                 ) {
                     builtInTools
                     customTools
-                    
                 }
             }.padding(.horizontal)
-            
         }
     }
     

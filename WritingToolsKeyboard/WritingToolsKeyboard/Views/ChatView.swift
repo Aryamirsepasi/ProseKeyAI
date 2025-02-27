@@ -53,34 +53,64 @@ struct ChatView: View {
     }
     
     var chatInput: some View {
-            VStack(spacing: 0) {
-                HStack(alignment: .bottom, spacing: 0) {
-                    attachButton
-                    
-                    TextField("Message", text: $prompt, axis: .vertical)
-                        .focused($isPromptFocused)
-                        .textFieldStyle(.plain)
-                        .padding(.horizontal, 16)
-                        .padding(.vertical, 8)
-                        .frame(minHeight: 48)
-                        .onSubmit {
-                            isPromptFocused = true
-                            generate()
+        VStack(spacing: 8) {
+            // Attached Images Row
+            if !appState.selectedImages.isEmpty {
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack(spacing: 8) {
+                        ForEach(appState.selectedImages.indices, id: \.self) { index in
+                            HStack {
+                                Image(systemName: "doc.text.image")
+                                    .foregroundColor(.secondary)
+                                Text("Image \(index + 1)")
+                                    .font(.caption)
+                                    .foregroundColor(.secondary)
+                                Button {
+                                    appState.selectedImages.remove(at: index)
+                                } label: {
+                                    Image(systemName: "xmark.circle.fill")
+                                        .foregroundColor(.red)
+                                }
+                            }
+                            .padding(.horizontal, 8)
+                            .padding(.vertical, 4)
+                            .background(
+                                RoundedRectangle(cornerRadius: 8)
+                                    .fill(Color(uiColor: .tertiarySystemBackground))
+                            )
                         }
-                    
-                    if llm.running {
-                        stopButton
-                    } else {
-                        generateButton
                     }
+                    .padding(.horizontal)
                 }
-                .background(
-                    RoundedRectangle(cornerRadius: 24)
-                        .fill(Color(uiColor: .secondarySystemBackground))
-                )
-                
             }
+            
+            // Existing Input Row
+            HStack(alignment: .bottom, spacing: 0) {
+                attachButton
+                
+                TextField("Message", text: $prompt, axis: .vertical)
+                    .focused($isPromptFocused)
+                    .textFieldStyle(.plain)
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 8)
+                    .frame(minHeight: 48)
+                    .onSubmit {
+                        isPromptFocused = true
+                        generate()
+                    }
+                
+                if llm.running {
+                    stopButton
+                } else {
+                    generateButton
+                }
+            }
+            .background(
+                RoundedRectangle(cornerRadius: 24)
+                    .fill(Color(uiColor: .secondarySystemBackground))
+            )
         }
+    }
     
     var generateButton: some View {
         Button {

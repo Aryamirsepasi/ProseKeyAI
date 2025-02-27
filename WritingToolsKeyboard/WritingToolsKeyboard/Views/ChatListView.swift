@@ -54,6 +54,7 @@ struct ChatsListView: View {
                     setCurrentThread(selection)
                 }
                 .listStyle(.insetGrouped)
+                .padding(.top, 16)
                 
                 if filteredThreads.isEmpty {
                     ContentUnavailableView {
