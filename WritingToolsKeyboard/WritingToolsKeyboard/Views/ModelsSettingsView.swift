@@ -8,10 +8,11 @@ struct ModelsSettingsView: View {
     
     @AppStorage("current_provider") private var currentProvider = "local"
     @State private var showModelInstaller = false
+    @State private var isLoadingModel = false
     
     var body: some View {
         NavigationStack {
-            Form {
+            List {
                 // Provider Selection
                 Section {
                     Picker("Provider", selection: $currentProvider) {
@@ -37,7 +38,12 @@ struct ModelsSettingsView: View {
                                             Text(appManager.modelDisplayName(modelName))
                                                 .tint(.primary)
                                         } icon: {
-                                            Image(systemName: appManager.currentModelName == modelName ? "checkmark.circle.fill" : "circle")
+                                            if isLoadingModel && appManager.currentModelName != modelName {
+                                                ProgressView()
+                                                    .frame(width: 16, height: 16)
+                                            } else {
+                                                Image(systemName: appManager.currentModelName == modelName ? "checkmark.circle.fill" : "circle")
+                                            }
                                         }
                                     }
                                     
@@ -73,7 +79,7 @@ struct ModelsSettingsView: View {
                     }
                 }
             }
-            .formStyle(.grouped)
+            .listStyle(.insetGrouped)
             .navigationTitle("Models")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
@@ -86,13 +92,31 @@ struct ModelsSettingsView: View {
             .sheet(isPresented: $showModelInstaller) {
                 ModelInstallationView()
             }
+            .overlay {
+                if isLoadingModel {
+                    Color.black.opacity(0.1)
+                        .ignoresSafeArea()
+                        .allowsHitTesting(false)
+                }
+            }
         }
     }
     
     private func switchModel(_ modelName: String) async {
-        await llm.switchModel(modelName) 
-        appManager.currentModelName = modelName
-        appManager.playHaptic()
+        if modelName == appManager.currentModelName {
+            return // Already selected
+        }
+        
+        isLoadingModel = true
+        // Load model in background
+        Task.detached(priority: .userInitiated) {
+            await llm.switchModel(modelName)
+            await MainActor.run {
+                appManager.currentModelName = modelName
+                appManager.playHaptic()
+                isLoadingModel = false
+            }
+        }
     }
     
     private func deleteModel(_ modelName: String) {

@@ -89,7 +89,7 @@ struct SettingsView: View {
                 
                 Section(header: Text("About")) {
                     Link("View on GitHub", destination: URL(string: "https://github.com/Aryamirsepasi/WritingToolsKeyboard")!)
-                    Text("Version 1.0.0")
+                    Text("Version 1.0.1")
                         .foregroundColor(.secondary)
                     Text("Developed by Arya Mirsepasi")
                         .foregroundColor(.secondary)

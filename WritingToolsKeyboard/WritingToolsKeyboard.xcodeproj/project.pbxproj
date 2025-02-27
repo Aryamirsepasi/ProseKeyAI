@@ -18,7 +18,6 @@
 		2AE4C8542D470FC00042EB1F /* MLXLMCommon in Frameworks */ = {isa = PBXBuildFile; productRef = 2AE4C8532D470FC00042EB1F /* MLXLMCommon */; };
 		2AE4C8562D470FC00042EB1F /* MLXMNIST in Frameworks */ = {isa = PBXBuildFile; productRef = 2AE4C8552D470FC00042EB1F /* MLXMNIST */; };
 		2AE4C8582D470FC00042EB1F /* MLXVLM in Frameworks */ = {isa = PBXBuildFile; productRef = 2AE4C8572D470FC00042EB1F /* MLXVLM */; };
-		2AE4C85A2D470FC00042EB1F /* StableDiffusion in Frameworks */ = {isa = PBXBuildFile; productRef = 2AE4C8592D470FC00042EB1F /* StableDiffusion */; };
 		2AE4C85C2D470FD40042EB1F /* MLX in Frameworks */ = {isa = PBXBuildFile; productRef = 2AE4C85B2D470FD40042EB1F /* MLX */; };
 		2AE4C85E2D470FD40042EB1F /* MLXFFT in Frameworks */ = {isa = PBXBuildFile; productRef = 2AE4C85D2D470FD40042EB1F /* MLXFFT */; };
 		2AE4C8602D470FD40042EB1F /* MLXFast in Frameworks */ = {isa = PBXBuildFile; productRef = 2AE4C85F2D470FD40042EB1F /* MLXFast */; };
@@ -102,16 +101,6 @@
 			path = WritingToolsKeyboard;
 			sourceTree = "<group>";
 		};
-		2A9BFD912D1F3CD000A8F121 /* WritingToolsKeyboardTests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = WritingToolsKeyboardTests;
-			sourceTree = "<group>";
-		};
-		2A9BFD9B2D1F3CD000A8F121 /* WritingToolsKeyboardUITests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = WritingToolsKeyboardUITests;
-			sourceTree = "<group>";
-		};
 		2A9BFDB02D1F3CEC00A8F121 /* WritingToolsKeyboardExt */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
@@ -142,7 +131,6 @@
 				2AE4C8492D470FA40042EB1F /* MLXFFT in Frameworks */,
 				2A5B324F2D49A1F3006A5F4D /* MarkdownUI in Frameworks */,
 				2AE4C8542D470FC00042EB1F /* MLXLMCommon in Frameworks */,
-				2AE4C85A2D470FC00042EB1F /* StableDiffusion in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -185,8 +173,6 @@
 			children = (
 				2A9BFF382D1F455400A8F121 /* Shared */,
 				2A9BFD802D1F3CCF00A8F121 /* WritingToolsKeyboard */,
-				2A9BFD912D1F3CD000A8F121 /* WritingToolsKeyboardTests */,
-				2A9BFD9B2D1F3CD000A8F121 /* WritingToolsKeyboardUITests */,
 				2A9BFDB02D1F3CEC00A8F121 /* WritingToolsKeyboardExt */,
 				2A9BFD7F2D1F3CCF00A8F121 /* Products */,
 			);
@@ -235,7 +221,6 @@
 				2AE4C8532D470FC00042EB1F /* MLXLMCommon */,
 				2AE4C8552D470FC00042EB1F /* MLXMNIST */,
 				2AE4C8572D470FC00042EB1F /* MLXVLM */,
-				2AE4C8592D470FC00042EB1F /* StableDiffusion */,
 				2A5B324E2D49A1F3006A5F4D /* MarkdownUI */,
 			);
 			productName = WritingToolsKeyboard;
@@ -254,9 +239,6 @@
 			);
 			dependencies = (
 				2A9BFD902D1F3CD000A8F121 /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				2A9BFD912D1F3CD000A8F121 /* WritingToolsKeyboardTests */,
 			);
 			name = WritingToolsKeyboardTests;
 			packageProductDependencies = (
@@ -277,9 +259,6 @@
 			);
 			dependencies = (
 				2A9BFD9A2D1F3CD000A8F121 /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				2A9BFD9B2D1F3CD000A8F121 /* WritingToolsKeyboardUITests */,
 			);
 			name = WritingToolsKeyboardUITests;
 			packageProductDependencies = (
@@ -583,7 +562,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = WritingToolsKeyboard/WritingToolsKeyboard.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_ASSET_PATHS = "\"WritingToolsKeyboard/Preview Content\"";
 				DEVELOPMENT_TEAM = MK2V998W66;
 				ENABLE_PREVIEWS = YES;
@@ -621,7 +600,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = WritingToolsKeyboard/WritingToolsKeyboard.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_ASSET_PATHS = "\"WritingToolsKeyboard/Preview Content\"";
 				DEVELOPMENT_TEAM = MK2V998W66;
 				ENABLE_PREVIEWS = YES;
@@ -908,11 +887,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 2AE4C8502D470FC00042EB1F /* XCRemoteSwiftPackageReference "mlx-swift-examples" */;
 			productName = MLXVLM;
-		};
-		2AE4C8592D470FC00042EB1F /* StableDiffusion */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 2AE4C8502D470FC00042EB1F /* XCRemoteSwiftPackageReference "mlx-swift-examples" */;
-			productName = StableDiffusion;
 		};
 		2AE4C85B2D470FD40042EB1F /* MLX */ = {
 			isa = XCSwiftPackageProductDependency;

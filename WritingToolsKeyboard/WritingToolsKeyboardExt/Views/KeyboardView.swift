@@ -2,22 +2,24 @@ import SwiftUI
 
 struct KeyboardView: View {
     weak var viewController: KeyboardViewController?
-    @StateObject private var vm: AIToolsViewModel
+    @ObservedObject var vm: AIToolsViewModel
     
-    
+    private let defaultsStore = UserDefaults(suiteName: "group.com.aryamirsepasi.writingtools")
     @AppStorage("enable_haptics", store: UserDefaults(suiteName: "group.com.aryamirsepasi.writingtools"))
     private var enableHaptics = true
     
-    init(viewController: KeyboardViewController?) {
+    init(viewController: KeyboardViewController?, vm: AIToolsViewModel? = nil) {
         self.viewController = viewController
-        _vm = StateObject(wrappedValue: AIToolsViewModel(viewController: viewController))
+        if let existingVM = vm {
+            self.vm = existingVM
+        } else {
+            self.vm = AIToolsViewModel(viewController: viewController)
+        }
     }
     
     var body: some View {
-        ZStack {
-            AIToolsView(vm: vm)
-        }
-        .ignoresSafeArea(.container, edges: .all)
-        .background(Color.clear)
+        AIToolsView(vm: vm)
+            .ignoresSafeArea(.container, edges: .all)
+            .background(.clear)
     }
 }

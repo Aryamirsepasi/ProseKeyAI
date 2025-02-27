@@ -4,30 +4,60 @@ import SwiftUI
 class KeyboardViewController: UIInputViewController {
     private var keyboardViewHostingController: UIHostingController<KeyboardView>?
     private var blurEffectView: UIVisualEffectView?
+    private var isHostingControllerAttached = false
+    
+    private lazy var viewModel: AIToolsViewModel = {
+        return AIToolsViewModel(viewController: self)
+    }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Set up the blur effect immediately (this is lightweight)
         setupBlurEffect()
+        
+        Task(priority: .userInitiated) {
+            await prepareHostingController()
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        // Defer creation of the SwiftUI hosting controller until the view appears
-        if keyboardViewHostingController == nil {
-            // Dispatch asynchronously so that the keyboard UI appears quickly
-            DispatchQueue.main.async { [weak self] in
-                self?.setupHostingController()
+        
+        if let hostingController = keyboardViewHostingController {
+            if !isHostingControllerAttached {
+                attachHostingController(hostingController)
             }
+            hostingController.view.isHidden = false
+        } else {
+            setupHostingControllerSynchronously()
         }
         
-        // Show the full-access banner if needed (this check can be done later)
-        if !hasFullAccess {
-            showFullAccessBanner()
+        Task { @MainActor in
+            if !hasFullAccess {
+                showFullAccessBanner()
+            }
         }
     }
     
-    /// Sets up the blur background.
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        keyboardViewHostingController?.view.isHidden = true
+    }
+    
+    @MainActor
+    private func prepareHostingController() async {
+        guard keyboardViewHostingController == nil else { return }
+        
+        let rootView = KeyboardView(viewController: self, vm: viewModel)
+        let hostingController = UIHostingController(rootView: rootView)
+        hostingController.view.backgroundColor = .clear
+        
+        self.keyboardViewHostingController = hostingController
+        
+        if self.isViewLoaded && self.view.window != nil {
+            attachHostingController(hostingController)
+        }
+    }
+    
     private func setupBlurEffect() {
         let blurEffect = UIBlurEffect(style: .systemUltraThinMaterial)
         let blurView = UIVisualEffectView(effect: blurEffect)
@@ -44,12 +74,7 @@ class KeyboardViewController: UIInputViewController {
         ])
     }
     
-    /// Sets up and embeds the SwiftUI hosting controller.
-    private func setupHostingController() {
-        // Create the SwiftUI keyboard view
-        let rootView = KeyboardView(viewController: self)
-        let hostingController = UIHostingController(rootView: rootView)
-        
+    private func attachHostingController(_ hostingController: UIHostingController<KeyboardView>) {
         addChild(hostingController)
         view.addSubview(hostingController.view)
         hostingController.didMove(toParent: self)
@@ -62,27 +87,19 @@ class KeyboardViewController: UIInputViewController {
             hostingController.view.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
         
-        // Cache the hosting controller so it isn’t recreated unnecessarily.
-        self.keyboardViewHostingController = hostingController
+        isHostingControllerAttached = true
+    }
+    
+    private func setupHostingControllerSynchronously() {
+        guard keyboardViewHostingController == nil else { return }
+        
+        let rootView = KeyboardView(viewController: self, vm: viewModel)
+        let hostingController = UIHostingController(rootView: rootView)
         hostingController.view.backgroundColor = .clear
-    }
-    
-    // MARK: - Keyboard Text Methods
-
-    func insertText(_ text: String) {
-        textDocumentProxy.insertText(text)
-    }
-    
-    func deleteBackward() {
-        textDocumentProxy.deleteBackward()
-    }
-    
-    func handleReturn() {
-        textDocumentProxy.insertText("\n")
-    }
-    
-    func handleSpace() {
-        textDocumentProxy.insertText(" ")
+        
+        attachHostingController(hostingController)
+        
+        self.keyboardViewHostingController = hostingController
     }
     
     func getSelectedText() -> String? {
@@ -98,12 +115,20 @@ class KeyboardViewController: UIInputViewController {
         let banner = UIView(frame: CGRect(x: 0, y: 0, width: view.bounds.width, height: bannerHeight))
         banner.backgroundColor = .systemRed
         
-        let label = UILabel(frame: banner.bounds)
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "Please enable Full Access in Settings to use AI features."
         label.textColor = .white
         label.font = .systemFont(ofSize: 12)
         label.textAlignment = .center
         banner.addSubview(label)
+        
+        NSLayoutConstraint.activate([
+            label.topAnchor.constraint(equalTo: banner.topAnchor),
+            label.bottomAnchor.constraint(equalTo: banner.bottomAnchor),
+            label.leadingAnchor.constraint(equalTo: banner.leadingAnchor, constant: 8),
+            label.trailingAnchor.constraint(equalTo: banner.trailingAnchor, constant: -8)
+        ])
         
         view.addSubview(banner)
         

@@ -7,6 +7,7 @@ struct AIToolsView: View {
     @State private var state: AIToolsUIState = .toolList
     @State private var isLoading = false
     @State private var aiResult: String = ""
+    private let minKeyboardHeight: CGFloat = 250
     @State private var chosenOption: WritingOption? = nil
     
     @StateObject private var commandsManager = CustomCommandsManager()
@@ -53,6 +54,8 @@ struct AIToolsView: View {
                 resultView(option)
             }
         }
+        .frame(minHeight: minKeyboardHeight) // Set the minimum height for the keyboard
+
     }
     
     private var toolListView: some View {
