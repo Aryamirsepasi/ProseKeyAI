@@ -1,6 +1,6 @@
 import UIKit
 
-/// Manages haptic feedback with optimized performance
+// Manages haptic feedback with optimized performance
 @MainActor
 final class HapticsManager {
     static let shared = HapticsManager()

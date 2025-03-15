@@ -53,18 +53,6 @@ class OpenAIProvider: ObservableObject, AIProvider {
         guard !config.apiKey.isEmpty else {
         throw AIError.missingAPIKey
     }
-        // Run OCR on any attached images.
-        var ocrExtractedText = ""
-        for image in images {
-            do {
-                let recognized = try await OCRManager.shared.performOCR(on: image)
-                if !recognized.isEmpty {
-                    ocrExtractedText += recognized + "\n"
-                }
-            } catch {
-                print("OCR error (OpenAI): \(error.localizedDescription)")
-            }
-        }
         
         let truncatedUserPrompt = userPrompt.count > 8000 ? String(userPrompt.prefix(8000)) : userPrompt
         
@@ -82,11 +70,10 @@ class OpenAIProvider: ObservableObject, AIProvider {
             request.setValue(organization, forHTTPHeaderField: "OpenAI-Organization")
         }
         
-        let combinedUserPrompt = ocrExtractedText.isEmpty ? truncatedUserPrompt : "\(truncatedUserPrompt)\n\nOCR Extracted Text:\n\(ocrExtractedText)"
         
         let messages: [[String: Any]] = [
             ["role": "system", "content": systemPrompt ?? "You are a helpful writing assistant."],
-            ["role": "user", "content": combinedUserPrompt]
+            ["role": "user", "content": truncatedUserPrompt]
         ]
         
         let requestBody: [String: Any] = [

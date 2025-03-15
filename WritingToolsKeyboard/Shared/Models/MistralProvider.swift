@@ -45,26 +45,11 @@ class MistralProvider: ObservableObject, AIProvider {
             throw NSError(domain: "MistralAPI", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid URL."])
         }
         
-        // Run OCR on any attached images.
-        var ocrExtractedText = ""
-        for image in images {
-            do {
-                let recognized = try await OCRManager.shared.performOCR(on: image)
-                if !recognized.isEmpty {
-                    ocrExtractedText += recognized + "\n"
-                }
-            } catch {
-                print("OCR error (Mistral): \(error.localizedDescription)")
-            }
-        }
-        
-        let combinedUserPrompt = ocrExtractedText.isEmpty ? userPrompt : "\(userPrompt)\n\nOCR Extracted Text:\n\(ocrExtractedText)"
-        
         var messages: [[String: Any]] = []
         if let systemPrompt = systemPrompt {
             messages.append(["role": "system", "content": systemPrompt])
         }
-        messages.append(["role": "user", "content": combinedUserPrompt])
+        messages.append(["role": "user", "content": userPrompt])
         
         let requestBody: [String: Any] = [
             "model": config.model,

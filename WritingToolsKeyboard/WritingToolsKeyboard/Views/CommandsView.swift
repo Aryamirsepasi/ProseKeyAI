@@ -1,57 +1,39 @@
 import SwiftUI
 
-struct CustomCommandsView: View {
-    @ObservedObject var commandsManager: CustomCommandsManager
+struct CommandsView: View {
+    @ObservedObject var commandsManager: KeyboardCommandsManager
     
     @State private var isShowingEditor = false
-    @State private var editingCommand: CustomCommand? = nil
+    @State private var editingCommand: KeyboardCommand? = nil
     
     var body: some View {
         List {
             Section {
-                ForEach(commandsManager.commands) { cmd in
-                    HStack {
-                        Image(systemName: cmd.icon)
-                            .foregroundColor(.blue)
-                        VStack(alignment: .leading) {
-                            Text(cmd.name)
-                                .font(.headline)
-                            Text(cmd.prompt)
-                                .font(.caption)
-                                .foregroundColor(.secondary)
-                                .lineLimit(2)
-                        }
-                        Spacer()
-                        
-                        // Edit
-                        Button {
-                            editingCommand = cmd
-                        } label: {
-                            Image(systemName: "pencil")
-                        }
-                        .buttonStyle(.plain)
-                        .padding(.trailing, 8)
-                        
-                        // Delete
-                        Button(role: .destructive) {
-                            commandsManager.deleteCommand(cmd)
-                        } label: {
-                            Image(systemName: "trash")
-                        }
-                        .buttonStyle(.plain)
-                    }
-                    .padding(.vertical, 4)
+                ForEach(commandsManager.builtInCommands) { cmd in
+                    commandRow(cmd)
                 }
             } header: {
-                Text("Your Custom Commands")
+                Text("Built-in Commands")
             } footer: {
-                Text("These commands will appear in your iOS Keyboard AI tools.")
+                Text("These are the default commands available in the keyboard. You can edit them but not delete them.")
+                    .font(.footnote)
+                    .foregroundColor(.secondary)
+            }
+            
+            Section {
+                ForEach(commandsManager.customCommands) { cmd in
+                    commandRow(cmd)
+                }
+            } header: {
+                Text("Custom Commands")
+            } footer: {
+                Text("These are your custom commands available in the keyboard.")
                     .font(.footnote)
                     .foregroundColor(.secondary)
             }
         }
         .listStyle(.insetGrouped)
-        .navigationTitle("Custom Commands")
+        .navigationTitle("Keyboard Commands")
         .toolbar {
             Button {
                 isShowingEditor = true
@@ -60,31 +42,68 @@ struct CustomCommandsView: View {
             }
         }
         .sheet(item: $editingCommand) { cmd in
-            CustomCommandEditorView(
+            CommandEditorView(
                 commandsManager: commandsManager,
                 onDismiss: { editingCommand = nil },
                 existingCommand: cmd
             )
         }
         .sheet(isPresented: $isShowingEditor) {
-            CustomCommandEditorView(
+            CommandEditorView(
                 commandsManager: commandsManager,
                 onDismiss: { isShowingEditor = false }
             )
         }
     }
+    
+    private func commandRow(_ cmd: KeyboardCommand) -> some View {
+        HStack {
+            Image(systemName: cmd.icon)
+                .foregroundColor(.blue)
+            VStack(alignment: .leading) {
+                Text(cmd.name)
+                    .font(.headline)
+                Text(cmd.prompt)
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+                    .lineLimit(2)
+            }
+            Spacer()
+            
+            // Edit
+            Button {
+                editingCommand = cmd
+            } label: {
+                Image(systemName: "pencil")
+            }
+            .buttonStyle(.plain)
+            .padding(.trailing, 8)
+            
+            // Delete (only available for custom commands)
+            if !cmd.isBuiltIn {
+                Button(role: .destructive) {
+                    commandsManager.deleteCommand(cmd)
+                } label: {
+                    Image(systemName: "trash")
+                }
+                .buttonStyle(.plain)
+            }
+        }
+        .padding(.vertical, 4)
+    }
 }
 
-// Editor to create or update a CustomCommand
-struct CustomCommandEditorView: View {
-    @ObservedObject var commandsManager: CustomCommandsManager
+// Editor to create or update a Command
+struct CommandEditorView: View {
+    @ObservedObject var commandsManager: KeyboardCommandsManager
     let onDismiss: () -> Void
     
-    var existingCommand: CustomCommand? = nil
+    var existingCommand: KeyboardCommand? = nil
     
     @State private var name: String = ""
     @State private var prompt: String = ""
     @State private var icon: String = "wand.and.stars"
+    @State private var isBuiltIn: Bool = false
     
     let icons: [String] = [
         "star.fill", "heart.fill", "bolt.fill", "leaf.fill", "globe",
@@ -131,6 +150,14 @@ struct CustomCommandEditorView: View {
                         }
                     }
                 }
+                
+                if existingCommand?.isBuiltIn == true {
+                    Section {
+                        Text("This is a built-in command. While you can modify it, you cannot delete it.")
+                            .font(.footnote)
+                            .foregroundColor(.secondary)
+                    }
+                }
             }
             .navigationTitle(existingCommand == nil ? "New Command" : "Edit Command")
             .toolbar {
@@ -139,11 +166,12 @@ struct CustomCommandEditorView: View {
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Save") {
-                        let cmd = CustomCommand(
+                        let cmd = KeyboardCommand(
                             id: existingCommand?.id ?? UUID(),
                             name: name,
                             prompt: prompt,
-                            icon: icon
+                            icon: icon,
+                            isBuiltIn: existingCommand?.isBuiltIn ?? false
                         )
                         if let _ = existingCommand {
                             commandsManager.updateCommand(cmd)
@@ -162,6 +190,7 @@ struct CustomCommandEditorView: View {
                 name = existing.name
                 prompt = existing.prompt
                 icon = existing.icon
+                isBuiltIn = existing.isBuiltIn
             }
         }
     }

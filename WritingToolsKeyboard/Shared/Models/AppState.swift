@@ -1,5 +1,4 @@
 import Foundation
-import MLXRandom
 
 @MainActor
 class AppState: ObservableObject {

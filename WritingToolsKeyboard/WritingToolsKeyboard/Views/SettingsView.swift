@@ -7,7 +7,7 @@ struct SettingsView: View {
     @AppStorage("enable_haptics", store: UserDefaults(suiteName: "group.com.aryamirsepasi.writingtools"))
     private var enableHaptics = true
     
-    @StateObject private var commandsManager = CustomCommandsManager()
+    @StateObject private var commandsManager = KeyboardCommandsManager()
     
     init(appState: AppState) {
         self.appState = appState
@@ -81,9 +81,9 @@ struct SettingsView: View {
                     Toggle("Enable Haptics", isOn: $enableHaptics)
                 }
                 
-                Section(header: Text("Custom Commands")) {
-                    NavigationLink("Manage Custom Commands") {
-                        CustomCommandsView(commandsManager: commandsManager)
+                Section(header: Text("Commands")) {
+                    NavigationLink("Manage Keyboard Commands") {
+                        CommandsView(commandsManager: commandsManager)
                     }
                 }
                 

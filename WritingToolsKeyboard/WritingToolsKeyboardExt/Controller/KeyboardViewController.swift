@@ -47,19 +47,21 @@ class KeyboardViewController: UIInputViewController {
     private func prepareHostingController() async {
         guard keyboardViewHostingController == nil else { return }
         
-        let rootView = KeyboardView(viewController: self, vm: viewModel)
-        let hostingController = UIHostingController(rootView: rootView)
-        hostingController.view.backgroundColor = .clear
-        
-        self.keyboardViewHostingController = hostingController
-        
-        if self.isViewLoaded && self.view.window != nil {
-            attachHostingController(hostingController)
+        await MainActor.run {
+            let rootView = KeyboardView(viewController: self, vm: viewModel)
+            let hostingController = UIHostingController(rootView: rootView)
+            hostingController.view.backgroundColor = .clear
+            
+            self.keyboardViewHostingController = hostingController
+            
+            if self.isViewLoaded && self.view.window != nil {
+                attachHostingController(hostingController)
+            }
         }
     }
     
     private func setupBlurEffect() {
-        let blurEffect = UIBlurEffect(style: .systemUltraThinMaterial)
+        let blurEffect = UIBlurEffect(style: .systemThinMaterial)
         let blurView = UIVisualEffectView(effect: blurEffect)
         blurView.translatesAutoresizingMaskIntoConstraints = false
         

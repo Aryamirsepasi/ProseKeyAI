@@ -6,7 +6,7 @@ struct GeminiConfig: Codable {
 }
 
 enum GeminiModel: String, CaseIterable {
-    case twofashlite = "gemini-2.0-flash-lite-preview-02-05"
+    case twofashlite = "gemini-2.0-flash-lite-preview"
     case twoflash = "gemini-2.0-flash-exp"
     case twoflashthinking = "gemini-2.0-flash-thinking-exp-01-21"
     case twopro = "gemini-2.0-pro-exp-02-05"
@@ -47,25 +47,11 @@ class GeminiProvider: ObservableObject, AIProvider {
         throw AIError.missingAPIKey
     }
         
-        // Run OCR on any attached images.
-        var ocrExtractedText = ""
-        for image in images {
-            do {
-                let recognized = try await OCRManager.shared.performOCR(on: image)
-                if !recognized.isEmpty {
-                    ocrExtractedText += recognized + "\n"
-                }
-            } catch {
-                print("OCR error (Mistral): \(error.localizedDescription)")
-            }
-        }
         
         // Truncate user prompt to avoid extremely large requests
         let truncatedPrompt = userPrompt.count > 8000 ? String(userPrompt.prefix(8000)) : userPrompt
         
-        // Combine system prompt and user prompt
-        let combinedUserPrompt = ocrExtractedText.isEmpty ? truncatedPrompt : "\(truncatedPrompt)\n\nOCR Extracted Text:\n\(ocrExtractedText)"
-        let finalPrompt = systemPrompt.map { "\($0)\n\n\(combinedUserPrompt)" } ?? combinedUserPrompt
+        let finalPrompt = systemPrompt.map { "\($0)\n\n\(truncatedPrompt)" } ?? truncatedPrompt
         
         
         let urlString = "https://generativelanguage.googleapis.com/v1beta/models/\(config.modelName):generateContent?key=\(config.apiKey)"
