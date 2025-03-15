@@ -19,6 +19,10 @@ struct KeyboardView: View {
     
     var body: some View {
         AIToolsView(vm: vm)
+            .onAppear {
+                // Check for selected text when the view appears
+                vm.checkSelectedText()
+            }
             .ignoresSafeArea(.container, edges: .all)
             .background(.clear)
     }

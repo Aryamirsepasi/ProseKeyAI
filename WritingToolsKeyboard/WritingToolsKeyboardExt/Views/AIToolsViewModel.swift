@@ -11,8 +11,10 @@ class AIToolsViewModel: ObservableObject {
     private lazy var hapticsManager = HapticsManager()
     
     init(viewController: KeyboardViewController?) {
-            self.viewController = viewController
-        }
+        self.viewController = viewController
+        // Automatically check for selected text when initialized
+        checkSelectedText()
+    }
     
     func checkSelectedText() {
         Task { @MainActor in
@@ -22,16 +24,16 @@ class AIToolsViewModel: ObservableObject {
     }
     
     func handleCopiedText() {
-           Task { @MainActor in
-               let clipboardText = UIPasteboard.general.string ?? ""
-               
-               if !clipboardText.isEmpty {
-                   selectedText = clipboardText
-                   errorMessage = nil
-               } else {
-                   errorMessage = "Clipboard is empty"
-                   selectedText = nil
-               }
-           }
-       }
+        Task { @MainActor in
+            let clipboardText = UIPasteboard.general.string ?? ""
+            
+            if !clipboardText.isEmpty {
+                selectedText = clipboardText
+                errorMessage = nil
+            } else {
+                errorMessage = "Clipboard is empty"
+                selectedText = nil
+            }
+        }
+    }
 }

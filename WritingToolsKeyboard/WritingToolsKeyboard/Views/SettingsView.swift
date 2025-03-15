@@ -6,6 +6,9 @@ struct SettingsView: View {
     
     @AppStorage("enable_haptics", store: UserDefaults(suiteName: "group.com.aryamirsepasi.writingtools"))
     private var enableHaptics = true
+
+    @AppStorage("hasCompletedOnboarding") private var hasCompletedOnboarding: Bool = false
+    @State private var showOnboarding: Bool = false
     
     @StateObject private var commandsManager = KeyboardCommandsManager()
     
@@ -99,6 +102,14 @@ struct SettingsView: View {
             .listStyle(.insetGrouped)
             .navigationTitle("Writing Tools")
             .navigationBarTitleDisplayMode(.large)
+        }
+        .onAppear {
+            if !hasCompletedOnboarding {
+                showOnboarding = true
+            }
+        }
+        .fullScreenCover(isPresented: $showOnboarding) {
+            OnboardingView()
         }
     }
     

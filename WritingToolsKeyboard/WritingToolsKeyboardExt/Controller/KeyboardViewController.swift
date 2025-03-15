@@ -106,10 +106,26 @@ class KeyboardViewController: UIInputViewController {
     
     func getSelectedText() -> String? {
         guard hasFullAccess else { return nil }
+        
+        // Try to get selected text first (iOS 16+)
+        if #available(iOS 16.0, *) {
+            if let selectedText = textDocumentProxy.selectedText,
+               !selectedText.isEmpty {
+                return selectedText
+            }
+        }
+        
+        // Fall back to combining text before/after cursor
         let before = textDocumentProxy.documentContextBeforeInput ?? ""
         let after = textDocumentProxy.documentContextAfterInput ?? ""
         let combined = (before + after).trimmingCharacters(in: .whitespacesAndNewlines)
-        return combined.isEmpty ? nil : combined
+        
+        // Only return combined text if it's not too long (200 chars or less)
+        if !combined.isEmpty && combined.count <= 200 {
+            return combined
+        }
+        
+        return nil
     }
     
     private func showFullAccessBanner() {

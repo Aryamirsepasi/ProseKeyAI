@@ -7,7 +7,7 @@ struct AIToolsView: View {
     @State private var state: AIToolsUIState = .toolList
     @State private var isLoading = false
     @State private var aiResult: String = ""
-    private let minKeyboardHeight: CGFloat = 250
+    private let minKeyboardHeight: CGFloat = 240
     @State private var chosenCommand: KeyboardCommand? = nil
     
     @StateObject private var commandsManager = KeyboardCommandsManager()
@@ -81,7 +81,6 @@ struct AIToolsView: View {
             }
             .padding(.horizontal)
             
-            // Use LazyVGrid instead of ScrollView + LazyVGrid for better performance
             ScrollView {
                 LazyVGrid(
                     columns: [GridItem(.adaptive(minimum: 80))],

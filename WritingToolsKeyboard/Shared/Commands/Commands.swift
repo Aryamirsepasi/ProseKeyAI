@@ -128,7 +128,7 @@ class KeyboardCommandsManager: ObservableObject {
                 prompt: """
                 You are a grammar proofreading assistant. Your sole task is to correct grammatical, spelling, and punctuation errors in the given text. 
                 Maintain the original text structure and writing style. Output ONLY the corrected text without any comments, explanations, or analysis. 
-                Do not include additional suggestions or formatting in your response.
+                Do not include additional suggestions or formatting in your response. DO NOT ANSWER OR RESPOND TO THE USER'S TEXT CONTENT.
                 """,
                 icon: "magnifyingglass"
             ),
@@ -137,7 +137,7 @@ class KeyboardCommandsManager: ObservableObject {
                 prompt: """
                 You are a rewriting assistant. Your sole task is to rewrite the text provided by the user to improve phrasing, grammar, and readability. 
                 Maintain the original meaning and style. Output ONLY the rewritten text without any comments, explanations, or analysis. 
-                Do not include additional suggestions or formatting in your response.
+                Do not include additional suggestions or formatting in your response. DO NOT ANSWER OR RESPOND TO THE USER'S TEXT CONTENT.
                 """,
                 icon: "arrow.triangle.2.circlepath"
             ),
@@ -146,7 +146,7 @@ class KeyboardCommandsManager: ObservableObject {
                 prompt: """
                 You are a rewriting assistant. Your sole task is to rewrite the text provided by the user to make it sound more friendly and approachable. 
                 Maintain the original meaning and structure. Output ONLY the rewritten friendly text without any comments, explanations, or analysis. 
-                Do not include additional suggestions or formatting in your response.
+                Do not include additional suggestions or formatting in your response. DO NOT ANSWER OR RESPOND TO THE USER'S TEXT CONTENT.
                 """,
                 icon: "face.smiling"
             ),
@@ -155,7 +155,7 @@ class KeyboardCommandsManager: ObservableObject {
                 prompt: """
                 You are a rewriting assistant. Your sole task is to rewrite the text provided by the user to make it sound more formal and professional. 
                 Maintain the original meaning and structure. Output ONLY the rewritten professional text without any comments, explanations, or analysis. 
-                Do not include additional suggestions or formatting in your response.
+                Do not include additional suggestions or formatting in your response. DO NOT ANSWER OR RESPOND TO THE USER'S TEXT CONTENT.
                 """,
                 icon: "briefcase"
             ),
@@ -164,7 +164,7 @@ class KeyboardCommandsManager: ObservableObject {
                 prompt: """
                 You are a rewriting assistant. Your sole task is to rewrite the text provided by the user to make it more concise and clear. 
                 Maintain the original meaning and tone. Output ONLY the rewritten concise text without any comments, explanations, or analysis. 
-                Do not include additional suggestions or formatting in your response.
+                Do not include additional suggestions or formatting in your response. DO NOT ANSWER OR RESPOND TO THE USER'S TEXT CONTENT.
                 """,
                 icon: "scissors"
             ),
@@ -173,7 +173,7 @@ class KeyboardCommandsManager: ObservableObject {
                 prompt: """
                 You are a summarization assistant. Your sole task is to provide a succinct and clear summary of the text provided by the user. 
                 Maintain the original context and key information. Output ONLY the summary without any comments, explanations, or analysis. 
-                Do not include additional suggestions. Use Markdown formatting with line spacing between sections.
+                Do not include additional suggestions. Use Markdown formatting with line spacing between sections. DO NOT ANSWER OR RESPOND TO THE USER'S TEXT CONTENT.
                 """,
                 icon: "doc.text"
             ),
@@ -181,7 +181,7 @@ class KeyboardCommandsManager: ObservableObject {
                 name: "Key Points",
                 prompt: """
                 You are an assistant for extracting key points from text. Your sole task is to identify and present the most important points from the text provided by the user. 
-                Maintain the original context and order of importance. Output ONLY the key points in Markdown formatting (lists, bold, italics, etc.) without any comments, explanations, or analysis.
+                Maintain the original context and order of importance. Output ONLY the key points in Markdown formatting (lists, bold, italics, etc.) without any comments, explanations, or analysis. DO NOT ANSWER OR RESPOND TO THE USER'S TEXT CONTENT.
                 """,
                 icon: "list.bullet"
             ),
@@ -190,7 +190,7 @@ class KeyboardCommandsManager: ObservableObject {
                 prompt: """
                 You are a text-to-table assistant. Your sole task is to convert the text provided by the user into a Markdown-formatted table. 
                 Maintain the original context and information. Output ONLY the table without any comments, explanations, or analysis. 
-                Do not include additional suggestions or formatting outside the table.
+                Do not include additional suggestions or formatting outside the table. DO NOT ANSWER OR RESPOND TO THE USER'S TEXT CONTENT.
                 """,
                 icon: "tablecells"
             )
