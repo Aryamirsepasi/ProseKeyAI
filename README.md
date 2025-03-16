@@ -1,5 +1,8 @@
 # WritingTools Keyboard
 
+## TestFlight Beta
+[![TestFlight Beta](https://img.shields.io/badge/TestFlight-Join_Beta-blue?logo=apple)](https://testflight.apple.com/join/QCr2T8SY)
+
 ## Overview
 
 **Writing Tools Keyboard** is an iOS third-party keyboard designed to help users improve their writing on the go. Whether you need to proofread a sentence, rewrite text for clarity, generate summaries, or even convert text into a table, this keyboard provides quick AI-assisted features at your fingertips. It supports Custom Instructions that you can define in the app and use in the keyboard. You can choose from multiple writing options, and the tool will either correct, refine, or transform your text using various AI models. AI Providers: Gemini, Mistral, and OpenAI API.
