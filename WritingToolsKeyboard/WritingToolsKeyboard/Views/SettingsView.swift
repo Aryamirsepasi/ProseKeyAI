@@ -12,22 +12,6 @@ struct SettingsView: View {
     
     @StateObject private var commandsManager = KeyboardCommandsManager()
     
-    init(appState: AppState) {
-        self.appState = appState
-        let appearance = UINavigationBarAppearance()
-        appearance.configureWithOpaqueBackground()
-        appearance.backgroundColor = UIColor.systemBackground
-        appearance.titleTextAttributes = [.foregroundColor: UIColor.label]
-        appearance.largeTitleTextAttributes = [
-            .foregroundColor: UIColor.label,
-            .font: UIFont.boldSystemFont(ofSize: 34)
-        ]
-        UINavigationBar.appearance().standardAppearance = appearance
-        UINavigationBar.appearance().compactAppearance = appearance
-        UINavigationBar.appearance().scrollEdgeAppearance = appearance
-        UINavigationBar.appearance().prefersLargeTitles = true
-    }
-    
     var body: some View {
         NavigationStack {
             List {
@@ -65,7 +49,10 @@ struct SettingsView: View {
                 }
                 
                 Section(header: Text("AI Provider")) {
-                    Picker("Provider", selection: $appState.currentProvider) {
+                    Picker("Provider", selection: Binding(
+                        get: { appState.currentProvider },
+                        set: { appState.setCurrentProvider($0) }
+                    )) {
                         Text("Gemini AI").tag("gemini")
                         Text("OpenAI").tag("openai")
                         Text("Mistral").tag("mistral")

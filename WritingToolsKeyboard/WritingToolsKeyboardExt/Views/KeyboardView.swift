@@ -22,8 +22,11 @@ struct KeyboardView: View {
             .onAppear {
                 // Check for selected text when the view appears
                 vm.checkSelectedText()
+                UIAccessibility.post(notification: .screenChanged, argument: "Writing Tools Keyboard Ready")
             }
             .ignoresSafeArea(.container, edges: .all)
             .background(.clear)
+            .dynamicTypeSize(.large) // Support dynamic type
+            .accessibilityElement(children: .contain)
     }
 }

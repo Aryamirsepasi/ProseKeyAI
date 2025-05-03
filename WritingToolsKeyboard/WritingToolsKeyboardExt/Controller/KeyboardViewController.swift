@@ -14,10 +14,17 @@ class KeyboardViewController: UIInputViewController {
         super.viewDidLoad()
         setupBlurEffect()
         
+        let settings = AppSettings.shared
+            print("Current provider: \(settings.currentProvider)")
+            print("Gemini API key (exists): \(!settings.geminiApiKey.isEmpty)")
+            print("OpenAI API key (exists): \(!settings.openAIApiKey.isEmpty)")
+            print("Mistral API key (exists): \(!settings.mistralApiKey.isEmpty)")
+        
         Task(priority: .userInitiated) {
             await prepareHostingController()
         }
     }
+    
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)

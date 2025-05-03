@@ -1,10 +1,11 @@
 import Foundation
+import AIProxy
+
+
 struct MistralConfig: Codable {
     var apiKey: String
-    var baseURL: String
     var model: String
     
-    static let defaultBaseURL = "https://api.mistral.ai/v1"
     static let defaultModel = "mistral-small-latest"
 }
 enum MistralModel: String, CaseIterable {
@@ -21,18 +22,24 @@ enum MistralModel: String, CaseIterable {
     }
 }
 
+@MainActor
 class MistralProvider: ObservableObject, AIProvider {
     @Published var isProcessing = false
-    var config: MistralConfig
+    private var config: MistralConfig
+    private var aiProxyService: MistralService?
+    private var currentTask: Task<Void, Never>?
     
     init(config: MistralConfig) {
         self.config = config
+        setupAIProxyService()
     }
     
-    func processText(systemPrompt: String? = "You are a helpful writing assistant.",
-                     userPrompt: String,
-                     images: [Data],
-                     streaming: Bool = false) async throws -> String {
+    private func setupAIProxyService() {
+        guard !config.apiKey.isEmpty else { return }
+        aiProxyService = AIProxy.mistralDirectService(unprotectedAPIKey: config.apiKey)
+    }
+    
+    func processText(systemPrompt: String? = "You are a helpful writing assistant.", userPrompt: String, images: [Data] = [], streaming: Bool = false) async throws -> String {
         isProcessing = true
         defer { isProcessing = false }
         
@@ -40,46 +47,78 @@ class MistralProvider: ObservableObject, AIProvider {
             throw NSError(domain: "MistralAPI", code: -1, userInfo: [NSLocalizedDescriptionKey: "API key is missing."])
         }
         
-        let baseURL = config.baseURL.isEmpty ? MistralConfig.defaultBaseURL : config.baseURL
-        guard let url = URL(string: "\(baseURL)/chat/completions") else {
-            throw NSError(domain: "MistralAPI", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid URL."])
+        if aiProxyService == nil {
+            setupAIProxyService()
         }
         
-        var messages: [[String: Any]] = []
+        guard let mistralService = aiProxyService else {
+            throw NSError(domain: "MistralAPI", code: -1, userInfo: [NSLocalizedDescriptionKey: "Failed to initialize AIProxy service."])
+        }
+        
+        var messages: [MistralChatCompletionRequestBody.Message] = []
+        
         if let systemPrompt = systemPrompt {
-            messages.append(["role": "system", "content": systemPrompt])
-        }
-        messages.append(["role": "user", "content": userPrompt])
-        
-        let requestBody: [String: Any] = [
-            "model": config.model,
-            "messages": messages
-        ]
-        
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.setValue("Bearer \(config.apiKey)", forHTTPHeaderField: "Authorization")
-        request.httpBody = try JSONSerialization.data(withJSONObject: requestBody)
-        
-        let (data, response) = try await URLSession.shared.data(for: request)
-        
-        guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
-            throw NSError(domain: "MistralAPI", code: -1, userInfo: [NSLocalizedDescriptionKey: "Server returned an error."])
+            messages.append(.system(content: systemPrompt))
         }
         
-        guard let json = try JSONSerialization.jsonObject(with: data) as? [String: Any],
-              let choices = json["choices"] as? [[String: Any]],
-              let firstChoice = choices.first,
-              let message = firstChoice["message"] as? [String: Any],
-              let content = message["content"] as? String else {
-            throw NSError(domain: "MistralAPI", code: -1, userInfo: [NSLocalizedDescriptionKey: "Failed to parse response."])
-        }
+        messages.append(.user(content: userPrompt))
         
-        return content
+        do {
+            if streaming {
+                var compiledResponse = ""
+                let stream = try await mistralService.streamingChatCompletionRequest(body: .init(
+                    messages: messages,
+                    model: config.model
+                ))
+                
+                for try await chunk in stream {
+                    if Task.isCancelled { break }
+                    if let content = chunk.choices.first?.delta.content {
+                        compiledResponse += content
+                    }
+                    if let usage = chunk.usage {
+                        print("""
+                                Used:
+                                 \(usage.promptTokens ?? 0) prompt tokens
+                                 \(usage.completionTokens ?? 0) completion tokens
+                                 \(usage.totalTokens ?? 0) total tokens
+                                """)
+                    }
+                }
+                return compiledResponse
+                
+            } else {
+                let response = try await mistralService.chatCompletionRequest(body: .init(
+                    messages: messages,
+                    model: config.model
+                ))
+                
+                /*if let usage = response.usage {
+                    print("""
+                            Used:
+                             \(usage.promptTokens ?? 0) prompt tokens
+                             \(usage.completionTokens ?? 0) completion tokens
+                             \(usage.totalTokens ?? 0) total tokens
+                            """)
+                }*/
+                
+                return response.choices.first?.message.content ?? ""
+            }
+            
+        } catch AIProxyError.unsuccessfulRequest(let statusCode, let responseBody) {
+            print("Received non-200 status code: \(statusCode) with response body: \(responseBody)")
+            throw NSError(domain: "MistralAPI",
+                          code: statusCode,
+                          userInfo: [NSLocalizedDescriptionKey: "API error: \(responseBody)"])
+        } catch {
+            print("Could not create mistral chat completion: \(error.localizedDescription)")
+            throw error
+        }
     }
     
     func cancel() {
+        currentTask?.cancel()
+        currentTask = nil
         isProcessing = false
     }
 }

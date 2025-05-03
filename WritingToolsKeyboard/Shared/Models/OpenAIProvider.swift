@@ -1,113 +1,130 @@
 import Foundation
+import AIProxy
 
 struct OpenAIConfig: Codable {
     var apiKey: String
     var baseURL: String
-    var organization: String?
-    var project: String?
     var model: String
     
-    static let defaultBaseURL = "https://api.openai.com/v1"
-    static let defaultModel   = "gpt-4o"
+    static let defaultBaseURL = "https://api.openai.com"
+    static let defaultModel = "gpt-4o"
 }
 
 enum OpenAIModel: String, CaseIterable {
-    case gpt4        = "gpt-4"
-    case gpt35Turbo  = "gpt-3.5-turbo"
-    case gpt4o       = "gpt-4o"
-    case gpt4oMini   = "gpt-4o-mini"
+    case gpt4 = "gpt-4"
+    case gpt4o = "gpt-4o"
+    case gpt4oMini = "gpt-4o-mini"
     
     var displayName: String {
         switch self {
-        case .gpt4:       return "GPT-4 (Most Capable)"
-        case .gpt35Turbo: return "GPT-3.5 Turbo (Faster)"
-        case .gpt4o:      return "GPT-4o (Optimized)"
-        case .gpt4oMini:  return "GPT-4o Mini (Lightweight)"
+        case .gpt4: return "GPT-4 (Most Capable)"
+        case .gpt4o: return "GPT-4o (Optimized)"
+        case .gpt4oMini: return "GPT-4o Mini (Lightweight)"
         }
     }
 }
 
+@MainActor
 class OpenAIProvider: ObservableObject, AIProvider {
     @Published var isProcessing = false
-    
-    var config: OpenAIConfig
-    private var currentTask: URLSessionDataTask?
-    
-    // Use of ephemeral session to reduce memory/disk usage
-    private let urlSession: URLSession = {
-        let configuration = URLSessionConfiguration.ephemeral
-        configuration.timeoutIntervalForRequest = 20
-        configuration.timeoutIntervalForResource = 20
-        return URLSession(configuration: configuration)
-    }()
-    
-    init(config: OpenAIConfig) {
-        self.config = config
-    }
-    
-    func processText(systemPrompt: String? = "You are a helpful writing assistant.",
-                     userPrompt: String,
-                     images: [Data],
-                     streaming: Bool = false) async throws -> String {
+        private var config: OpenAIConfig
+        private var aiProxyService: OpenAIService?
+        private var currentTask: Task<Void, Never>?
         
-        guard !config.apiKey.isEmpty else {
-        throw AIError.missingAPIKey
-    }
-        
-        let truncatedUserPrompt = userPrompt.count > 8000 ? String(userPrompt.prefix(8000)) : userPrompt
-        
-        let baseURL = config.baseURL.isEmpty ? OpenAIConfig.defaultBaseURL : config.baseURL
-        guard let url = URL(string: "\(baseURL)/chat/completions") else {
-            throw AIError.serverError
+        init(config: OpenAIConfig) {
+            self.config = config
+            setupAIProxyService()
         }
         
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.setValue("Bearer \(config.apiKey)", forHTTPHeaderField: "Authorization")
-        
-        if let organization = config.organization {
-            request.setValue(organization, forHTTPHeaderField: "OpenAI-Organization")
+        private func setupAIProxyService() {
+            guard !config.apiKey.isEmpty else { return }
+            
+            // Use custom base URL if provided, otherwise use default
+            let baseURL = config.baseURL.isEmpty ? OpenAIConfig.defaultBaseURL : config.baseURL
+            
+            aiProxyService = AIProxy.openAIDirectService(
+                unprotectedAPIKey: config.apiKey,
+                baseURL: baseURL
+            )
         }
-        
-        
-        let messages: [[String: Any]] = [
-            ["role": "system", "content": systemPrompt ?? "You are a helpful writing assistant."],
-            ["role": "user", "content": truncatedUserPrompt]
-        ]
-        
-        let requestBody: [String: Any] = [
-            "model": config.model,
-            "messages": messages,
-            "temperature": 0.7
-        ]
-        
-        let jsonData = try JSONSerialization.data(withJSONObject: requestBody)
-        request.httpBody = jsonData
-        
-        isProcessing = true
-        let (data, response) = try await urlSession.data(for: request)
-        isProcessing = false
-        
-        guard let httpResponse = response as? HTTPURLResponse,
-              httpResponse.statusCode == 200 else {
-            throw AIError.serverError
+    
+    func processText(systemPrompt: String? = "You are a helpful writing assistant.", userPrompt: String, images: [Data] = [], streaming: Bool = false) async throws -> String {
+            isProcessing = true
+            defer { isProcessing = false }
+            
+            guard !config.apiKey.isEmpty else {
+                throw NSError(domain: "OpenAIAPI", code: -1, userInfo: [NSLocalizedDescriptionKey: "API key is missing."])
+            }
+            
+            if aiProxyService == nil {
+                setupAIProxyService()
+            }
+            
+            guard let openAIService = aiProxyService else {
+                throw NSError(domain: "OpenAIAPI", code: -1, userInfo: [NSLocalizedDescriptionKey: "Failed to initialize AIProxy service."])
+            }
+            
+            var messages: [OpenAIChatCompletionRequestBody.Message] = []
+            
+            if let systemPrompt = systemPrompt {
+                messages.append(.system(content: .text(systemPrompt)))
+            }
+            
+            // Handle text and images
+            if images.isEmpty {
+                messages.append(.user(content: .text(userPrompt)))
+            } else {
+                var parts: [OpenAIChatCompletionRequestBody.Message.ContentPart] = [.text(userPrompt)]
+                
+                for imageData in images {
+                    let dataString = "data:image/jpeg;base64," + imageData.base64EncodedString()
+                    if let dataURL = URL(string: dataString) {
+                        parts.append(.imageURL(dataURL, detail: .auto))
+                    }
+                }
+                
+                messages.append(.user(content: .parts(parts)))
+            }
+            
+            do {
+                if streaming {
+                    var compiledResponse = ""
+                    let stream = try await openAIService.streamingChatCompletionRequest(body: .init(
+                        model: config.model,
+                        messages: messages
+                    ))
+                    
+                    for try await chunk in stream {
+                        if Task.isCancelled { break }
+                        if let content = chunk.choices.first?.delta.content {
+                            compiledResponse += content
+                        }
+                    }
+                    return compiledResponse
+                    
+                } else {
+                    let response = try await openAIService.chatCompletionRequest(body: .init(
+                        model: config.model,
+                        messages: messages
+                    ))
+                    
+                    return response.choices.first?.message.content ?? ""
+                }
+                
+            } catch AIProxyError.unsuccessfulRequest(let statusCode, let responseBody) {
+                print("Received non-200 status code: \(statusCode) with response body: \(responseBody)")
+                throw NSError(domain: "OpenAIAPI",
+                              code: statusCode,
+                              userInfo: [NSLocalizedDescriptionKey: "API error: \(responseBody)"])
+            } catch {
+                print("Could not create OpenAI chat completion: \(error.localizedDescription)")
+                throw error
+            }
         }
-        
-        let json = try JSONSerialization.jsonObject(with: data) as? [String: Any]
-        
-        guard let choices = json?["choices"] as? [[String: Any]],
-              let firstChoice = choices.first,
-              let message = firstChoice["message"] as? [String: String],
-              let content = message["content"] else {
-            throw AIError.invalidResponse
-        }
-        
-        return content
-    }
+
     
     func cancel() {
-        currentTask?.cancel()
         isProcessing = false
+        currentTask = nil
     }
 }

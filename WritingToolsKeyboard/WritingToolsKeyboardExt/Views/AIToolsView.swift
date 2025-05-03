@@ -1,4 +1,5 @@
 import SwiftUI
+import MarkdownUI
 
 struct AIToolsView: View {
     @ObservedObject var vm: AIToolsViewModel
@@ -58,37 +59,53 @@ struct AIToolsView: View {
     }
     
     private var toolListView: some View {
-        VStack(spacing: 10) {
-            // Cache and reuse views
-            let previewText = vm.selectedText.map {
-                $0.count > 50 ? String($0.prefix(50)) + "..." : $0
-            } ?? "None"
-            
-            HStack(spacing: 12) {
-                Button("Use Copied Text") {
-                    vm.handleCopiedText()
+        VStack(spacing: 12) {
+                HStack(spacing: 12) {
+                    Button(action: {
+                        vm.handleCopiedText()
+                    }) {
+                        HStack {
+                            Image(systemName: "doc.on.clipboard")
+                                .font(.system(size: 16))
+                            Text("Use Copied Text")
+                                .font(.system(size: 15, weight: .medium))
+                        }
+                        .padding(.horizontal, 12)
+                        .padding(.vertical, 8)
+                        .background(Color.blue)
+                        .foregroundColor(.white)
+                        .cornerRadius(8)
+                    }
+                    .buttonStyle(PlainButtonStyle())
+                    
+                    // Text preview with better visual distinction
+                    if let selectedText = vm.selectedText {
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            Text(selectedText.count > 22 ? String(selectedText.prefix(22)) + "..." : selectedText)
+                                .font(.system(size: 14))
+                                .foregroundColor(.secondary)
+                                .lineLimit(1)
+                                .padding(.vertical, 6)
+                                .padding(.horizontal, 10)
+                                .background(Color(.systemGray6))
+                                .cornerRadius(6)
+                        }
+                    } else {
+                        Text("No text selected")
+                            .font(.system(size: 14))
+                            .foregroundColor(.secondary)
+                            .padding(.vertical, 6)
+                            .padding(.horizontal, 10)
+                            .background(Color(.systemGray6))
+                            .cornerRadius(6)
+                    }
                 }
-                .buttonStyle(.bordered)
-                .scaleEffect(0.9)
-                
-                // Use Text only when needed
-                Text(previewText)
-                    .font(.footnote)
-                    .foregroundColor(.secondary)
-                    .lineLimit(1)
-                    .truncationMode(.tail)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-            }
             .padding(.horizontal)
             
             ScrollView {
-                LazyVGrid(
-                    columns: [GridItem(.adaptive(minimum: 80))],
-                    spacing: 8
-                ) {
-                    allCommandsView
-                }
-            }.padding(.horizontal)
+                        allCommandsView
+                            .padding(.horizontal)
+                    }
         }
     }
     
@@ -121,41 +138,111 @@ struct AIToolsView: View {
     }
     
     private func resultView(_ command: KeyboardCommand) -> some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Text("\(command.name) Result")
-                .font(.headline)
-            
-            ScrollView {
-                Text(aiResult)
-                    .font(.body)
-                    .padding(8)
-                    .background(Color(.systemGray6))
-                    .cornerRadius(8)
-                    .frame(maxHeight: 200)
+        VStack(alignment: .leading, spacing: 14) {
+            HStack {
+                Text("\(command.name) Result")
+                    .font(.headline)
+                
+                Spacer()
+                
+                Button(action: {
+                    state = .toolList
+                    aiResult = ""
+                }) {
+                    Image(systemName: "xmark.circle.fill")
+                        .font(.system(size: 20))
+                        .foregroundColor(.secondary)
+                }
+                .buttonStyle(PlainButtonStyle())
             }
             
-            HStack {
-                Button("Copy") {
+            ScrollView {
+                Markdown(aiResult)
+                    .font(.body)
+                    .padding(12)
+                    .background(Color(.systemGray6))
+                    .cornerRadius(10)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+
+            }
+            
+            .background(
+                RoundedRectangle(cornerRadius: 10)
+                    .stroke(Color(.systemGray4), lineWidth: 1)
+            )
+            
+            HStack(spacing: 6) {
+                // Copy button
+                Button(action: {
                     UIPasteboard.general.string = aiResult
+                    // Show success feedback
+                    UINotificationFeedbackGenerator().notificationOccurred(.success)
+                }) {
+                    HStack {
+                        Image(systemName: "doc.on.doc")
+                        Text("Copy")
+                    }
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 10)
+                    .background(Color(.systemGray5))
+                    .foregroundColor(.primary)
+                    .cornerRadius(8)
                 }
-                .buttonStyle(.bordered)
+                .buttonStyle(PlainButtonStyle())
                 
-                Button("Regenerate") {
+                // Insert button
+                Button(action: {
+                    vm.viewController?.textDocumentProxy.insertText(aiResult)
+                    state = .toolList
+                    aiResult = ""
+                }) {
+                    HStack {
+                        Image(systemName: "text.insert")
+                        Text("Insert")
+                    }
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 10)
+                    .background(Color.blue)
+                    .foregroundColor(.white)
+                    .cornerRadius(8)
+                }
+                .buttonStyle(PlainButtonStyle())
+                
+                // Regenerate button
+                Button(action: {
                     guard let text = vm.selectedText, let chosen = chosenCommand else { return }
                     isLoading = true
                     state = .generating(chosen)
                     aiResult = ""
                     processAICommand(chosen, userText: text)
+                }) {
+                    HStack {
+                        Image(systemName: "arrow.clockwise")
+                        Text("Regenerate")
+                    }
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 10)
+                    .background(Color.green)
+                    .foregroundColor(.white)
+                    .cornerRadius(8)
                 }
-                .buttonStyle(.borderedProminent)
-                
-                Spacer()
+                .buttonStyle(PlainButtonStyle())
             }
             
             Spacer()
         }
         .padding(.horizontal)
         .padding(.bottom, 12)
+        // Add swipe down gesture to dismiss
+        .gesture(
+            DragGesture()
+                .onEnded { gesture in
+                    if gesture.translation.height > 100 {
+                        state = .toolList
+                        aiResult = ""
+                    }
+                }
+        )
     }
     
     // MARK: - Logic for calling AI
