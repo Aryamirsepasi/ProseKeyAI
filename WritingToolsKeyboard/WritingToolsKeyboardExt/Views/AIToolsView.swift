@@ -14,100 +14,110 @@ struct AIToolsView: View {
     @StateObject private var commandsManager = KeyboardCommandsManager()
     
     var body: some View {
-        VStack(spacing: 12) {
-            // Top bar
-            HStack {
+            VStack(spacing: 12) {
+                // Top bar - only show in toolList state
                 if case .toolList = state {
-                    // Empty in toolList state
-                } else {
-                    Button(action: {
-                        state = .toolList
-                        aiResult = ""
-                        isLoading = false
-                    }) {
-                        Image(systemName: "chevron.left")
-                            .font(.system(size: 20))
+                    HStack {
+                        Spacer()
+                        
+                        // Show spinner if loading in toolList state
+                        if isLoading {
+                            ProgressView()
+                        }
                     }
+                    .padding(.horizontal)
+                    .padding(.top, 4)
                 }
                 
-                Spacer()
+                if let error = vm.errorMessage {
+                    Text(error)
+                        .foregroundColor(.red)
+                        .font(.caption)
+                }
                 
-                // Show spinner if loading
-                if isLoading {
-                    ProgressView()
+                switch state {
+                case .toolList:
+                    toolListView
+                case .generating(let command):
+                    generatingView(command)
+                case .result(let command):
+                    resultView(command)
                 }
             }
-            .padding(.horizontal)
-            .padding(.top, 4)
-            
-            if let error = vm.errorMessage {
-                Text(error)
-                    .foregroundColor(.red)
-                    .font(.caption)
-            }
-            
-            switch state {
-            case .toolList:
-                toolListView
-            case .generating(let command):
-                generatingView(command)
-            case .result(let command):
-                resultView(command)
-            }
+            .frame(minHeight: minKeyboardHeight) // Set the minimum height for the keyboard
         }
-        .frame(minHeight: minKeyboardHeight) // Set the minimum height for the keyboard
-    }
     
     private var toolListView: some View {
         VStack(spacing: 12) {
-                HStack(spacing: 12) {
-                    Button(action: {
-                        vm.handleCopiedText()
-                    }) {
-                        HStack {
-                            Image(systemName: "doc.on.clipboard")
-                                .font(.system(size: 16))
-                            Text("Use Copied Text")
-                                .font(.system(size: 15, weight: .medium))
-                        }
-                        .padding(.horizontal, 12)
-                        .padding(.vertical, 8)
-                        .background(Color.blue)
-                        .foregroundColor(.white)
-                        .cornerRadius(8)
+            HStack(spacing: 12) {
+                Button(action: {
+                    vm.handleCopiedText()
+                }) {
+                    HStack {
+                        Image(systemName: "doc.on.clipboard")
+                            .font(.system(size: 16))
+                        Text("Use Copied Text")
+                            .font(.system(size: 15, weight: .medium))
                     }
-                    .buttonStyle(PlainButtonStyle())
-                    
-                    // Text preview with better visual distinction
-                    if let selectedText = vm.selectedText {
-                        ScrollView(.horizontal, showsIndicators: false) {
-                            Text(selectedText.count > 22 ? String(selectedText.prefix(22)) + "..." : selectedText)
-                                .font(.system(size: 14))
-                                .foregroundColor(.secondary)
-                                .lineLimit(1)
-                                .padding(.vertical, 6)
-                                .padding(.horizontal, 10)
-                                .background(Color(.systemGray6))
-                                .cornerRadius(6)
-                        }
-                    } else {
-                        Text("No text selected")
+                    .padding(.horizontal, 12)
+                    .padding(.vertical, 8)
+                    .background(Color.blue)
+                    .foregroundColor(.white)
+                    .cornerRadius(8)
+                }
+                .buttonStyle(PlainButtonStyle())
+                
+                // Text preview with fixed width and horizontal scrolling
+                if let selectedText = vm.selectedText, !selectedText.isEmpty {
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        Text(selectedText)
                             .font(.system(size: 14))
                             .foregroundColor(.secondary)
+                            .lineLimit(1)
                             .padding(.vertical, 6)
                             .padding(.horizontal, 10)
-                            .background(Color(.systemGray6))
-                            .cornerRadius(6)
                     }
+                    .frame(width: 180) // Fixed width
+                    .background(Color(.systemGray6))
+                    .cornerRadius(6)
+                    .overlay(
+                        // Visual indicator for scrollable content
+                        HStack {
+                            Spacer()
+                            if selectedText.count > 20 {
+                                LinearGradient(
+                                    gradient: Gradient(colors: [.clear, Color(.systemGray6)]),
+                                    startPoint: .leading,
+                                    endPoint: .trailing
+                                )
+                                .frame(width: 20)
+                            }
+                        }
+                    )
+                } else {
+                    Text("No text selected")
+                        .font(.system(size: 14))
+                        .foregroundColor(.secondary)
+                        .padding(.vertical, 6)
+                        .padding(.horizontal, 10)
+                        .frame(width: 180) // Match width
+                        .background(Color(.systemGray6))
+                        .cornerRadius(6)
                 }
+            }
             .padding(.horizontal)
             
             ScrollView {
-                        allCommandsView
-                            .padding(.horizontal)
-                    }
+                allCommandsView
+                    .padding(.horizontal)
+            }
+        }
+        .onChange(of: vm.selectedText) { _ in
+            // Force UI update when selected text changes
+            // This helps ensure the preview updates properly
         }
     }
+
     
     var allCommandsView: some View {
         CommandsGridView(
@@ -128,14 +138,20 @@ struct AIToolsView: View {
     }
     
     private func generatingView(_ command: KeyboardCommand) -> some View {
-        VStack(spacing: 16) {
-            Text("Applying \(command.name)...")
-                .font(.headline)
-                .padding(.top, 20)
-            
-            Spacer()
+            VStack(spacing: 16) {
+                Text("Applying \(command.name)...")
+                    .font(.headline)
+                    .padding(.top, 20)
+                
+                // Loading indicator below text
+                ProgressView()
+                    .scaleEffect(1.2)
+                    .padding(.top, 8)
+                
+                Spacer()
+            }
+            .frame(maxWidth: .infinity)
         }
-    }
     
     private func resultView(_ command: KeyboardCommand) -> some View {
         VStack(alignment: .leading, spacing: 14) {
@@ -155,27 +171,33 @@ struct AIToolsView: View {
                 }
                 .buttonStyle(PlainButtonStyle())
             }
+            .padding(.top, 8)
             
-            ScrollView {
-                Markdown(aiResult)
-                    .font(.body)
-                    .padding(12)
-                    .background(Color(.systemGray6))
-                    .cornerRadius(10)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-
-            }
-            
-            .background(
+            // Fixed height container for the result
+            ZStack {
+                // Background and border for the fixed-size container
                 RoundedRectangle(cornerRadius: 10)
                     .stroke(Color(.systemGray4), lineWidth: 1)
-            )
+                
+                // Background fill that matches the system gray
+                RoundedRectangle(cornerRadius: 10)
+                    .fill(Color(.systemGray6))
+                
+                // ScrollView inside the fixed container
+                ScrollView {
+                    Markdown(aiResult)
+                        .font(.body)
+                        .padding(12)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                }
+                .padding(1) // Small padding to prevent content touching the border
+            }
+            .frame(height: 160) // Fixed height for the result area
             
             HStack(spacing: 6) {
                 // Copy button
                 Button(action: {
                     UIPasteboard.general.string = aiResult
-                    // Show success feedback
                     UINotificationFeedbackGenerator().notificationOccurred(.success)
                 }) {
                     HStack {
@@ -228,22 +250,22 @@ struct AIToolsView: View {
                 }
                 .buttonStyle(PlainButtonStyle())
             }
-            
-            Spacer()
+            .padding(.bottom, 4)
         }
-        .padding(.horizontal)
-        .padding(.bottom, 12)
-        // Add swipe down gesture to dismiss
+        .padding(.horizontal, 16)
+        .padding(.vertical, 16)
         .gesture(
             DragGesture()
                 .onEnded { gesture in
-                    if gesture.translation.height > 100 {
+                    if gesture.translation.height > 70 {
                         state = .toolList
                         aiResult = ""
                     }
                 }
         )
     }
+
+
     
     // MARK: - Logic for calling AI
     private func processAICommand(_ command: KeyboardCommand, userText: String) {

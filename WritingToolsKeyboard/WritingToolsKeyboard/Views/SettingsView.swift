@@ -2,15 +2,35 @@ import SwiftUI
 
 struct SettingsView: View {
     @ObservedObject var appState: AppState
-    @AppStorage("keyboard_enabled") private var keyboardEnabled = false
+    @State private var keyboardEnabled: Bool = false
     
     @AppStorage("enable_haptics", store: UserDefaults(suiteName: "group.com.aryamirsepasi.writingtools"))
-    private var enableHaptics = true
+    
+    private var enableHaptics = false
 
     @AppStorage("hasCompletedOnboarding") private var hasCompletedOnboarding: Bool = false
     @State private var showOnboarding: Bool = false
     
     @StateObject private var commandsManager = KeyboardCommandsManager()
+    
+    private func checkKeyboardStatus() {
+        // Check if our keyboard is in the list of enabled keyboards
+        // This is an indirect way since there's no public API for this
+        let extensionID = "com.aryamirsepasi.writingtools.WritingToolsKeyboardExt"
+        
+        // Check app container for evidence of keyboard usage
+        let keyboardUsed = UserDefaults(suiteName: "group.com.aryamirsepasi.writingtools")?
+            .bool(forKey: "keyboard_has_been_used") ?? false
+            
+        // Check if we've previously detected the keyboard
+        let previouslyEnabled = UserDefaults.standard.bool(forKey: "keyboard_enabled")
+        
+        // Use all available evidence
+        keyboardEnabled = keyboardUsed || previouslyEnabled
+        
+        // Save the status
+        UserDefaults.standard.set(keyboardEnabled, forKey: "keyboard_enabled")
+    }
     
     var body: some View {
         NavigationStack {
@@ -91,6 +111,8 @@ struct SettingsView: View {
             .navigationBarTitleDisplayMode(.large)
         }
         .onAppear {
+            checkKeyboardStatus()
+            
             if !hasCompletedOnboarding {
                 showOnboarding = true
             }

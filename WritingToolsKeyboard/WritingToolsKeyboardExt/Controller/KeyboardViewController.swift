@@ -14,6 +14,19 @@ class KeyboardViewController: UIInputViewController {
         super.viewDidLoad()
         setupBlurEffect()
         
+        // Mark that the keyboard has been used
+        UserDefaults(suiteName: "group.com.aryamirsepasi.writingtools")?
+            .set(true, forKey: "keyboard_has_been_used")
+        
+        // Also set the standard UserDefaults
+        UserDefaults.standard.set(true, forKey: "keyboard_enabled")
+        
+        // Also check and update full access status
+        if hasFullAccess {
+            UserDefaults(suiteName: "group.com.aryamirsepasi.writingtools")?
+                .set(true, forKey: "hasFullAccess")
+        }
+        
         let settings = AppSettings.shared
             print("Current provider: \(settings.currentProvider)")
             print("Gemini API key (exists): \(!settings.geminiApiKey.isEmpty)")

@@ -270,26 +270,26 @@ struct OnboardingView: View {
                 .bold()
                 .multilineTextAlignment(.center)
             
-            Text("Writing Tools gives you two ways to work with text")
-                .font(.title3)
-                .multilineTextAlignment(.center)
-                .foregroundColor(.secondary)
-                .padding(.horizontal, 32)
-            
             VStack(alignment: .leading, spacing: 16) {
-                FeatureCard(
-                    icon: "arrow.up.and.down.text.horizontal",
-                    title: "Automatic Text Selection",
-                    description: "Works with text up to 200 characters. Place cursor before or after the text you want to enhance."
-                )
-                
-                FeatureCard(
-                    icon: "doc.on.clipboard",
-                    title: "Use Copied Text",
-                    description: "For longer text, copy it first, then tap \"Use Copied Text\" in the keyboard."
-                )
+                VStack(alignment: .leading, spacing: 16) {
+                    FeatureCard(
+                        icon: "arrow.up.and.down.text.horizontal",
+                        title: "Automatic Text Selection",
+                        description: "Works with text up to 200 characters. Place cursor before or after the text you want to enhance."
+                    )
+                    .frame(maxWidth: .infinity) // Make each card fill the container width
+                    
+                    FeatureCard(
+                        icon: "doc.on.clipboard",
+                        title: "Use Copied Text",
+                        description: "For longer text, copy it first, then tap \"Use Copied Text\" in the keyboard."
+                    )
+                    .frame(maxWidth: .infinity) // Make each card fill the container width
+                }
+                .frame(width: 300) // Set a fixed width for the container
             }
             .padding(.horizontal, 24)
+
             
             Spacer()
         }
@@ -338,20 +338,33 @@ struct OnboardingView: View {
     // MARK: - Helper Methods
     
     private func checkKeyboardStatus() {
-        // This is a simplified check - in a real app, we would need to check
-        // if our keyboard is actually enabled and has full access
         
-        // For demo purposes, we'll just set these values to simulate checking
+        let keyboardExtensionBundleID = "com.aryamirsepasi.writingtools.WritingToolsKeyboardExt"
+        
+        // Check if our keyboard extension is enabled in the app container
+        let extensionEnabled = Bundle.main.appStoreReceiptURL?
+            .lastPathComponent
+            .contains(keyboardExtensionBundleID) ?? false
+        
+        // A more reliable method - check if the keyboard has previously typed anything
+        let keyboardUsed = UserDefaults(suiteName: "group.com.aryamirsepasi.writingtools")?
+            .bool(forKey: "keyboard_has_been_used") ?? false
+        
+        isKeyboardEnabled = extensionEnabled || keyboardUsed
+        
+        // For full access detection - check if we can access pasteboard (only possible with full access)
+        if isKeyboardEnabled {
+            // This code runs when the app is active, so we can test clipboard access
+            let testString = "test_full_access_\(Date().timeIntervalSince1970)"
+            UIPasteboard.general.string = testString
+            isFullAccessEnabled = UIPasteboard.general.string == testString
+            
+            // Save this status to the shared container
+            UserDefaults(suiteName: "group.com.aryamirsepasi.writingtools")?
+                .set(isFullAccessEnabled, forKey: "hasFullAccess")
+        }
+        
         hasCheckedSetup = true
-        
-        // In a real implementation, we would check if the keyboard is installed and has full access
-        // For now, we'll simulate this with a basic check
-        let keyboards = UserDefaults.standard.dictionaryRepresentation()
-            .filter { $0.key.contains("Keyboard") }
-        
-        // This is just for demonstration - actual implementation would be more complex
-        isKeyboardEnabled = !keyboards.isEmpty
-        isFullAccessEnabled = UserDefaults(suiteName: "group.com.aryamirsepasi.writingtools")?.bool(forKey: "hasFullAccess") ?? false
     }
 }
 
@@ -420,7 +433,6 @@ struct FeatureCard: View {
         .padding()
         .background(Color.gray.opacity(0.4))
         .cornerRadius(16)
-        .frame(width: 300)
     }
 }
 
