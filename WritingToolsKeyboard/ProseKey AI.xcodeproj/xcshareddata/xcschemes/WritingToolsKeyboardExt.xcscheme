@@ -17,9 +17,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "2A9BFDAE2D1F3CEC00A8F121"
-               BuildableName = "WritingToolsKeyboardExt.appex"
-               BlueprintName = "WritingToolsKeyboardExt"
-               ReferencedContainer = "container:WritingToolsKeyboard.xcodeproj">
+               BuildableName = "ProseKey AIExt.appex"
+               BlueprintName = "ProseKey AIExt"
+               ReferencedContainer = "container:ProseKey AI.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
          <BuildActionEntry
@@ -31,9 +31,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "2A9BFD7D2D1F3CCF00A8F121"
-               BuildableName = "WritingToolsKeyboard.app"
-               BlueprintName = "WritingToolsKeyboard"
-               ReferencedContainer = "container:WritingToolsKeyboard.xcodeproj">
+               BuildableName = "ProseKey AI.app"
+               BlueprintName = "ProseKey AI"
+               ReferencedContainer = "container:ProseKey AI.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -66,9 +66,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "2A9BFD7D2D1F3CCF00A8F121"
-            BuildableName = "WritingToolsKeyboard.app"
-            BlueprintName = "WritingToolsKeyboard"
-            ReferencedContainer = "container:WritingToolsKeyboard.xcodeproj">
+            BuildableName = "ProseKey AI.app"
+            BlueprintName = "ProseKey AI"
+            ReferencedContainer = "container:ProseKey AI.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </LaunchAction>
@@ -85,9 +85,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "2A9BFD7D2D1F3CCF00A8F121"
-            BuildableName = "WritingToolsKeyboard.app"
-            BlueprintName = "WritingToolsKeyboard"
-            ReferencedContainer = "container:WritingToolsKeyboard.xcodeproj">
+            BuildableName = "ProseKey AI.app"
+            BlueprintName = "ProseKey AI"
+            ReferencedContainer = "container:ProseKey AI.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

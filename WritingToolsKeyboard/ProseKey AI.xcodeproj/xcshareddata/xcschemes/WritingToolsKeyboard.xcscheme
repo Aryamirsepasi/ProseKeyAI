@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
    LastUpgradeVersion = "1630"
-   wasCreatedForAppExtension = "YES"
    version = "1.7">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -17,23 +16,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "2A9BFD7D2D1F3CCF00A8F121"
-               BuildableName = "WritingToolsKeyboard.app"
-               BlueprintName = "WritingToolsKeyboard"
-               ReferencedContainer = "container:WritingToolsKeyboard.xcodeproj">
-            </BuildableReference>
-         </BuildActionEntry>
-         <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "YES"
-            buildForProfiling = "YES"
-            buildForArchiving = "YES"
-            buildForAnalyzing = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "2A9BFDAE2D1F3CEC00A8F121"
-               BuildableName = "WritingToolsKeyboardExt.appex"
-               BlueprintName = "WritingToolsKeyboardExt"
-               ReferencedContainer = "container:WritingToolsKeyboard.xcodeproj">
+               BuildableName = "ProseKey AI.app"
+               BlueprintName = "ProseKey AI"
+               ReferencedContainer = "container:ProseKey AI.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -44,6 +29,30 @@
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES"
       shouldAutocreateTestPlan = "YES">
+      <Testables>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "2A9BFD8D2D1F3CD000A8F121"
+               BuildableName = "WritingToolsKeyboardTests.xctest"
+               BlueprintName = "WritingToolsKeyboardTests"
+               ReferencedContainer = "container:ProseKey AI.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "2A9BFD972D1F3CD000A8F121"
+               BuildableName = "WritingToolsKeyboardUITests.xctest"
+               BlueprintName = "WritingToolsKeyboardUITests"
+               ReferencedContainer = "container:ProseKey AI.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+      </Testables>
    </TestAction>
    <LaunchAction
       buildConfiguration = "Debug"
@@ -60,9 +69,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "2A9BFD7D2D1F3CCF00A8F121"
-            BuildableName = "WritingToolsKeyboard.app"
-            BlueprintName = "WritingToolsKeyboard"
-            ReferencedContainer = "container:WritingToolsKeyboard.xcodeproj">
+            BuildableName = "ProseKey AI.app"
+            BlueprintName = "ProseKey AI"
+            ReferencedContainer = "container:ProseKey AI.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -77,9 +86,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "2A9BFD7D2D1F3CCF00A8F121"
-            BuildableName = "WritingToolsKeyboard.app"
-            BlueprintName = "WritingToolsKeyboard"
-            ReferencedContainer = "container:WritingToolsKeyboard.xcodeproj">
+            BuildableName = "ProseKey AI.app"
+            BlueprintName = "ProseKey AI"
+            ReferencedContainer = "container:ProseKey AI.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

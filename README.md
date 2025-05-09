@@ -1,15 +1,15 @@
-# WritingTools Keyboard
+# ProseKey AI
 
 ## TestFlight Beta
 [![TestFlight Beta](https://img.shields.io/badge/TestFlight-Join_Beta-blue?logo=apple)](https://testflight.apple.com/join/QCr2T8SY)
 
 ## Overview
 
-**Writing Tools Keyboard** is an iOS third-party keyboard designed to help users improve their writing on the go. Whether you need to proofread a sentence, rewrite text for clarity, generate summaries, or even convert text into a table, this keyboard provides quick AI-assisted features at your fingertips. It supports Custom Instructions that you can define in the app and use in the keyboard. You can choose from multiple writing options, and the tool will either correct, refine, or transform your text using various AI models. AI Providers: Gemini, Mistral, and OpenAI API.
+**ProseKey AI** is an iOS third-party keyboard designed to help users improve their writing on the go. Whether you need to proofread a sentence, rewrite text for clarity, generate summaries, or even convert text into a table, this keyboard provides quick AI-assisted features at your fingertips. It supports Custom Instructions that you can define in the app and use in the keyboard. You can choose from multiple writing options, and the tool will either correct, refine, or transform your text using various AI models. AI Providers: Gemini, Mistral, and OpenAI API.
 
 The Windows/Linux versions are developed by Jesai Tarun (@theJayTea). The macOS version is developed by me. 
 
-![Keyboard Flow](Images/keyboard.jpeg)  
+![Keyboard Flow](Images/keyboard.png)  
 *Keyboard Flow with the tools*
 
 ### Keyboard Features
@@ -25,7 +25,7 @@ The Windows/Linux versions are developed by Jesai Tarun (@theJayTea). The macOS 
 - Custom command system for adding your own commands to use in the keyboard!
 - Clipboard integration
 
-![App Interface](Images/appflow.jpeg)  
+![App Interface](Images/appflow.png)  
 *You can use the app to select AI Provider, define custom commands or edit current ones.*
 
 ## Future Plans

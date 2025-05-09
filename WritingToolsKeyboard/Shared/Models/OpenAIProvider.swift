@@ -27,7 +27,7 @@ enum OpenAIModel: String, CaseIterable {
 @MainActor
 class OpenAIProvider: ObservableObject, AIProvider {
     @Published var isProcessing = false
-        private var config: OpenAIConfig
+        var config: OpenAIConfig
         private var aiProxyService: OpenAIService?
         private var currentTask: Task<Void, Never>?
         

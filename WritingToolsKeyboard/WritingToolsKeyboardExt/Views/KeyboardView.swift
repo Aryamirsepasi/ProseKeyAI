@@ -22,7 +22,7 @@ struct KeyboardView: View {
             .onAppear {
                 // Check for selected text when the view appears
                 vm.checkSelectedText()
-                UIAccessibility.post(notification: .screenChanged, argument: "Writing Tools Keyboard Ready")
+                UIAccessibility.post(notification: .screenChanged, argument: "ProseKey AI Keyboard Ready")
             }
             .ignoresSafeArea(.container, edges: .all)
             .background(.clear)

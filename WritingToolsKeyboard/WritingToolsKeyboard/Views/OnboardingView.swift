@@ -129,7 +129,7 @@ struct OnboardingView: View {
                 .foregroundColor(accentColor)
                 .padding(.bottom, 20)
             
-            Text("Welcome to Writing Tools")
+            Text("Welcome to ProseKey AI")
                 .font(.largeTitle)
                 .bold()
                 .multilineTextAlignment(.center)
@@ -170,7 +170,7 @@ struct OnboardingView: View {
                     "Open Settings",
                     "Go to General → Keyboard",
                     "Tap Keyboards → Add New Keyboard",
-                    "Select Writing Tools Keyboard"
+                    "Select ProseKey AI Keyboard"
                 ],
                 isComplete: $isKeyboardEnabled,
                 completeText: "Keyboard Enabled"
@@ -224,7 +224,7 @@ struct OnboardingView: View {
                 title: "To enable full access:",
                 steps: [
                     "Open Settings → General → Keyboard",
-                    "Select Writing Tools Keyboard",
+                    "Select ProseKey AI Keyboard",
                     "Toggle on \"Allow Full Access\"",
                     "Confirm when prompted"
                 ],

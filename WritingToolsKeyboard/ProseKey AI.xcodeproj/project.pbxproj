@@ -11,7 +11,7 @@
 		2A1CC6262DC6B96700D0A451 /* AIProxy in Frameworks */ = {isa = PBXBuildFile; productRef = 2A1CC6252DC6B96700D0A451 /* AIProxy */; };
 		2A5B324F2D49A1F3006A5F4D /* MarkdownUI in Frameworks */ = {isa = PBXBuildFile; productRef = 2A5B324E2D49A1F3006A5F4D /* MarkdownUI */; };
 		2A96CFE12D862308002D819E /* OnboardingKit in Frameworks */ = {isa = PBXBuildFile; productRef = 2A96CFE02D862308002D819E /* OnboardingKit */; };
-		2A9BFDB62D1F3CEC00A8F121 /* WritingToolsKeyboardExt.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 2A9BFDAF2D1F3CEC00A8F121 /* WritingToolsKeyboardExt.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		2A9BFDB62D1F3CEC00A8F121 /* ProseKey AIExt.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 2A9BFDAF2D1F3CEC00A8F121 /* ProseKey AIExt.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		2AEB8FCD2DC6D7C7007869EF /* MarkdownUI in Frameworks */ = {isa = PBXBuildFile; productRef = 2AEB8FCC2DC6D7C7007869EF /* MarkdownUI */; };
 /* End PBXBuildFile section */
 
@@ -32,7 +32,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
-				2A9BFDB62D1F3CEC00A8F121 /* WritingToolsKeyboardExt.appex in Embed Foundation Extensions */,
+				2A9BFDB62D1F3CEC00A8F121 /* ProseKey AIExt.appex in Embed Foundation Extensions */,
 			);
 			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -40,24 +40,24 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		2A9BFD7E2D1F3CCF00A8F121 /* WritingToolsKeyboard.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WritingToolsKeyboard.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		2A9BFDAF2D1F3CEC00A8F121 /* WritingToolsKeyboardExt.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = WritingToolsKeyboardExt.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		2A9BFD7E2D1F3CCF00A8F121 /* ProseKey AI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "ProseKey AI.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		2A9BFDAF2D1F3CEC00A8F121 /* ProseKey AIExt.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "ProseKey AIExt.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		2A9BFF462D1F4A8C00A8F121 /* Exceptions for "WritingToolsKeyboard" folder in "WritingToolsKeyboard" target */ = {
+		2A9BFF462D1F4A8C00A8F121 /* Exceptions for "WritingToolsKeyboard" folder in "ProseKey AI" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				App/Info.plist,
 			);
-			target = 2A9BFD7D2D1F3CCF00A8F121 /* WritingToolsKeyboard */;
+			target = 2A9BFD7D2D1F3CCF00A8F121 /* ProseKey AI */;
 		};
-		2A9BFF492D1F4B0000A8F121 /* Exceptions for "WritingToolsKeyboardExt" folder in "WritingToolsKeyboardExt" target */ = {
+		2A9BFF492D1F4B0000A8F121 /* Exceptions for "WritingToolsKeyboardExt" folder in "ProseKey AIExt" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Resources/Info.plist,
 			);
-			target = 2A9BFDAE2D1F3CEC00A8F121 /* WritingToolsKeyboardExt */;
+			target = 2A9BFDAE2D1F3CEC00A8F121 /* ProseKey AIExt */;
 		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
@@ -65,7 +65,7 @@
 		2A9BFD802D1F3CCF00A8F121 /* WritingToolsKeyboard */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				2A9BFF462D1F4A8C00A8F121 /* Exceptions for "WritingToolsKeyboard" folder in "WritingToolsKeyboard" target */,
+				2A9BFF462D1F4A8C00A8F121 /* Exceptions for "WritingToolsKeyboard" folder in "ProseKey AI" target */,
 			);
 			path = WritingToolsKeyboard;
 			sourceTree = "<group>";
@@ -73,7 +73,7 @@
 		2A9BFDB02D1F3CEC00A8F121 /* WritingToolsKeyboardExt */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				2A9BFF492D1F4B0000A8F121 /* Exceptions for "WritingToolsKeyboardExt" folder in "WritingToolsKeyboardExt" target */,
+				2A9BFF492D1F4B0000A8F121 /* Exceptions for "WritingToolsKeyboardExt" folder in "ProseKey AIExt" target */,
 			);
 			path = WritingToolsKeyboardExt;
 			sourceTree = "<group>";
@@ -122,8 +122,8 @@
 		2A9BFD7F2D1F3CCF00A8F121 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				2A9BFD7E2D1F3CCF00A8F121 /* WritingToolsKeyboard.app */,
-				2A9BFDAF2D1F3CEC00A8F121 /* WritingToolsKeyboardExt.appex */,
+				2A9BFD7E2D1F3CCF00A8F121 /* ProseKey AI.app */,
+				2A9BFDAF2D1F3CEC00A8F121 /* ProseKey AIExt.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -138,9 +138,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		2A9BFD7D2D1F3CCF00A8F121 /* WritingToolsKeyboard */ = {
+		2A9BFD7D2D1F3CCF00A8F121 /* ProseKey AI */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 2A9BFDA22D1F3CD000A8F121 /* Build configuration list for PBXNativeTarget "WritingToolsKeyboard" */;
+			buildConfigurationList = 2A9BFDA22D1F3CD000A8F121 /* Build configuration list for PBXNativeTarget "ProseKey AI" */;
 			buildPhases = (
 				2A9BFD7A2D1F3CCF00A8F121 /* Sources */,
 				2A9BFD7B2D1F3CCF00A8F121 /* Frameworks */,
@@ -156,19 +156,19 @@
 				2A9BFD802D1F3CCF00A8F121 /* WritingToolsKeyboard */,
 				2A9BFF382D1F455400A8F121 /* Shared */,
 			);
-			name = WritingToolsKeyboard;
+			name = "ProseKey AI";
 			packageProductDependencies = (
 				2A5B324E2D49A1F3006A5F4D /* MarkdownUI */,
 				2A96CFE02D862308002D819E /* OnboardingKit */,
 				2A1CC6252DC6B96700D0A451 /* AIProxy */,
 			);
 			productName = WritingToolsKeyboard;
-			productReference = 2A9BFD7E2D1F3CCF00A8F121 /* WritingToolsKeyboard.app */;
+			productReference = 2A9BFD7E2D1F3CCF00A8F121 /* ProseKey AI.app */;
 			productType = "com.apple.product-type.application";
 		};
-		2A9BFDAE2D1F3CEC00A8F121 /* WritingToolsKeyboardExt */ = {
+		2A9BFDAE2D1F3CEC00A8F121 /* ProseKey AIExt */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 2A9BFDB82D1F3CEC00A8F121 /* Build configuration list for PBXNativeTarget "WritingToolsKeyboardExt" */;
+			buildConfigurationList = 2A9BFDB82D1F3CEC00A8F121 /* Build configuration list for PBXNativeTarget "ProseKey AIExt" */;
 			buildPhases = (
 				2A9BFDAB2D1F3CEC00A8F121 /* Sources */,
 				2A9BFDAC2D1F3CEC00A8F121 /* Frameworks */,
@@ -182,13 +182,13 @@
 				2A9BFDB02D1F3CEC00A8F121 /* WritingToolsKeyboardExt */,
 				2A9BFF382D1F455400A8F121 /* Shared */,
 			);
-			name = WritingToolsKeyboardExt;
+			name = "ProseKey AIExt";
 			packageProductDependencies = (
 				2A17363A2DC6C08100846B7B /* AIProxy */,
 				2AEB8FCC2DC6D7C7007869EF /* MarkdownUI */,
 			);
 			productName = WritingToolsKeyboardExt;
-			productReference = 2A9BFDAF2D1F3CEC00A8F121 /* WritingToolsKeyboardExt.appex */;
+			productReference = 2A9BFDAF2D1F3CEC00A8F121 /* ProseKey AIExt.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
 /* End PBXNativeTarget section */
@@ -210,7 +210,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 2A9BFD792D1F3CCF00A8F121 /* Build configuration list for PBXProject "WritingToolsKeyboard" */;
+			buildConfigurationList = 2A9BFD792D1F3CCF00A8F121 /* Build configuration list for PBXProject "ProseKey AI" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -229,8 +229,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				2A9BFD7D2D1F3CCF00A8F121 /* WritingToolsKeyboard */,
-				2A9BFDAE2D1F3CEC00A8F121 /* WritingToolsKeyboardExt */,
+				2A9BFD7D2D1F3CCF00A8F121 /* ProseKey AI */,
+				2A9BFDAE2D1F3CEC00A8F121 /* ProseKey AIExt */,
 			);
 		};
 /* End PBXProject section */
@@ -272,7 +272,7 @@
 /* Begin PBXTargetDependency section */
 		2A9BFDB52D1F3CEC00A8F121 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 2A9BFDAE2D1F3CEC00A8F121 /* WritingToolsKeyboardExt */;
+			target = 2A9BFDAE2D1F3CEC00A8F121 /* ProseKey AIExt */;
 			targetProxy = 2A9BFDB42D1F3CEC00A8F121 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -407,12 +407,12 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = WritingToolsKeyboard/WritingToolsKeyboard.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 8;
+				CURRENT_PROJECT_VERSION = 10;
 				DEVELOPMENT_ASSET_PATHS = "\"WritingToolsKeyboard/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = "$(SRCROOT)/WritingToolsKeyboard/App/Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = "WritingTools AI Keyboard";
+				INFOPLIST_KEY_CFBundleDisplayName = "ProseKey AI";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -444,12 +444,12 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = WritingToolsKeyboard/WritingToolsKeyboard.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 8;
+				CURRENT_PROJECT_VERSION = 10;
 				DEVELOPMENT_ASSET_PATHS = "\"WritingToolsKeyboard/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = "$(SRCROOT)/WritingToolsKeyboard/App/Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = "WritingTools AI Keyboard";
+				INFOPLIST_KEY_CFBundleDisplayName = "ProseKey AI";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -483,7 +483,7 @@
 				CURRENT_PROJECT_VERSION = 5;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = "$(SRCROOT)/WritingToolsKeyboardExt/Resources/Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = WritingToolsKeyboardExt;
+				INFOPLIST_KEY_CFBundleDisplayName = "ProseKey AI Keyboard Extension";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -494,11 +494,15 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.aryamirsepasi.WritingToolsKeyboard.WritingToolsKeyboardExt;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "WritingToolsKeyboardExt/Controller/WritingToolsKeyboardExt-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -511,7 +515,7 @@
 				CURRENT_PROJECT_VERSION = 5;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = "$(SRCROOT)/WritingToolsKeyboardExt/Resources/Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = WritingToolsKeyboardExt;
+				INFOPLIST_KEY_CFBundleDisplayName = "ProseKey AI Keyboard Extension";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -522,17 +526,21 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.aryamirsepasi.WritingToolsKeyboard.WritingToolsKeyboardExt;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "WritingToolsKeyboardExt/Controller/WritingToolsKeyboardExt-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		2A9BFD792D1F3CCF00A8F121 /* Build configuration list for PBXProject "WritingToolsKeyboard" */ = {
+		2A9BFD792D1F3CCF00A8F121 /* Build configuration list for PBXProject "ProseKey AI" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				2A9BFDA02D1F3CD000A8F121 /* Debug */,
@@ -541,7 +549,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		2A9BFDA22D1F3CD000A8F121 /* Build configuration list for PBXNativeTarget "WritingToolsKeyboard" */ = {
+		2A9BFDA22D1F3CD000A8F121 /* Build configuration list for PBXNativeTarget "ProseKey AI" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				2A9BFDA32D1F3CD000A8F121 /* Debug */,
@@ -550,7 +558,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		2A9BFDB82D1F3CEC00A8F121 /* Build configuration list for PBXNativeTarget "WritingToolsKeyboardExt" */ = {
+		2A9BFDB82D1F3CEC00A8F121 /* Build configuration list for PBXNativeTarget "ProseKey AIExt" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				2A9BFDB92D1F3CEC00A8F121 /* Debug */,
