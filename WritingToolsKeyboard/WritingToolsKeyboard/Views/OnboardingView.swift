@@ -271,24 +271,19 @@ struct OnboardingView: View {
                 .multilineTextAlignment(.center)
             
             VStack(alignment: .leading, spacing: 16) {
-                VStack(alignment: .leading, spacing: 16) {
-                    FeatureCard(
-                        icon: "arrow.up.and.down.text.horizontal",
-                        title: "Automatic Text Selection",
-                        description: "Works with text up to 200 characters. Place cursor before or after the text you want to enhance."
-                    )
-                    .frame(maxWidth: .infinity) // Make each card fill the container width
-                    
-                    FeatureCard(
-                        icon: "doc.on.clipboard",
-                        title: "Use Copied Text",
-                        description: "For longer text, copy it first, then tap \"Use Copied Text\" in the keyboard."
-                    )
-                    .frame(maxWidth: .infinity) // Make each card fill the container width
-                }
-                .frame(width: 300) // Set a fixed width for the container
+                FeatureCard(
+                    icon: "arrow.up.and.down.text.horizontal",
+                    title: "Automatic Text Selection",
+                    description: "Works with text up to 200 characters. Place cursor before or after the text you want to enhance."
+                )
+                FeatureCard(
+                    icon: "doc.on.clipboard",
+                    title: "Use Copied Text",
+                    description: "For longer text, copy it first, then tap \"Use Copied Text\" in the keyboard."
+                )
             }
             .padding(.horizontal, 24)
+
 
             
             Spacer()

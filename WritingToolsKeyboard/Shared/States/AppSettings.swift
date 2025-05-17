@@ -6,7 +6,6 @@ class AppSettings: ObservableObject {
     
     private let defaults = UserDefaults(suiteName: "group.com.aryamirsepasi.writingtools")!
     
-    // MARK: - Published Settings
     @Published var geminiApiKey: String {
         didSet { defaults.set(geminiApiKey, forKey: "gemini_api_key") }
     }
@@ -31,15 +30,34 @@ class AppSettings: ObservableObject {
         didSet { defaults.set(openAIModel, forKey: "openai_model") }
     }
     
+    // --- Anthropic ---
+    @Published var anthropicApiKey: String {
+        didSet { defaults.set(anthropicApiKey, forKey: "anthropic_api_key") }
+    }
+    @Published var anthropicModel: String {
+        didSet { defaults.set(anthropicModel, forKey: "anthropic_model") }
+    }
+    
+    // --- OpenRouter ---
+    @Published var openRouterApiKey: String {
+        didSet { defaults.set(openRouterApiKey, forKey: "openrouter_api_key") }
+    }
+    @Published var openRouterModel: String {
+        didSet { defaults.set(openRouterModel, forKey: "openrouter_model") }
+    }
+    
     
     @Published var currentProvider: String {
         didSet { defaults.set(currentProvider, forKey: "current_provider") }
     }
     
+    @Published var hasCompletedOnboarding: Bool {
+        didSet { defaults.set(hasCompletedOnboarding, forKey: "has_completed_onboarding") }
+    }
+    
     @Published var mistralApiKey: String {
         didSet { defaults.set(mistralApiKey, forKey: "mistral_api_key") }
     }
-    
     
     @Published var mistralModel: String {
         didSet { defaults.set(mistralModel, forKey: "mistral_model") }
@@ -47,27 +65,59 @@ class AppSettings: ObservableObject {
     
     // MARK: - Init
     private init() {
-        // Load or set defaults
-        self.geminiApiKey = defaults.string(forKey: "gemini_api_key") ?? ""
-        let geminiModelStr = defaults.string(forKey: "gemini_model") ?? GeminiModel.twoflash.rawValue
+        // Use self.defaults (the app group UserDefaults) for reading
+        self.geminiApiKey =
+        self.defaults.string(forKey: "gemini_api_key") ?? ""
+        let geminiModelStr =
+        self.defaults.string(forKey: "gemini_model") ??
+        GeminiModel.twoflash.rawValue
         self.geminiModel = GeminiModel(rawValue: geminiModelStr) ?? .twoflash
         
-        self.geminiCustomModel = defaults.string(forKey: "gemini_custom_model") ?? ""
+        self.geminiCustomModel =
+        self.defaults.string(forKey: "gemini_custom_model") ?? ""
         
-        self.openAIApiKey = defaults.string(forKey: "openai_api_key") ?? ""
-        self.openAIBaseURL = defaults.string(forKey: "openai_base_url") ?? OpenAIConfig.defaultBaseURL
-        self.openAIModel = defaults.string(forKey: "openai_model") ?? OpenAIConfig.defaultModel
+        self.openAIApiKey =
+        self.defaults.string(forKey: "openai_api_key") ?? ""
+        self.openAIBaseURL =
+        self.defaults.string(forKey: "openai_base_url") ??
+        OpenAIConfig.defaultBaseURL
+        self.openAIModel =
+        self.defaults.string(forKey: "openai_model") ??
+        OpenAIConfig.defaultModel
         
-        self.mistralApiKey = defaults.string(forKey: "mistral_api_key") ?? ""
-        self.mistralModel = defaults.string(forKey: "mistral_model") ?? MistralConfig.defaultModel
+        self.mistralApiKey =
+        self.defaults.string(forKey: "mistral_api_key") ?? ""
+        self.mistralModel =
+        self.defaults.string(forKey: "mistral_model") ??
+        MistralConfig.defaultModel
         
-        self.currentProvider = defaults.string(forKey: "current_provider") ?? "gemini"
+        self.anthropicApiKey = defaults.string(forKey: "anthropic_api_key") ?? ""
+        self.anthropicModel = defaults.string(forKey: "anthropic_model") ?? AnthropicConfig.defaultModel
+        
+        self.openRouterApiKey = defaults.string(forKey: "openrouter_api_key") ?? ""
+        self.openRouterModel = defaults.string(forKey: "openrouter_model") ?? OpenRouterConfig.defaultModel
+        
+        // Defaulting to "mistral" if no provider is set, which seems reasonable
+        self.currentProvider =
+        self.defaults.string(forKey: "current_provider") ?? "mistral"
+        
+        self.hasCompletedOnboarding =
+        self.defaults.bool(forKey: "has_completed_onboarding")
     }
     
-    // MARK: - Convenience
     func resetAll() {
+        // This resets UserDefaults.standard, ensure it's what you intend.
+        // If you want to clear the app group defaults, use self.defaults.removePersistentDomain(forName: suiteName)
         let domain = Bundle.main.bundleIdentifier!
         UserDefaults.standard.removePersistentDomain(forName: domain)
         UserDefaults.standard.synchronize()
+        
+        // To clear the app group defaults:
+        if (defaults.persistentDomain(forName: "group.com.aryamirsepasi.writingtools")?.keys.first) != nil { // A bit of a hack to get the actual suite name if needed, or just use the string
+            defaults.removePersistentDomain(forName: "group.com.aryamirsepasi.writingtools")
+            defaults.synchronize()
+        }
+        // Then re-initialize or set to defaults
+        // For simplicity, you might want to re-initialize AppSettings properties to their defaults here.
     }
 }

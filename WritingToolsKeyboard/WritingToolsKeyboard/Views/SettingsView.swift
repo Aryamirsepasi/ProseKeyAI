@@ -1,13 +1,14 @@
 import SwiftUI
 
 struct SettingsView: View {
-    @ObservedObject var appState: AppState
+    @StateObject var appState = AppState.shared
+    @ObservedObject var settings = AppSettings.shared
     @State private var keyboardEnabled: Bool = false
     @State private var selectedTab = 0
     
     @AppStorage("enable_haptics", store: UserDefaults(suiteName: "group.com.aryamirsepasi.writingtools"))
     private var enableHaptics = false
-
+    
     @AppStorage("hasCompletedOnboarding") private var hasCompletedOnboarding: Bool = false
     @State private var showOnboarding: Bool = false
     @State private var showApiKeyHelp: Bool = false
@@ -64,15 +65,15 @@ struct SettingsView: View {
                             .padding(.horizontal)
                         
                         ProviderTabView(
-                            currentProvider: Binding(
-                                get: { appState.currentProvider },
-                                set: { appState.setCurrentProvider($0) }
-                            )
+                            currentProvider: $settings.currentProvider // Bind to AppSettings
                         )
+                        // Ensure AppState is updated when settings.currentProvider changes
+                        .onChange(of: settings.currentProvider) { newProvider in
+                            appState.setCurrentProvider(newProvider)
+                        }
                         
-                        // Provider setup guidance
                         ProviderSetupCard(
-                            provider: appState.currentProvider,
+                            provider: settings.currentProvider, // Use settings.currentProvider
                             appState: appState,
                             showApiKeyHelp: $showApiKeyHelp
                         )
@@ -140,13 +141,13 @@ struct SettingsView: View {
                                 .padding(.leading, 56)
                             
                             // Developer website
-                            Link(destination: URL(string: "https://aryamirsepasi.com")!) {
+                            Link(destination: URL(string: "https://aryamirsepasi.com/prosekey")!) {
                                 HStack {
                                     Image(systemName: "person.fill")
                                         .font(.system(size: 22))
                                         .foregroundColor(.blue)
                                     VStack(alignment: .leading, spacing: 2) {
-                                        Text("Developer Website")
+                                        Text("App Website")
                                             .font(.subheadline)
                                             .fontWeight(.medium)
                                         Text("Arya Mirsepasi")
@@ -165,7 +166,7 @@ struct SettingsView: View {
                                 .padding(.leading, 56)
                             
                             // How to use
-                            Link(destination: URL(string: "https://github.com/Aryamirsepasi/WritingToolsKeyboard/issues")!) {
+                            Link(destination: URL(string: "https://aryamirsepasi.com/support")!) {
                                 HStack {
                                     Image(systemName: "questionmark.circle.fill")
                                         .font(.system(size: 22))
@@ -174,7 +175,7 @@ struct SettingsView: View {
                                         Text("Having Issues?")
                                             .font(.subheadline)
                                             .fontWeight(.medium)
-                                        Text("Open a new issue on GitHub and tag me!")
+                                        Text("Submit a new issue on the support page!")
                                             .font(.caption)
                                             .foregroundColor(.secondary)
                                     }
@@ -190,7 +191,7 @@ struct SettingsView: View {
                                 .padding(.leading, 56)
                             
                             // Privacy Policy
-                            Link(destination: URL(string: "https://github.com/Aryamirsepasi/WritingToolsKeyboard/tree/main/Privacy%20Policy")!) {
+                            Link(destination: URL(string: "https://aryamirsepasi.com/prosekey/privacy")!) {
                                 HStack {
                                     Image(systemName: "lock.shield.fill")
                                         .font(.system(size: 22))
@@ -217,10 +218,10 @@ struct SettingsView: View {
                                     .font(.headline)
                                     .foregroundColor(.primary)
                                 
-                                Text("Version 1.0.1")
+                                Text("Version 1.1")
                                     .font(.subheadline)
                                     .foregroundColor(.secondary)
-                                    
+                                
                                 Text("© 2025 Arya Mirsepasi")
                                     .font(.caption)
                                     .foregroundColor(.secondary)
@@ -232,7 +233,7 @@ struct SettingsView: View {
                         .cornerRadius(12)
                         .padding(.horizontal)
                     }
-
+                    
                 }
                 .padding(.bottom, 30)
             }
@@ -245,12 +246,14 @@ struct SettingsView: View {
             if !hasCompletedOnboarding {
                 showOnboarding = true
             }
+            // Ensure AppState's current provider is in sync with AppSettings on appear
+            appState.setCurrentProvider(settings.currentProvider)
         }
         .fullScreenCover(isPresented: $showOnboarding) {
             OnboardingView()
         }
         .sheet(isPresented: $showApiKeyHelp) {
-            ApiKeyHelpView(provider: appState.currentProvider)
+            ApiKeyHelpView(provider: settings.currentProvider) // Use settings.currentProvider
         }
     }
     
@@ -351,124 +354,91 @@ struct SetupStepView: View {
 struct ProviderTabView: View {
     @Binding var currentProvider: String
     
+    private let providers: [(id: String, icon: String, name: String, color: Color)] = [
+        ("gemini", "g.circle.fill", "Gemini", .blue),
+        ("openai", "o.circle.fill", "OpenAI", .green),
+        ("mistral", "m.circle.fill", "Mistral", .orange),
+        ("anthropic", "a.circle.fill", "Anthropic", .purple),
+        ("openrouter", "r.circle.fill", "OpenRouter", .pink)
+    ]
+    
     var body: some View {
-        HStack(spacing: 0) {
-            ProviderTab(
-                icon: "g.circle.fill",
-                title: "Gemini AI",
-                isSelected: currentProvider == "gemini",
-                action: { currentProvider = "gemini" }
-            )
-            
-            ProviderTab(
-                icon: "o.circle.fill",
-                title: "OpenAI",
-                isSelected: currentProvider == "openai",
-                action: { currentProvider = "openai" }
-            )
-            
-            ProviderTab(
-                icon: "m.circle.fill",
-                title: "Mistral",
-                isSelected: currentProvider == "mistral",
-                action: { currentProvider = "mistral" }
-            )
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: 10) {
+                ForEach(providers, id: \.id) { provider in
+                    Button(action: { currentProvider = provider.id }) {
+                        HStack(spacing: 6) {
+                            Image(systemName: provider.icon)
+                                .foregroundColor(provider.color)
+                            Text(provider.name)
+                                .font(.subheadline)
+                                .fontWeight(.medium)
+                        }
+                        .padding(.horizontal, 14)
+                        .padding(.vertical, 8)
+                        .background(currentProvider == provider.id ? provider.color.opacity(0.15) : Color(.systemGray6))
+                        .foregroundColor(currentProvider == provider.id ? provider.color : .primary)
+                        .cornerRadius(20)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 20)
+                                .stroke(currentProvider == provider.id ? provider.color : Color.clear, lineWidth: 2)
+                        )
+                    }
+                    .buttonStyle(PlainButtonStyle())
+                }
+            }
+            .padding(.horizontal)
         }
-        .background(Color(.systemGray6))
-        .cornerRadius(12)
-        .padding(.horizontal)
     }
 }
 
-struct ProviderTab: View {
-    let icon: String
-    let title: String
-    let isSelected: Bool
-    let action: () -> Void
-    
-    var body: some View {
-        Button(action: action) {
-            VStack(spacing: 8) {
-                Image(systemName: icon)
-                    .font(.system(size: 20))
-                
-                Text(title)
-                    .font(.subheadline)
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.8)
-            }
-            .frame(maxWidth: .infinity)
-            .padding(.vertical, 12)
-            .background(isSelected ? Color.blue.opacity(0.15) : Color.clear)
-            .foregroundColor(isSelected ? .blue : .primary)
-            .cornerRadius(8)
-        }
-        .buttonStyle(PlainButtonStyle())
-    }
-}
 
 struct ProviderSetupCard: View {
     let provider: String
-    let appState: AppState
+    @ObservedObject var appState: AppState
+    @ObservedObject var settings = AppSettings.shared
     @Binding var showApiKeyHelp: Bool
     
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
-            // Header with provider info
             HStack {
                 Image(systemName: providerIcon)
                     .font(.system(size: 22))
                     .foregroundColor(.blue)
-                
                 Text(providerName)
                     .font(.headline)
-                
                 Spacer()
-                
-                Button(action: {
-                    showApiKeyHelp = true
-                }) {
+                Button(action: { showApiKeyHelp = true }) {
                     Label("Help", systemImage: "questionmark.circle")
                         .font(.subheadline)
                         .foregroundColor(.blue)
                 }
             }
-            
-            // API key status
             HStack {
                 Image(systemName: hasApiKey ? "checkmark.shield.fill" : "key.fill")
                     .foregroundColor(hasApiKey ? .green : .orange)
-                
                 Text(hasApiKey ? "API Key Configured" : "API Key Required")
                     .font(.subheadline)
-                
                 Spacer()
-                
-                if provider == "gemini" {
-                    NavigationLink(destination: GeminiSettingsView(appState: appState)) {
-                        Text(hasApiKey ? "Change" : "Configure")
-                            .foregroundColor(.blue)
-                    }
-                } else if provider == "openai" {
-                    NavigationLink(destination: OpenAISettingsView(appState: appState)) {
-                        Text(hasApiKey ? "Change" : "Configure")
-                            .foregroundColor(.blue)
-                    }
-                } else if provider == "mistral" {
-                    NavigationLink(destination: MistralSettingsView(appState: appState)) {
-                        Text(hasApiKey ? "Change" : "Configure")
-                            .foregroundColor(.blue)
-                    }
+                // NavigationLinks for all providers
+                switch provider {
+                case "gemini":
+                    NavigationLink(destination: GeminiSettingsView(appState: appState)) { Text(hasApiKey ? "Change" : "Configure").foregroundColor(.blue) }
+                case "openai":
+                    NavigationLink(destination: OpenAISettingsView(appState: appState)) { Text(hasApiKey ? "Change" : "Configure").foregroundColor(.blue) }
+                case "mistral":
+                    NavigationLink(destination: MistralSettingsView(appState: appState)) { Text(hasApiKey ? "Change" : "Configure").foregroundColor(.blue) }
+                case "anthropic":
+                    NavigationLink(destination: AnthropicSettingsView(appState: appState)) { Text(hasApiKey ? "Change" : "Configure").foregroundColor(.blue) }
+                case "openrouter":
+                    NavigationLink(destination: OpenRouterSettingsView(appState: appState)) { Text(hasApiKey ? "Change" : "Configure").foregroundColor(.blue) }
+                default: EmptyView()
                 }
             }
-            
-            // Provider description
             Text(providerDescription)
                 .font(.subheadline)
                 .foregroundColor(.secondary)
                 .fixedSize(horizontal: false, vertical: true)
-            
-            // Get API key link
             Link(destination: URL(string: apiKeyUrl)!) {
                 HStack {
                     Text("Get \(providerName) API Key")
@@ -492,50 +462,53 @@ struct ProviderSetupCard: View {
         case "gemini": return "g.circle.fill"
         case "openai": return "o.circle.fill"
         case "mistral": return "m.circle.fill"
+        case "anthropic": return "a.circle.fill"
+        case "openrouter": return "r.circle.fill"
         default: return "questionmark"
         }
     }
-    
     private var providerName: String {
         switch provider {
         case "gemini": return "Google Gemini"
         case "openai": return "OpenAI"
         case "mistral": return "Mistral AI"
+        case "anthropic": return "Anthropic"
+        case "openrouter": return "OpenRouter"
         default: return "Unknown Provider"
         }
     }
-    
     private var hasApiKey: Bool {
         switch provider {
-        case "gemini": return !appState.geminiProvider.config.apiKey.isEmpty
-        case "openai": return !appState.openAIProvider.config.apiKey.isEmpty
-        case "mistral": return !appState.mistralProvider.config.apiKey.isEmpty
+        case "gemini": return !settings.geminiApiKey.isEmpty
+        case "openai": return !settings.openAIApiKey.isEmpty
+        case "mistral": return !settings.mistralApiKey.isEmpty
+        case "anthropic": return !settings.anthropicApiKey.isEmpty
+        case "openrouter": return !settings.openRouterApiKey.isEmpty
         default: return false
         }
     }
-    
     private var providerDescription: String {
         switch provider {
-        case "gemini":
-            return "Google Gemini is a versatile AI model optimized for creative writing and text processing tasks. It provides high-quality completions and reformulations."
-        case "openai":
-            return "OpenAI offers powerful language models like GPT-4 that excel at understanding context and generating human-like text for various writing tasks."
-        case "mistral":
-            return "Mistral AI delivers efficient language models that balance performance and speed, great for text transformations and creative writing assistance."
-        default:
-            return ""
+        case "gemini": return "Google Gemini is a versatile AI model optimized for creative writing and text processing tasks. It provides high-quality completions and reformulations."
+        case "openai": return "OpenAI offers powerful language models like GPT-4 that excel at understanding context and generating human-like text for various writing tasks."
+        case "mistral": return "Mistral AI delivers efficient language models that balance performance and speed, great for text transformations and creative writing assistance."
+        case "anthropic": return "Anthropic's Claude models are known for their safety and helpfulness, offering advanced language capabilities for writing and productivity."
+        case "openrouter": return "OpenRouter is a gateway to many top AI models, letting you choose from a variety of providers with a single API key."
+        default: return ""
         }
     }
-    
     private var apiKeyUrl: String {
         switch provider {
         case "gemini": return "https://ai.google.dev/tutorials/setup"
         case "openai": return "https://platform.openai.com/account/api-keys"
         case "mistral": return "https://console.mistral.ai/api-keys/"
+        case "anthropic": return "https://console.anthropic.com/settings/keys"
+        case "openrouter": return "https://openrouter.ai/keys"
         default: return "https://example.com"
         }
     }
 }
+
 
 // MARK: - Help Sheets
 
@@ -630,31 +603,37 @@ struct ApiKeyHelpView: View {
     }
     
     private var providerIcon: String {
-        switch provider {
-        case "gemini": return "g.circle.fill"
-        case "openai": return "o.circle.fill"
-        case "mistral": return "m.circle.fill"
-        default: return "questionmark"
+            switch provider {
+            case "gemini": return "g.circle.fill"
+            case "openai": return "o.circle.fill"
+            case "mistral": return "m.circle.fill"
+            case "anthropic": return "a.circle.fill"
+            case "openrouter": return "r.circle.fill"
+            default: return "questionmark"
+            }
         }
-    }
     
     private var providerName: String {
-        switch provider {
-        case "gemini": return "Google Gemini"
-        case "openai": return "OpenAI"
-        case "mistral": return "Mistral AI"
-        default: return "Unknown Provider"
+            switch provider {
+            case "gemini": return "Google Gemini"
+            case "openai": return "OpenAI"
+            case "mistral": return "Mistral AI"
+            case "anthropic": return "Anthropic"
+            case "openrouter": return "OpenRouter"
+            default: return "Unknown Provider"
+            }
         }
-    }
     
     private var apiKeyUrl: String {
-        switch provider {
-        case "gemini": return "https://ai.google.dev/tutorials/setup"
-        case "openai": return "https://platform.openai.com/account/api-keys"
-        case "mistral": return "https://console.mistral.ai/api-keys/"
-        default: return "https://example.com"
+            switch provider {
+            case "gemini": return "https://ai.google.dev/tutorials/setup"
+            case "openai": return "https://platform.openai.com/account/api-keys"
+            case "mistral": return "https://console.mistral.ai/api-keys/"
+            case "anthropic": return "https://console.anthropic.com/settings/keys"
+            case "openrouter": return "https://openrouter.ai/keys"
+            default: return "https://example.com"
+            }
         }
-    }
     
     private var steps: [(title: String, description: String)] {
         switch provider {
@@ -700,8 +679,21 @@ struct ApiKeyHelpView: View {
                  description: "Return to this app and paste the key in the Mistral settings section.")
             ]
             
-        default:
-            return []
+        case "anthropic":
+            return [
+                (title: "Create an Anthropic account", description: "Go to console.anthropic.com and sign up or log in."),
+                (title: "Go to API Keys", description: "Navigate to the API Keys section in your account settings."),
+                (title: "Create a new API key", description: "Click 'Create Key', give it a name, and copy it."),
+                (title: "Enter the API key in ProseKey AI", description: "Paste the key in the Anthropic settings section.")
+            ]
+        case "openrouter":
+            return [
+                (title: "Create an OpenRouter account", description: "Go to openrouter.ai and sign up or log in."),
+                (title: "Go to API Keys", description: "Navigate to the API Keys section."),
+                (title: "Create a new API key", description: "Click 'Create Key', give it a name, and copy it."),
+                (title: "Enter the API key in ProseKey AI", description: "Paste the key in the OpenRouter settings section.")
+            ]
+        default: return []
         }
     }
     
@@ -731,6 +723,18 @@ struct ApiKeyHelpView: View {
                 "The app stores your key locally only and does not share it with any third parties."
             ]
             
+        case "anthropic":
+            return [
+                "Anthropic API usage may be billed based on your plan.",
+                "Keep your API key secure and do not share it.",
+                "Your API key is stored only on your device."
+            ]
+        case "openrouter":
+            return [
+                "OpenRouter lets you access many models with one key.",
+                "Check your usage and billing in your OpenRouter dashboard.",
+                "Your API key is stored only on your device."
+            ]
         default:
             return []
         }
