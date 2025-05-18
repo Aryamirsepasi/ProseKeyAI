@@ -10,6 +10,7 @@ class AppState: ObservableObject {
     @Published var mistralProvider: MistralProvider
     @Published var anthropicProvider: AnthropicProvider
     @Published var openRouterProvider: OpenRouterProvider
+    @Published var aiProxyProvider: AIProxyProvider
     
     // Other app state
     @Published var selectedText: String = ""
@@ -25,6 +26,8 @@ class AppState: ObservableObject {
         case "mistral": return mistralProvider
         case "anthropic": return anthropicProvider
         case "openrouter": return openRouterProvider
+        case "aiproxy":
+            return AppSettings.shared.isNativeAISubscribed ? aiProxyProvider : openAIProvider // fallback to OpenAI if locked
         default: return geminiProvider
         }
     }
@@ -68,6 +71,8 @@ class AppState: ObservableObject {
             apiKey: asettings.openRouterApiKey,
             model: asettings.openRouterModel
         ))
+        
+        self.aiProxyProvider = AIProxyProvider()
         
         if asettings.openAIApiKey.isEmpty && asettings.geminiApiKey.isEmpty && asettings.mistralApiKey.isEmpty {
             print("Warning: No API keys configured.")

@@ -63,6 +63,11 @@ class AppSettings: ObservableObject {
         didSet { defaults.set(mistralModel, forKey: "mistral_model") }
     }
     
+    // Subscription var
+    @Published var isNativeAISubscribed: Bool {
+        didSet { defaults.set(isNativeAISubscribed, forKey: "is_native_ai_subscribed") }
+    }
+    
     // MARK: - Init
     private init() {
         // Use self.defaults (the app group UserDefaults) for reading
@@ -97,12 +102,15 @@ class AppSettings: ObservableObject {
         self.openRouterApiKey = defaults.string(forKey: "openrouter_api_key") ?? ""
         self.openRouterModel = defaults.string(forKey: "openrouter_model") ?? OpenRouterConfig.defaultModel
         
+        self.isNativeAISubscribed = defaults.bool(forKey: "is_native_ai_subscribed")
+
         // Defaulting to "mistral" if no provider is set, which seems reasonable
         self.currentProvider =
         self.defaults.string(forKey: "current_provider") ?? "mistral"
         
         self.hasCompletedOnboarding =
         self.defaults.bool(forKey: "has_completed_onboarding")
+        
     }
     
     func resetAll() {

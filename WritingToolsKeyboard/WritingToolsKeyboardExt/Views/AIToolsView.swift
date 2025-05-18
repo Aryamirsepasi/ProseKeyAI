@@ -10,17 +10,18 @@ struct AIToolsView: View {
     @State private var aiResult: String = ""
     private let minKeyboardHeight: CGFloat = 240
     @State private var chosenCommand: KeyboardCommand? = nil
+    //@State private var showVoiceChat = false
     
     @StateObject private var commandsManager = KeyboardCommandsManager()
     
     var body: some View {
+        ZStack {
+            // Main keyboard UI
             VStack(spacing: 12) {
                 // Top bar - only show in toolList state
                 if case .toolList = state {
                     HStack {
                         Spacer()
-                        
-                        // Show spinner if loading in toolList state
                         if isLoading {
                             ProgressView()
                         }
@@ -44,8 +45,37 @@ struct AIToolsView: View {
                     resultView(command)
                 }
             }
-            .frame(minHeight: minKeyboardHeight) // Set the minimum height for the keyboard
+            .frame(minHeight: minKeyboardHeight)
+            
+            // Overlay for VoiceChatView
+            /*if showVoiceChat {
+                Color.black.opacity(0.2)
+                    .ignoresSafeArea()
+                    .onTapGesture { showVoiceChat = false }
+                
+                VoiceChatView(
+                    selectedText: vm.selectedText ?? "",
+                    onResult: { prompt, aiResult in
+                        self.aiResult = aiResult
+                        self.chosenCommand = KeyboardCommand(
+                            name: "Voice Chat",
+                            prompt: prompt,
+                            icon: "mic.circle.fill"
+                        )
+                        self.state = .result(self.chosenCommand!)
+                        self.isLoading = false
+                        self.showVoiceChat = false
+                    },
+                    onCancel: {
+                        self.showVoiceChat = false
+                    }
+                )
+                .transition(.move(edge: .bottom).combined(with: .opacity))
+                .zIndex(10)
+            }*/
         }
+        //.animation(.easeInOut, value: showVoiceChat)
+    }
     
     private var toolListView: some View {
         VStack(spacing: 12) {
@@ -77,11 +107,10 @@ struct AIToolsView: View {
                             .padding(.vertical, 6)
                             .padding(.horizontal, 10)
                     }
-                    .frame(width: 180) // Fixed width
+                    .frame(width: 180)
                     .background(Color(.systemGray6))
                     .cornerRadius(6)
                     .overlay(
-                        // Visual indicator for scrollable content
                         HStack {
                             Spacer()
                             if selectedText.count > 20 {
@@ -100,24 +129,38 @@ struct AIToolsView: View {
                         .foregroundColor(.secondary)
                         .padding(.vertical, 6)
                         .padding(.horizontal, 10)
-                        .frame(width: 180) // Match width
+                        .frame(width: 180)
                         .background(Color(.systemGray6))
                         .cornerRadius(6)
                 }
             }
             .padding(.horizontal)
             
+            // Chat with AI button
+            /*Button(action: { showVoiceChat = true }) {
+                HStack {
+                    Image(systemName: "mic.circle.fill")
+                        .font(.system(size: 22))
+                    Text("Chat with AI")
+                        .font(.system(size: 15, weight: .medium))
+                }
+                .padding(.horizontal, 12)
+                .padding(.vertical, 10)
+                .background(Color.purple)
+                .foregroundColor(.white)
+                .cornerRadius(10)
+            }
+            .buttonStyle(PlainButtonStyle())
+            .padding(.horizontal)
+            .padding(.bottom, 4)*/
+            
             ScrollView {
                 allCommandsView
                     .padding(.horizontal)
             }
         }
-        .onChange(of: vm.selectedText) { _ in
-            // Force UI update when selected text changes
-            // This helps ensure the preview updates properly
-        }
+        .onChange(of: vm.selectedText) { _ in }
     }
-
     
     var allCommandsView: some View {
         CommandsGridView(
@@ -138,29 +181,24 @@ struct AIToolsView: View {
     }
     
     private func generatingView(_ command: KeyboardCommand) -> some View {
-            VStack(spacing: 16) {
-                Text("Applying \(command.name)...")
-                    .font(.headline)
-                    .padding(.top, 20)
-                
-                // Loading indicator below text
-                ProgressView()
-                    .scaleEffect(1.2)
-                    .padding(.top, 8)
-                
-                Spacer()
-            }
-            .frame(maxWidth: .infinity)
+        VStack(spacing: 16) {
+            Text("Applying \(command.name)...")
+                .font(.headline)
+                .padding(.top, 20)
+            ProgressView()
+                .scaleEffect(1.2)
+                .padding(.top, 8)
+            Spacer()
         }
+        .frame(maxWidth: .infinity)
+    }
     
     private func resultView(_ command: KeyboardCommand) -> some View {
         VStack(alignment: .leading, spacing: 14) {
             HStack {
                 Text("\(command.name) Result")
                     .font(.headline)
-                
                 Spacer()
-                
                 Button(action: {
                     state = .toolList
                     aiResult = ""
@@ -173,29 +211,22 @@ struct AIToolsView: View {
             }
             .padding(.top, 8)
             
-            // Fixed height container for the result
             ZStack {
-                // Background and border for the fixed-size container
                 RoundedRectangle(cornerRadius: 10)
                     .stroke(Color(.systemGray4), lineWidth: 1)
-                
-                // Background fill that matches the system gray
                 RoundedRectangle(cornerRadius: 10)
                     .fill(Color(.systemGray6))
-                
-                // ScrollView inside the fixed container
                 ScrollView {
                     Markdown(aiResult)
                         .font(.body)
                         .padding(12)
                         .frame(maxWidth: .infinity, alignment: .leading)
                 }
-                .padding(1) // Small padding to prevent content touching the border
+                .padding(1)
             }
-            .frame(height: 160) // Fixed height for the result area
+            .frame(height: 160)
             
             HStack(spacing: 6) {
-                // Copy button
                 Button(action: {
                     UIPasteboard.general.string = aiResult
                     UINotificationFeedbackGenerator().notificationOccurred(.success)
@@ -212,7 +243,6 @@ struct AIToolsView: View {
                 }
                 .buttonStyle(PlainButtonStyle())
                 
-                // Insert button
                 Button(action: {
                     vm.viewController?.textDocumentProxy.insertText(aiResult)
                     state = .toolList
@@ -230,7 +260,6 @@ struct AIToolsView: View {
                 }
                 .buttonStyle(PlainButtonStyle())
                 
-                // Regenerate button
                 Button(action: {
                     guard let text = vm.selectedText, let chosen = chosenCommand else { return }
                     isLoading = true
@@ -264,14 +293,11 @@ struct AIToolsView: View {
                 }
         )
     }
-
-
     
     // MARK: - Logic for calling AI
     private func processAICommand(_ command: KeyboardCommand, userText: String) {
         Task(priority: .userInitiated) {
             do {
-                // Truncate text early to avoid unnecessary memory allocation
                 let truncatedText = userText.count > 8000 ? String(userText.prefix(8000)) : userText
                 let result = try await AppState.shared.activeProvider.processText(
                     systemPrompt: command.prompt,
@@ -303,4 +329,3 @@ enum AIToolsUIState {
     case generating(KeyboardCommand)
     case result(KeyboardCommand)
 }
-

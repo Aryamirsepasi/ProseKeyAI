@@ -58,6 +58,8 @@ struct SettingsView: View {
                     )
                     .padding(.horizontal)
                     
+                   
+                    
                     // Provider selection with visual tabs
                     VStack(alignment: .leading, spacing: 12) {
                         Text("Select AI Provider")
@@ -310,6 +312,12 @@ struct KeyboardStatusCard: View {
                     SetupStepView(number: 2, text: "Go to General → Keyboard → Keyboards", isCompleted: false)
                     SetupStepView(number: 3, text: "Tap Add New Keyboard → Select ProseKey AI", isCompleted: false)
                     SetupStepView(number: 4, text: "Enable Full Access for AI features", isCompleted: false)
+                    
+                    Text("⚠️ If you just enabled Full Access, please close and reopen the keyboard, and restart the app, for the change to take effect.")
+                        .font(.footnote)
+                        .foregroundColor(.orange)
+                        .multilineTextAlignment(.center)
+                        .padding(.horizontal, 12)
                 }
                 .padding(.top, 8)
             }
@@ -603,37 +611,37 @@ struct ApiKeyHelpView: View {
     }
     
     private var providerIcon: String {
-            switch provider {
-            case "gemini": return "g.circle.fill"
-            case "openai": return "o.circle.fill"
-            case "mistral": return "m.circle.fill"
-            case "anthropic": return "a.circle.fill"
-            case "openrouter": return "r.circle.fill"
-            default: return "questionmark"
-            }
+        switch provider {
+        case "gemini": return "g.circle.fill"
+        case "openai": return "o.circle.fill"
+        case "mistral": return "m.circle.fill"
+        case "anthropic": return "a.circle.fill"
+        case "openrouter": return "r.circle.fill"
+        default: return "questionmark"
         }
+    }
     
     private var providerName: String {
-            switch provider {
-            case "gemini": return "Google Gemini"
-            case "openai": return "OpenAI"
-            case "mistral": return "Mistral AI"
-            case "anthropic": return "Anthropic"
-            case "openrouter": return "OpenRouter"
-            default: return "Unknown Provider"
-            }
+        switch provider {
+        case "gemini": return "Google Gemini"
+        case "openai": return "OpenAI"
+        case "mistral": return "Mistral AI"
+        case "anthropic": return "Anthropic"
+        case "openrouter": return "OpenRouter"
+        default: return "Unknown Provider"
         }
+    }
     
     private var apiKeyUrl: String {
-            switch provider {
-            case "gemini": return "https://ai.google.dev/tutorials/setup"
-            case "openai": return "https://platform.openai.com/account/api-keys"
-            case "mistral": return "https://console.mistral.ai/api-keys/"
-            case "anthropic": return "https://console.anthropic.com/settings/keys"
-            case "openrouter": return "https://openrouter.ai/keys"
-            default: return "https://example.com"
-            }
+        switch provider {
+        case "gemini": return "https://ai.google.dev/tutorials/setup"
+        case "openai": return "https://platform.openai.com/account/api-keys"
+        case "mistral": return "https://console.mistral.ai/api-keys/"
+        case "anthropic": return "https://console.anthropic.com/settings/keys"
+        case "openrouter": return "https://openrouter.ai/keys"
+        default: return "https://example.com"
         }
+    }
     
     private var steps: [(title: String, description: String)] {
         switch provider {

@@ -74,6 +74,13 @@
             ReferencedContainer = "container:ProseKey AI.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
+      <EnvironmentVariables>
+         <EnvironmentVariable
+            key = "AIPROXY_DEVICE_CHECK_BYPASS"
+            value = "d03b0c6b-c9a0-4778-a251-b72d3a4e3dfd"
+            isEnabled = "YES">
+         </EnvironmentVariable>
+      </EnvironmentVariables>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"
