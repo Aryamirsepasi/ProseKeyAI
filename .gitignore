@@ -23,6 +23,7 @@ DerivedData/
 /*.gcno
 **/xcshareddata/WorkspaceSettings.xcsettings
 .aidigestignore
+codebase.md
 WritingToolsKeyboard/WritingToolsKeyboard.xcodeproj/xcuserdata/
 
 # CocoaPods
@@ -54,3 +55,4 @@ fastlane/test_output
 *.swp
 *.lock
 
+WritingToolsKeyboard/Shared/Models/AIProxyProvider.swift
