@@ -10,7 +10,7 @@ class AppState: ObservableObject {
     @Published var mistralProvider: MistralProvider
     @Published var anthropicProvider: AnthropicProvider
     @Published var openRouterProvider: OpenRouterProvider
-    @Published var aiProxyProvider: AIProxyProvider
+    //@Published var aiProxyProvider: AIProxyProvider
     
     // Other app state
     @Published var selectedText: String = ""
@@ -26,8 +26,8 @@ class AppState: ObservableObject {
         case "mistral": return mistralProvider
         case "anthropic": return anthropicProvider
         case "openrouter": return openRouterProvider
-        case "aiproxy":
-            return AppSettings.shared.isNativeAISubscribed ? aiProxyProvider : openAIProvider // fallback to OpenAI if locked
+        /*case "aiproxy":
+            return AppSettings.shared.isNativeAISubscribed ? aiProxyProvider : openAIProvider // fallback to OpenAI if locked*/
         default: return geminiProvider
         }
     }
@@ -72,7 +72,7 @@ class AppState: ObservableObject {
             model: asettings.openRouterModel
         ))
         
-        self.aiProxyProvider = AIProxyProvider()
+        //self.aiProxyProvider = AIProxyProvider()
         
         if asettings.openAIApiKey.isEmpty && asettings.geminiApiKey.isEmpty && asettings.mistralApiKey.isEmpty {
             print("Warning: No API keys configured.")
@@ -132,4 +132,17 @@ class AppState: ObservableObject {
         )
         mistralProvider = MistralProvider(config: config)
     }
+    
+    func reloadProviders() {
+            let asettings = AppSettings.shared
+            // Re-initialize all providers with the latest config
+            let geminiModelEnum = asettings.geminiModel
+            let geminiModelName = (geminiModelEnum == .custom) ? asettings.geminiCustomModel : geminiModelEnum.rawValue
+            self.geminiProvider = GeminiProvider(config: GeminiConfig(apiKey: asettings.geminiApiKey, modelName: geminiModelName))
+            self.openAIProvider = OpenAIProvider(config: OpenAIConfig(apiKey: asettings.openAIApiKey, baseURL: asettings.openAIBaseURL, model: asettings.openAIModel))
+            self.mistralProvider = MistralProvider(config: MistralConfig(apiKey: asettings.mistralApiKey, model: asettings.mistralModel))
+            self.anthropicProvider = AnthropicProvider(config: AnthropicConfig(apiKey: asettings.anthropicApiKey, model: asettings.anthropicModel))
+            self.openRouterProvider = OpenRouterProvider(config: OpenRouterConfig(apiKey: asettings.openRouterApiKey, model: asettings.openRouterModel))
+            self.currentProvider = asettings.currentProvider
+        }
 }

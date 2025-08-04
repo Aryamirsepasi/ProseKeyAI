@@ -14,13 +14,30 @@ final class HapticsManager {
         UserDefaults(suiteName: "group.com.aryamirsepasi.writingtools")?.bool(forKey: "enable_haptics") ?? true
     }
     
+    // Cache the enabled state to avoid repeated UserDefaults calls
+    private var cachedIsEnabled: Bool = true
+    private var lastEnabledCheck: Date = .distantPast
+    private let enabledCheckInterval: TimeInterval = 1.0
+    
     init() {
         // Prepare generators on initialization to reduce first-time latency
         prepareAll()
     }
     
+    private func shouldCheckEnabled() -> Bool {
+        Date().timeIntervalSince(lastEnabledCheck) > enabledCheckInterval
+    }
+    
+    private func updateEnabledState() {
+        if shouldCheckEnabled() {
+            cachedIsEnabled = isEnabled
+            lastEnabledCheck = Date()
+        }
+    }
+    
     func prepareAll() {
-        guard isEnabled else { return }
+        updateEnabledState()
+        guard cachedIsEnabled else { return }
         
         keyPressGenerator.prepare()
         aiButtonGenerator.prepare()
@@ -28,30 +45,26 @@ final class HapticsManager {
     }
     
     func keyPress() {
-        guard isEnabled else { return }
+        updateEnabledState()
+        guard cachedIsEnabled else { return }
         keyPressGenerator.impactOccurred()
-        // Re-prepare for next use
-        keyPressGenerator.prepare()
     }
     
     func aiButtonPress() {
-        guard isEnabled else { return }
+        updateEnabledState()
+        guard cachedIsEnabled else { return }
         aiButtonGenerator.impactOccurred()
-        // Re-prepare for next use
-        aiButtonGenerator.prepare()
     }
     
     func error() {
-        guard isEnabled else { return }
+        updateEnabledState()
+        guard cachedIsEnabled else { return }
         notificationGenerator.notificationOccurred(.error)
-        // Re-prepare for next use
-        notificationGenerator.prepare()
     }
     
     func success() {
-        guard isEnabled else { return }
+        updateEnabledState()
+        guard cachedIsEnabled else { return }
         notificationGenerator.notificationOccurred(.success)
-        // Re-prepare for next use
-        notificationGenerator.prepare()
     }
 }

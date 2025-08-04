@@ -68,6 +68,26 @@ class AppSettings: ObservableObject {
         didSet { defaults.set(isNativeAISubscribed, forKey: "is_native_ai_subscribed") }
     }
     
+    func reload() {
+            // Re-read all values from UserDefaults
+            self.geminiApiKey = self.defaults.string(forKey: "gemini_api_key") ?? ""
+            let geminiModelStr = self.defaults.string(forKey: "gemini_model") ?? GeminiModel.twoflash.rawValue
+            self.geminiModel = GeminiModel(rawValue: geminiModelStr) ?? .twoflash
+            self.geminiCustomModel = self.defaults.string(forKey: "gemini_custom_model") ?? ""
+            self.openAIApiKey = self.defaults.string(forKey: "openai_api_key") ?? ""
+            self.openAIBaseURL = self.defaults.string(forKey: "openai_base_url") ?? OpenAIConfig.defaultBaseURL
+            self.openAIModel = self.defaults.string(forKey: "openai_model") ?? OpenAIConfig.defaultModel
+            self.mistralApiKey = self.defaults.string(forKey: "mistral_api_key") ?? ""
+            self.mistralModel = self.defaults.string(forKey: "mistral_model") ?? MistralConfig.defaultModel
+            self.anthropicApiKey = defaults.string(forKey: "anthropic_api_key") ?? ""
+            self.anthropicModel = defaults.string(forKey: "anthropic_model") ?? AnthropicConfig.defaultModel
+            self.openRouterApiKey = defaults.string(forKey: "openrouter_api_key") ?? ""
+            self.openRouterModel = defaults.string(forKey: "openrouter_model") ?? OpenRouterConfig.defaultModel
+            self.isNativeAISubscribed = defaults.bool(forKey: "is_native_ai_subscribed")
+            self.currentProvider = self.defaults.string(forKey: "current_provider") ?? "mistral"
+            self.hasCompletedOnboarding = self.defaults.bool(forKey: "has_completed_onboarding")
+        }
+    
     // MARK: - Init
     private init() {
         // Use self.defaults (the app group UserDefaults) for reading

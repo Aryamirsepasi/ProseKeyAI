@@ -111,130 +111,48 @@ struct SettingsView: View {
                     }
                     
                     // About section
-                    VStack(alignment: .leading) {
-                        Text("About")
-                            .font(.headline)
-                            .padding(.horizontal)
-                        
                         VStack(spacing: 0) {
-                            // GitHub Link
-                            Link(destination: URL(string: "https://github.com/Aryamirsepasi/WritingToolsKeyboard")!) {
-                                HStack {
-                                    Image(systemName: "globe.badge.chevron.backward")
-                                        .font(.system(size: 22))
-                                        .foregroundColor(.blue)
-                                    VStack(alignment: .leading, spacing: 2) {
-                                        Text("View on GitHub")
-                                            .font(.subheadline)
-                                            .fontWeight(.medium)
-                                        Text("Open source repository")
-                                            .font(.caption)
-                                            .foregroundColor(.secondary)
-                                    }
-                                    Spacer()
-                                    Image(systemName: "arrow.up.right.square")
-                                        .foregroundColor(.gray)
-                                }
-                                .padding(.vertical, 12)
-                                .padding(.horizontal)
-                            }
-                            
+                            AboutLinkRow(
+                                iconName: "globe.badge.chevron.backward", iconColor: .blue, title: "View on GitHub", subtitle: "Open source repository", url: URL(string: "https://github.com/Aryamirsepasi/WritingToolsKeyboard")!)
+                            .padding(.horizontal)
+
                             Divider()
-                                .padding(.leading, 56)
                             
-                            // Developer website
-                            Link(destination: URL(string: "https://aryamirsepasi.com/prosekey")!) {
-                                HStack {
-                                    Image(systemName: "person.fill")
-                                        .font(.system(size: 22))
-                                        .foregroundColor(.blue)
-                                    VStack(alignment: .leading, spacing: 2) {
-                                        Text("App Website")
-                                            .font(.subheadline)
-                                            .fontWeight(.medium)
-                                        Text("Arya Mirsepasi")
-                                            .font(.caption)
-                                            .foregroundColor(.secondary)
-                                    }
-                                    Spacer()
-                                    Image(systemName: "arrow.up.right.square")
-                                        .foregroundColor(.gray)
-                                }
-                                .padding(.vertical, 12)
-                                .padding(.horizontal)
-                            }
-                            
+                            AboutLinkRow(
+                                iconName: "person.fill",
+                                iconColor: .blue,
+                                title: "App Website",
+                                subtitle: "Arya Mirsepasi",
+                                url: URL(string: "https://aryamirsepasi.com/prosekey")!
+                            )
+                            .padding(.horizontal)
+
                             Divider()
-                                .padding(.leading, 56)
-                            
-                            // How to use
-                            Link(destination: URL(string: "https://aryamirsepasi.com/support")!) {
-                                HStack {
-                                    Image(systemName: "questionmark.circle.fill")
-                                        .font(.system(size: 22))
-                                        .foregroundColor(.blue)
-                                    VStack(alignment: .leading, spacing: 2) {
-                                        Text("Having Issues?")
-                                            .font(.subheadline)
-                                            .fontWeight(.medium)
-                                        Text("Submit a new issue on the support page!")
-                                            .font(.caption)
-                                            .foregroundColor(.secondary)
-                                    }
-                                    Spacer()
-                                    Image(systemName: "arrow.up.right.square")
-                                        .foregroundColor(.gray)
-                                }
-                                .padding(.vertical, 12)
-                                .padding(.horizontal)
-                            }
-                            
+                            AboutLinkRow(
+                                iconName: "questionmark.circle.fill",
+                                iconColor: .blue,
+                                title: "Having Issues?",
+                                subtitle: "Submit a new issue on the support page!",
+                                url: URL(string: "https://aryamirsepasi.com/support")!
+                            )
+                            .padding(.horizontal)
+
                             Divider()
-                                .padding(.leading, 56)
-                            
-                            // Privacy Policy
-                            Link(destination: URL(string: "https://aryamirsepasi.com/prosekey/privacy")!) {
-                                HStack {
-                                    Image(systemName: "lock.shield.fill")
-                                        .font(.system(size: 22))
-                                        .foregroundColor(.blue)
-                                    VStack(alignment: .leading, spacing: 2) {
-                                        Text("Privacy Policy")
-                                            .font(.subheadline)
-                                            .fontWeight(.medium)
-                                        Text("How your data is handled")
-                                            .font(.caption)
-                                            .foregroundColor(.secondary)
-                                    }
-                                    Spacer()
-                                    Image(systemName: "arrow.up.right.square")
-                                        .foregroundColor(.gray)
-                                }
-                                .padding(.vertical, 12)
-                                .padding(.horizontal)
-                            }
-                            
-                            // Version info with nicer layout
-                            VStack(spacing: 4) {
-                                Text("ProseKey AI")
-                                    .font(.headline)
-                                    .foregroundColor(.primary)
-                                
-                                Text("Version 1.1")
-                                    .font(.subheadline)
-                                    .foregroundColor(.secondary)
-                                
-                                Text("© 2025 Arya Mirsepasi")
-                                    .font(.caption)
-                                    .foregroundColor(.secondary)
-                            }
-                            .frame(maxWidth: .infinity)
-                            .padding(.vertical, 16)
+                            AboutLinkRow(
+                                iconName: "lock.shield.fill",
+                                iconColor: .blue,
+                                title: "Privacy Policy",
+                                subtitle: "How your data is handled",
+                                url: URL(string: "https://aryamirsepasi.com/prosekey/privacy")!
+                            )
+                            .padding(.horizontal)
+
                         }
                         .background(Color(.systemGray6))
                         .cornerRadius(12)
                         .padding(.horizontal)
-                    }
+
+
                     
                 }
                 .padding(.bottom, 30)
@@ -745,6 +663,42 @@ struct ApiKeyHelpView: View {
             ]
         default:
             return []
+        }
+    }
+}
+
+struct AboutLinkRow: View {
+    let iconName: String
+    let iconColor: Color
+    let title: String
+    let subtitle: String
+    let url: URL
+
+    var body: some View {
+        Link(destination: url) {
+            HStack(spacing: 10) {
+                ZStack {
+                    RoundedRectangle(cornerRadius: 8, style: .continuous)
+                        .fill(iconColor.opacity(0.12))
+                        .frame(width: 36, height: 36)
+                    Image(systemName: iconName)
+                        .font(.system(size: 20, weight: .semibold))
+                        .foregroundColor(iconColor)
+                }
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(title)
+                        .font(.subheadline)
+                        .fontWeight(.medium)
+                        .foregroundColor(.accentColor)
+                    Text(subtitle)
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                }
+                Spacer()
+                Image(systemName: "arrow.up.right.square")
+                    .foregroundColor(.gray)
+            }
+            .padding(.vertical, 12)
         }
     }
 }

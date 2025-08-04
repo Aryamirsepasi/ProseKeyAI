@@ -1,3 +1,10 @@
+//
+//  CommandsGridView.swift
+//  ProseKey AI
+//
+//  Created by Arya Mirsepasi on 04.08.25.
+//
+
 import SwiftUI
 
 struct AICommandButton: View {

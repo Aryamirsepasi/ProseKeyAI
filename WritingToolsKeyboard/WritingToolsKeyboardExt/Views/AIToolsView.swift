@@ -10,10 +10,11 @@ struct AIToolsView: View {
     @State private var aiResult: String = ""
     private let minKeyboardHeight: CGFloat = 240
     @State private var chosenCommand: KeyboardCommand? = nil
-    //@State private var showVoiceChat = false
+    @State private var customPrompt: String = ""
     
     @StateObject private var commandsManager = KeyboardCommandsManager()
     
+
     var body: some View {
         ZStack {
             // Main keyboard UI
@@ -43,38 +44,12 @@ struct AIToolsView: View {
                     generatingView(command)
                 case .result(let command):
                     resultView(command)
+                case .customPrompt:
+                    customPromptView
                 }
             }
             .frame(minHeight: minKeyboardHeight)
-            
-            // Overlay for VoiceChatView
-            /*if showVoiceChat {
-                Color.black.opacity(0.2)
-                    .ignoresSafeArea()
-                    .onTapGesture { showVoiceChat = false }
-                
-                VoiceChatView(
-                    selectedText: vm.selectedText ?? "",
-                    onResult: { prompt, aiResult in
-                        self.aiResult = aiResult
-                        self.chosenCommand = KeyboardCommand(
-                            name: "Voice Chat",
-                            prompt: prompt,
-                            icon: "mic.circle.fill"
-                        )
-                        self.state = .result(self.chosenCommand!)
-                        self.isLoading = false
-                        self.showVoiceChat = false
-                    },
-                    onCancel: {
-                        self.showVoiceChat = false
-                    }
-                )
-                .transition(.move(edge: .bottom).combined(with: .opacity))
-                .zIndex(10)
-            }*/
         }
-        //.animation(.easeInOut, value: showVoiceChat)
     }
     
     private var toolListView: some View {
@@ -97,6 +72,33 @@ struct AIToolsView: View {
                 }
                 .buttonStyle(PlainButtonStyle())
                 
+                // Custom Prompt Button
+                Button(action: {
+                    guard vm.selectedText != nil && !vm.selectedText!.isEmpty else {
+                        vm.errorMessage = "No text is selected."
+                        return
+                    }
+                    customPrompt = ""
+                    state = .customPrompt
+                }) {
+                    HStack {
+                        Image(systemName: "magnifyingglass")
+                            .font(.system(size: 16))
+                        Text("Custom Prompt")
+                            .font(.system(size: 15, weight: .medium))
+                    }
+                    .padding(.horizontal, 12)
+                    .padding(.vertical, 10)
+                    .background(vm.selectedText?.isEmpty != false ? Color.gray : Color.purple)
+                    .foregroundColor(.white)
+                    .cornerRadius(8)
+                }
+                .buttonStyle(PlainButtonStyle())
+                .disabled(vm.selectedText?.isEmpty != false)
+            }
+            .padding(.horizontal)
+            
+            HStack(spacing: 12) {
                 // Text preview with fixed width and horizontal scrolling
                 if let selectedText = vm.selectedText, !selectedText.isEmpty {
                     ScrollView(.horizontal, showsIndicators: false) {
@@ -107,13 +109,13 @@ struct AIToolsView: View {
                             .padding(.vertical, 6)
                             .padding(.horizontal, 10)
                     }
-                    .frame(width: 180)
+                    .frame(maxWidth: .infinity)
                     .background(Color(.systemGray6))
                     .cornerRadius(6)
                     .overlay(
                         HStack {
                             Spacer()
-                            if selectedText.count > 20 {
+                            if selectedText.count > 30 {
                                 LinearGradient(
                                     gradient: Gradient(colors: [.clear, Color(.systemGray6)]),
                                     startPoint: .leading,
@@ -129,30 +131,12 @@ struct AIToolsView: View {
                         .foregroundColor(.secondary)
                         .padding(.vertical, 6)
                         .padding(.horizontal, 10)
-                        .frame(width: 180)
+                        .frame(maxWidth: .infinity)
                         .background(Color(.systemGray6))
                         .cornerRadius(6)
                 }
             }
             .padding(.horizontal)
-            
-            // Chat with AI button
-            /*Button(action: { showVoiceChat = true }) {
-                HStack {
-                    Image(systemName: "mic.circle.fill")
-                        .font(.system(size: 22))
-                    Text("Chat with AI")
-                        .font(.system(size: 15, weight: .medium))
-                }
-                .padding(.horizontal, 12)
-                .padding(.vertical, 10)
-                .background(Color.purple)
-                .foregroundColor(.white)
-                .cornerRadius(10)
-            }
-            .buttonStyle(PlainButtonStyle())
-            .padding(.horizontal)
-            .padding(.bottom, 4)*/
             
             ScrollView {
                 allCommandsView
@@ -160,6 +144,35 @@ struct AIToolsView: View {
             }
         }
         .onChange(of: vm.selectedText) { _ in }
+    }
+    
+    private var customPromptView: some View {
+        CustomPromptView(
+            prompt: $customPrompt,
+            selectedText: vm.selectedText ?? "",
+            onSubmit: { prompt in
+                guard let text = vm.selectedText, !text.isEmpty else {
+                    vm.errorMessage = "No text is selected."
+                    return
+                }
+                
+                let command = KeyboardCommand(
+                    name: "Custom Prompt",
+                    prompt: prompt,
+                    icon: "magnifyingglass"
+                )
+                
+                isLoading = true
+                vm.errorMessage = nil
+                chosenCommand = command
+                state = .generating(command)
+                processAICommand(command, userText: text)
+            },
+            onCancel: {
+                state = .toolList
+                customPrompt = ""
+            }
+        )
     }
     
     var allCommandsView: some View {
@@ -323,9 +336,10 @@ struct AIToolsView: View {
     }
 }
 
-// A small UI enum to track the sub-screen
+// Updated UI enum to include custom prompt state
 enum AIToolsUIState {
     case toolList
     case generating(KeyboardCommand)
     case result(KeyboardCommand)
+    case customPrompt
 }
