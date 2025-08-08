@@ -16,10 +16,8 @@ struct AICommandButton: View {
     
     var body: some View {
         Button(action: {
-            if UserDefaults(suiteName: "group.com.aryamirsepasi.writingtools")?.bool(forKey: "enable_haptics") ?? true {
-                UIImpactFeedbackGenerator(style: .medium).impactOccurred()
-            }
-            action()
+          HapticsManager.shared.keyPress()
+          action()
         }) {
             VStack(spacing: 6) {
                 Image(systemName: command.icon)
@@ -53,16 +51,10 @@ struct AICommandButton: View {
         .buttonStyle(PlainButtonStyle())
         .accessibilityLabel(command.name)
         .simultaneousGesture(
-            DragGesture(minimumDistance: 0)
-                .onChanged { _ in
-                    if !isPressed {
-                        isPressed = true
-                    }
-                }
-                .onEnded { _ in
-                    isPressed = false
-                }
-        )
+             DragGesture(minimumDistance: 0)
+               .onChanged { _ in isPressed = true }
+               .onEnded { _ in isPressed = false }
+           )
     }
 }
 

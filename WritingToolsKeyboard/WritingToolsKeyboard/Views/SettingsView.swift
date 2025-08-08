@@ -1,438 +1,600 @@
 import SwiftUI
+import Combine
+import CoreFoundation
 
 struct SettingsView: View {
-    @StateObject var appState = AppState.shared
-    @ObservedObject var settings = AppSettings.shared
-    @State private var keyboardEnabled: Bool = false
-    @State private var selectedTab = 0
-    
-    @AppStorage("enable_haptics", store: UserDefaults(suiteName: "group.com.aryamirsepasi.writingtools"))
-    private var enableHaptics = false
-    
-    @AppStorage("hasCompletedOnboarding") private var hasCompletedOnboarding: Bool = false
-    @State private var showOnboarding: Bool = false
-    @State private var showApiKeyHelp: Bool = false
-    
-    @StateObject private var commandsManager = KeyboardCommandsManager()
-    
-    // Custom colors
-    private let accentGradient = LinearGradient(
-        colors: [Color.blue, Color.purple],
-        startPoint: .topLeading,
-        endPoint: .bottomTrailing
+  @StateObject var appState = AppState.shared
+  @ObservedObject var settings = AppSettings.shared
+  @State private var keyboardEnabled: Bool = false
+  @State private var selectedTab = 0
+
+    @AppStorage(
+      "enable_haptics",
+      store: UserDefaults(
+        suiteName: "group.com.aryamirsepasi.writingtools"
+      )
     )
-    
-    private func checkKeyboardStatus() {
-        let keyboardUsed = UserDefaults(suiteName: "group.com.aryamirsepasi.writingtools")?
-            .bool(forKey: "keyboard_has_been_used") ?? false
-        let previouslyEnabled = UserDefaults.standard.bool(forKey: "keyboard_enabled")
-        keyboardEnabled = keyboardUsed || previouslyEnabled
-        UserDefaults.standard.set(keyboardEnabled, forKey: "keyboard_enabled")
-    }
-    
-    var body: some View {
-        NavigationStack {
-            ScrollView {
-                VStack(spacing: 20) {
-                    // Custom header
-                    VStack(spacing: 4) {
-                        Image(systemName: "keyboard.fill")
-                            .font(.system(size: 40))
-                            .foregroundStyle(accentGradient)
-                            .padding(.bottom, 10)
-                        
-                        Text("Enhance your writing with AI")
-                            .font(.headline)
-                            .foregroundColor(.secondary)
-                    }
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 20)
-                    .background(Color(.systemGray6))
-                    .cornerRadius(16)
-                    .padding(.horizontal)
-                    
-                    // Keyboard status card
-                    KeyboardStatusCard(
-                        isEnabled: keyboardEnabled,
-                        onEnablePressed: openKeyboardSettings
-                    )
-                    .padding(.horizontal)
-                    
-                   
-                    
-                    // Provider selection with visual tabs
-                    VStack(alignment: .leading, spacing: 12) {
-                        Text("Select AI Provider")
-                            .font(.headline)
-                            .padding(.horizontal)
-                        
-                        ProviderTabView(
-                            currentProvider: $settings.currentProvider // Bind to AppSettings
-                        )
-                        // Ensure AppState is updated when settings.currentProvider changes
-                        .onChange(of: settings.currentProvider) { newProvider in
-                            appState.setCurrentProvider(newProvider)
-                        }
-                        
-                        ProviderSetupCard(
-                            provider: settings.currentProvider, // Use settings.currentProvider
-                            appState: appState,
-                            showApiKeyHelp: $showApiKeyHelp
-                        )
-                        .padding(.top, 8)
-                    }
-                    .padding(.vertical, 10)
-                    
-                    // Preferences
-                    VStack(alignment: .leading) {
-                        Text("Preferences")
-                            .font(.headline)
-                            .padding(.horizontal)
-                        
-                        VStack {
-                            Toggle("Enable Haptic Feedback", isOn: $enableHaptics)
-                                .padding()
-                            
-                            NavigationLink(destination: CommandsView(commandsManager: commandsManager)) {
-                                HStack {
-                                    Image(systemName: "list.bullet.rectangle")
-                                        .foregroundColor(.blue)
-                                    Text("Manage AI Commands")
-                                    Spacer()
-                                    Image(systemName: "chevron.right")
-                                        .foregroundColor(.gray)
-                                }
-                                .padding()
-                            }
-                        }
-                        .background(Color(.systemGray6))
-                        .cornerRadius(12)
-                        .padding(.horizontal)
-                    }
-                    
-                    // About section
-                        VStack(spacing: 0) {
-                            AboutLinkRow(
-                                iconName: "globe.badge.chevron.backward", iconColor: .blue, title: "View on GitHub", subtitle: "Open source repository", url: URL(string: "https://github.com/Aryamirsepasi/WritingToolsKeyboard")!)
-                            .padding(.horizontal)
+    private var enableHaptics = true
 
-                            Divider()
-                            
-                            AboutLinkRow(
-                                iconName: "person.fill",
-                                iconColor: .blue,
-                                title: "App Website",
-                                subtitle: "Arya Mirsepasi",
-                                url: URL(string: "https://aryamirsepasi.com/prosekey")!
-                            )
-                            .padding(.horizontal)
+  @AppStorage("hasCompletedOnboarding") private var hasCompletedOnboarding: Bool = false
+  @State private var showOnboarding: Bool = false
+  @State private var showApiKeyHelp: Bool = false
 
-                            Divider()
-                            AboutLinkRow(
-                                iconName: "questionmark.circle.fill",
-                                iconColor: .blue,
-                                title: "Having Issues?",
-                                subtitle: "Submit a new issue on the support page!",
-                                url: URL(string: "https://aryamirsepasi.com/support")!
-                            )
-                            .padding(.horizontal)
+  @StateObject private var commandsManager = KeyboardCommandsManager()
 
-                            Divider()
-                            AboutLinkRow(
-                                iconName: "lock.shield.fill",
-                                iconColor: .blue,
-                                title: "Privacy Policy",
-                                subtitle: "How your data is handled",
-                                url: URL(string: "https://aryamirsepasi.com/prosekey/privacy")!
-                            )
-                            .padding(.horizontal)
+  // Darwin observer + optional polling after returning from Settings
+  @State private var darwinObserver: SettingsDarwinObserver?
+  @State private var pollingCancellable: AnyCancellable?
 
-                        }
-                        .background(Color(.systemGray6))
-                        .cornerRadius(12)
-                        .padding(.horizontal)
+  // Custom colors
+  private let accentGradient = LinearGradient(
+    colors: [Color.blue, Color.purple],
+    startPoint: .topLeading,
+    endPoint: .bottomTrailing
+  )
 
+  private func checkKeyboardStatus() {
+    let keyboardUsed = UserDefaults(suiteName: "group.com.aryamirsepasi.writingtools")?
+      .bool(forKey: "keyboard_has_been_used") ?? false
+    keyboardEnabled = keyboardUsed
+  }
 
-                    
+  var body: some View {
+    NavigationStack {
+      ScrollView {
+        VStack(spacing: 20) {
+          // Custom header
+          VStack(spacing: 4) {
+            Image(systemName: "keyboard.fill")
+              .font(.system(size: 40))
+              .foregroundStyle(accentGradient)
+              .padding(.bottom, 10)
+
+            Text("Enhance your writing with AI")
+              .font(.headline)
+              .foregroundColor(.secondary)
+          }
+          .frame(maxWidth: .infinity)
+          .padding(.vertical, 20)
+          .background(Color(.systemGray6))
+          .cornerRadius(16)
+          .padding(.horizontal)
+
+          // Keyboard status card
+          KeyboardStatusCard(
+            isEnabled: keyboardEnabled,
+            onEnablePressed: openKeyboardSettings
+          )
+          .padding(.horizontal)
+
+          // Provider selection with visual tabs
+          VStack(alignment: .leading, spacing: 12) {
+            Text("Select AI Provider")
+              .font(.headline)
+              .padding(.horizontal)
+
+            ProviderTabView(
+              currentProvider: $settings.currentProvider
+            )
+            .onChange(of: settings.currentProvider) { newProvider in
+              appState.setCurrentProvider(newProvider)
+            }
+
+            ProviderSetupCard(
+              provider: settings.currentProvider,
+              appState: appState,
+              showApiKeyHelp: $showApiKeyHelp
+            )
+            .padding(.top, 8)
+          }
+          .padding(.vertical, 10)
+
+          // Preferences
+          VStack(alignment: .leading) {
+            Text("Preferences")
+              .font(.headline)
+              .padding(.horizontal)
+
+            VStack {
+              Toggle("Enable Haptic Feedback", isOn: $enableHaptics)
+                .padding()
+
+              NavigationLink(
+                destination: CommandsView(commandsManager: commandsManager)
+              ) {
+                HStack {
+                  Image(systemName: "list.bullet.rectangle")
+                    .foregroundColor(.blue)
+                  Text("Manage AI Commands")
+                  Spacer()
+                  Image(systemName: "chevron.right")
+                    .foregroundColor(.gray)
                 }
-                .padding(.bottom, 30)
+                .padding()
+              }
             }
-            .navigationTitle("ProseKey AI")
-            .navigationBarTitleDisplayMode(.large)
+            .background(Color(.systemGray6))
+            .cornerRadius(12)
+            .padding(.horizontal)
+          }
+
+          // About section
+          VStack(spacing: 0) {
+            AboutLinkRow(
+              iconName: "globe.badge.chevron.backward",
+              iconColor: .blue,
+              title: "View on GitHub",
+              subtitle: "Open source repository",
+              url: URL(
+                string: "https://github.com/Aryamirsepasi/WritingToolsKeyboard"
+              )!
+            )
+            .padding(.horizontal)
+
+            Divider()
+
+            AboutLinkRow(
+              iconName: "person.fill",
+              iconColor: .blue,
+              title: "App Website",
+              subtitle: "Arya Mirsepasi",
+              url: URL(string: "https://aryamirsepasi.com/prosekey")!
+            )
+            .padding(.horizontal)
+
+            Divider()
+            AboutLinkRow(
+              iconName: "questionmark.circle.fill",
+              iconColor: .blue,
+              title: "Having Issues?",
+              subtitle: "Submit a new issue on the support page!",
+              url: URL(string: "https://aryamirsepasi.com/support")!
+            )
+            .padding(.horizontal)
+
+            Divider()
+            AboutLinkRow(
+              iconName: "lock.shield.fill",
+              iconColor: .blue,
+              title: "Privacy Policy",
+              subtitle: "How your data is handled",
+              url: URL(string: "https://aryamirsepasi.com/prosekey/privacy")!
+            )
+            .padding(.horizontal)
+
+          }
+          .background(Color(.systemGray6))
+          .cornerRadius(12)
+          .padding(.horizontal)
+
         }
-        .onAppear {
-            checkKeyboardStatus()
-            
-            if !hasCompletedOnboarding {
-                showOnboarding = true
-            }
-            // Ensure AppState's current provider is in sync with AppSettings on appear
-            appState.setCurrentProvider(settings.currentProvider)
-        }
-        .fullScreenCover(isPresented: $showOnboarding) {
-            OnboardingView()
-        }
-        .sheet(isPresented: $showApiKeyHelp) {
-            ApiKeyHelpView(provider: settings.currentProvider) // Use settings.currentProvider
-        }
+        .padding(.bottom, 30)
+      }
+      .navigationTitle("ProseKey AI")
+      .navigationBarTitleDisplayMode(.large)
     }
-    
-    private func openKeyboardSettings() {
-        if let url = URL(string: UIApplication.openSettingsURLString) {
-            UIApplication.shared.open(url)
-        }
+    .onAppear {
+      checkKeyboardStatus()
+
+      if !hasCompletedOnboarding {
+        showOnboarding = true
+      }
+      // Sync AppState's current provider with AppSettings on appear
+      appState.setCurrentProvider(settings.currentProvider)
+
+      // Start Darwin observer
+      darwinObserver = SettingsDarwinObserver {
+        checkKeyboardStatus()
+      }
     }
+    .onDisappear {
+      pollingCancellable?.cancel()
+      pollingCancellable = nil
+      darwinObserver = nil
+    }
+    .onReceive(
+      NotificationCenter.default.publisher(
+        for: UIApplication.didBecomeActiveNotification
+      )
+    ) { _ in
+      checkKeyboardStatus()
+      startShortPolling()
+    }
+    .fullScreenCover(isPresented: $showOnboarding) {
+      OnboardingView()
+    }
+    .sheet(isPresented: $showApiKeyHelp) {
+      ApiKeyHelpView(provider: settings.currentProvider)
+    }
+  }
+
+  private func openKeyboardSettings() {
+    if let url = URL(string: UIApplication.openSettingsURLString) {
+      UIApplication.shared.open(url)
+    }
+  }
+
+  private func startShortPolling() {
+    pollingCancellable?.cancel()
+    let ticker = Timer.publish(every: 0.5, on: .main, in: .common).autoconnect()
+    var ticks = 0
+    pollingCancellable = ticker.sink { _ in
+      ticks += 1
+      checkKeyboardStatus()
+      if self.keyboardEnabled || ticks >= 20 {
+        self.pollingCancellable?.cancel()
+        self.pollingCancellable = nil
+      }
+    }
+  }
 }
 
 // MARK: - Supporting Components
 
 struct KeyboardStatusCard: View {
-    let isEnabled: Bool
-    let onEnablePressed: () -> Void
-    
-    var body: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            HStack {
-                Image(systemName: isEnabled ? "keyboard.badge.ellipsis" : "keyboard")
-                    .font(.system(size: 24))
-                    .foregroundColor(isEnabled ? .green : .orange)
-                
-                VStack(alignment: .leading, spacing: 4) {
-                    Text("Keyboard Status")
-                        .font(.headline)
-                    Text(isEnabled ? "Ready to use" : "Setup required")
-                        .font(.subheadline)
-                        .foregroundColor(.secondary)
-                }
-                
-                Spacer()
-                
-                if isEnabled {
-                    Image(systemName: "checkmark.circle.fill")
-                        .foregroundColor(.green)
-                        .font(.system(size: 24))
-                } else {
-                    Button(action: onEnablePressed) {
-                        Text("Enable")
-                            .fontWeight(.medium)
-                            .padding(.horizontal, 16)
-                            .padding(.vertical, 8)
-                            .background(Color.blue)
-                            .foregroundColor(.white)
-                            .cornerRadius(8)
-                    }
-                }
-            }
-            
-            if !isEnabled {
-                VStack(alignment: .leading, spacing: 8) {
-                    SetupStepView(number: 1, text: "Open Settings", isCompleted: false)
-                    SetupStepView(number: 2, text: "Go to General → Keyboard → Keyboards", isCompleted: false)
-                    SetupStepView(number: 3, text: "Tap Add New Keyboard → Select ProseKey AI", isCompleted: false)
-                    SetupStepView(number: 4, text: "Enable Full Access for AI features", isCompleted: false)
-                    
-                    Text("⚠️ If you just enabled Full Access, please close and reopen the keyboard, and restart the app, for the change to take effect.")
-                        .font(.footnote)
-                        .foregroundColor(.orange)
-                        .multilineTextAlignment(.center)
-                        .padding(.horizontal, 12)
-                }
-                .padding(.top, 8)
-            }
+  let isEnabled: Bool
+  let onEnablePressed: () -> Void
+
+  var body: some View {
+    VStack(alignment: .leading, spacing: 16) {
+      HStack {
+        Image(systemName: isEnabled ? "keyboard.badge.ellipsis" : "keyboard")
+          .font(.system(size: 24))
+          .foregroundColor(isEnabled ? .green : .orange)
+
+        VStack(alignment: .leading, spacing: 4) {
+          Text("Keyboard Status")
+            .font(.headline)
+          Text(isEnabled ? "Ready to use" : "Setup required")
+            .font(.subheadline)
+            .foregroundColor(.secondary)
         }
-        .padding()
-        .background(Color(.systemGray6))
-        .cornerRadius(16)
+
+        Spacer()
+
+        if isEnabled {
+          Image(systemName: "checkmark.circle.fill")
+            .foregroundColor(.green)
+            .font(.system(size: 24))
+        } else {
+          Button(action: onEnablePressed) {
+            Text("Enable")
+              .fontWeight(.medium)
+              .padding(.horizontal, 16)
+              .padding(.vertical, 8)
+              .background(Color.blue)
+              .foregroundColor(.white)
+              .cornerRadius(8)
+          }
+        }
+      }
+
+      if !isEnabled {
+        VStack(alignment: .leading, spacing: 8) {
+          SetupStepView(
+            number: 1,
+            text: "Open Settings",
+            isCompleted: false
+          )
+          SetupStepView(
+            number: 2,
+            text: "Go to General → Keyboard → Keyboards",
+            isCompleted: false
+          )
+          SetupStepView(
+            number: 3,
+            text: "Tap Add New Keyboard → Select ProseKey AI",
+            isCompleted: false
+          )
+          SetupStepView(
+            number: 4,
+            text: "Enable Full Access for AI features",
+            isCompleted: false
+          )
+
+          Text(
+            "⚠️ If you just enabled Full Access, please close and reopen the keyboard, and restart the app, for the change to take effect."
+          )
+          .font(.footnote)
+          .foregroundColor(.orange)
+          .multilineTextAlignment(.center)
+          .padding(.horizontal, 12)
+        }
+        .padding(.top, 8)
+      }
     }
+    .padding()
+    .background(Color(.systemGray6))
+    .cornerRadius(16)
+  }
 }
 
 struct SetupStepView: View {
-    let number: Int
-    let text: String
-    let isCompleted: Bool
-    
-    var body: some View {
-        HStack(alignment: .top, spacing: 12) {
-            ZStack {
-                Circle()
-                    .fill(isCompleted ? Color.green : Color.blue.opacity(0.2))
-                    .frame(width: 24, height: 24)
-                
-                if isCompleted {
-                    Image(systemName: "checkmark")
-                        .font(.system(size: 12, weight: .bold))
-                        .foregroundColor(.white)
-                } else {
-                    Text("\(number)")
-                        .font(.system(size: 12, weight: .bold))
-                        .foregroundColor(.blue)
-                }
-            }
-            
-            Text(text)
-                .font(.subheadline)
-                .foregroundColor(isCompleted ? .secondary : .primary)
-                .strikethrough(isCompleted)
+  let number: Int
+  let text: String
+  let isCompleted: Bool
+
+  var body: some View {
+    HStack(alignment: .top, spacing: 12) {
+      ZStack {
+        Circle()
+          .fill(isCompleted ? Color.green : Color.blue.opacity(0.2))
+          .frame(width: 24, height: 24)
+
+        if isCompleted {
+          Image(systemName: "checkmark")
+            .font(.system(size: 12, weight: .bold))
+            .foregroundColor(.white)
+        } else {
+          Text("\(number)")
+            .font(.system(size: 12, weight: .bold))
+            .foregroundColor(.blue)
         }
+      }
+
+      Text(text)
+        .font(.subheadline)
+        .foregroundColor(isCompleted ? .secondary : .primary)
+        .strikethrough(isCompleted)
     }
+  }
 }
 
 struct ProviderTabView: View {
-    @Binding var currentProvider: String
-    
-    private let providers: [(id: String, icon: String, name: String, color: Color)] = [
-        ("gemini", "g.circle.fill", "Gemini", .blue),
-        ("openai", "o.circle.fill", "OpenAI", .green),
-        ("mistral", "m.circle.fill", "Mistral", .orange),
-        ("anthropic", "a.circle.fill", "Anthropic", .purple),
-        ("openrouter", "r.circle.fill", "OpenRouter", .pink)
-    ]
-    
-    var body: some View {
-        ScrollView(.horizontal, showsIndicators: false) {
-            HStack(spacing: 10) {
-                ForEach(providers, id: \.id) { provider in
-                    Button(action: { currentProvider = provider.id }) {
-                        HStack(spacing: 6) {
-                            Image(systemName: provider.icon)
-                                .foregroundColor(provider.color)
-                            Text(provider.name)
-                                .font(.subheadline)
-                                .fontWeight(.medium)
-                        }
-                        .padding(.horizontal, 14)
-                        .padding(.vertical, 8)
-                        .background(currentProvider == provider.id ? provider.color.opacity(0.15) : Color(.systemGray6))
-                        .foregroundColor(currentProvider == provider.id ? provider.color : .primary)
-                        .cornerRadius(20)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 20)
-                                .stroke(currentProvider == provider.id ? provider.color : Color.clear, lineWidth: 2)
-                        )
-                    }
-                    .buttonStyle(PlainButtonStyle())
-                }
+  @Binding var currentProvider: String
+
+  private let providers: [(id: String, icon: String, name: String, color: Color)] = [
+    ("gemini", "g.circle.fill", "Gemini", .blue),
+    ("openai", "o.circle.fill", "OpenAI", .green),
+    ("mistral", "m.circle.fill", "Mistral", .orange),
+    ("anthropic", "a.circle.fill", "Anthropic", .purple),
+    ("openrouter", "r.circle.fill", "OpenRouter", .pink),
+  ]
+
+  var body: some View {
+    ScrollView(.horizontal, showsIndicators: false) {
+      HStack(spacing: 10) {
+        ForEach(providers, id: \.id) { provider in
+          Button(action: { currentProvider = provider.id }) {
+            HStack(spacing: 6) {
+              Image(systemName: provider.icon)
+                .foregroundColor(provider.color)
+              Text(provider.name)
+                .font(.subheadline)
+                .fontWeight(.medium)
             }
-            .padding(.horizontal)
+            .padding(.horizontal, 14)
+            .padding(.vertical, 8)
+            .background(
+              currentProvider == provider.id
+                ? provider.color.opacity(0.15) : Color(.systemGray6)
+            )
+            .foregroundColor(
+              currentProvider == provider.id ? provider.color : .primary
+            )
+            .cornerRadius(20)
+            .overlay(
+              RoundedRectangle(cornerRadius: 20)
+                .stroke(
+                  currentProvider == provider.id ? provider.color : Color.clear,
+                  lineWidth: 2
+                )
+            )
+          }
+          .buttonStyle(PlainButtonStyle())
         }
+      }
+      .padding(.horizontal)
     }
+  }
 }
 
-
 struct ProviderSetupCard: View {
-    let provider: String
-    @ObservedObject var appState: AppState
-    @ObservedObject var settings = AppSettings.shared
-    @Binding var showApiKeyHelp: Bool
-    
-    var body: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            HStack {
-                Image(systemName: providerIcon)
-                    .font(.system(size: 22))
-                    .foregroundColor(.blue)
-                Text(providerName)
-                    .font(.headline)
-                Spacer()
-                Button(action: { showApiKeyHelp = true }) {
-                    Label("Help", systemImage: "questionmark.circle")
-                        .font(.subheadline)
-                        .foregroundColor(.blue)
-                }
-            }
-            HStack {
-                Image(systemName: hasApiKey ? "checkmark.shield.fill" : "key.fill")
-                    .foregroundColor(hasApiKey ? .green : .orange)
-                Text(hasApiKey ? "API Key Configured" : "API Key Required")
-                    .font(.subheadline)
-                Spacer()
-                // NavigationLinks for all providers
-                switch provider {
-                case "gemini":
-                    NavigationLink(destination: GeminiSettingsView(appState: appState)) { Text(hasApiKey ? "Change" : "Configure").foregroundColor(.blue) }
-                case "openai":
-                    NavigationLink(destination: OpenAISettingsView(appState: appState)) { Text(hasApiKey ? "Change" : "Configure").foregroundColor(.blue) }
-                case "mistral":
-                    NavigationLink(destination: MistralSettingsView(appState: appState)) { Text(hasApiKey ? "Change" : "Configure").foregroundColor(.blue) }
-                case "anthropic":
-                    NavigationLink(destination: AnthropicSettingsView(appState: appState)) { Text(hasApiKey ? "Change" : "Configure").foregroundColor(.blue) }
-                case "openrouter":
-                    NavigationLink(destination: OpenRouterSettingsView(appState: appState)) { Text(hasApiKey ? "Change" : "Configure").foregroundColor(.blue) }
-                default: EmptyView()
-                }
-            }
-            Text(providerDescription)
-                .font(.subheadline)
-                .foregroundColor(.secondary)
-                .fixedSize(horizontal: false, vertical: true)
-            Link(destination: URL(string: apiKeyUrl)!) {
-                HStack {
-                    Text("Get \(providerName) API Key")
-                    Spacer()
-                    Image(systemName: "arrow.up.right.square")
-                }
-                .padding(12)
-                .background(Color.blue.opacity(0.1))
-                .foregroundColor(.blue)
-                .cornerRadius(8)
-            }
+  let provider: String
+  @ObservedObject var appState: AppState
+  @ObservedObject var settings = AppSettings.shared
+  @Binding var showApiKeyHelp: Bool
+
+  var body: some View {
+    VStack(alignment: .leading, spacing: 16) {
+      HStack {
+        Image(systemName: providerIcon)
+          .font(.system(size: 22))
+          .foregroundColor(.blue)
+        Text(providerName)
+          .font(.headline)
+        Spacer()
+        Button(action: { showApiKeyHelp = true }) {
+          Label("Help", systemImage: "questionmark.circle")
+            .font(.subheadline)
+            .foregroundColor(.blue)
         }
-        .padding()
-        .background(Color(.systemGray6))
-        .cornerRadius(12)
-        .padding(.horizontal)
-    }
-    
-    private var providerIcon: String {
+      }
+      HStack {
+        Image(systemName: hasApiKey ? "checkmark.shield.fill" : "key.fill")
+          .foregroundColor(hasApiKey ? .green : .orange)
+        Text(hasApiKey ? "API Key Configured" : "API Key Required")
+          .font(.subheadline)
+        Spacer()
         switch provider {
-        case "gemini": return "g.circle.fill"
-        case "openai": return "o.circle.fill"
-        case "mistral": return "m.circle.fill"
-        case "anthropic": return "a.circle.fill"
-        case "openrouter": return "r.circle.fill"
-        default: return "questionmark"
+        case "gemini":
+          NavigationLink(destination: GeminiSettingsView(appState: appState)) {
+            Text(hasApiKey ? "Change" : "Configure").foregroundColor(.blue)
+          }
+        case "openai":
+          NavigationLink(destination: OpenAISettingsView(appState: appState)) {
+            Text(hasApiKey ? "Change" : "Configure").foregroundColor(.blue)
+          }
+        case "mistral":
+          NavigationLink(destination: MistralSettingsView(appState: appState)) {
+            Text(hasApiKey ? "Change" : "Configure").foregroundColor(.blue)
+          }
+        case "anthropic":
+          NavigationLink(
+            destination: AnthropicSettingsView(appState: appState)
+          ) { Text(hasApiKey ? "Change" : "Configure").foregroundColor(.blue) }
+        case "openrouter":
+          NavigationLink(
+            destination: OpenRouterSettingsView(appState: appState)
+          ) { Text(hasApiKey ? "Change" : "Configure").foregroundColor(.blue) }
+        default: EmptyView()
         }
-    }
-    private var providerName: String {
-        switch provider {
-        case "gemini": return "Google Gemini"
-        case "openai": return "OpenAI"
-        case "mistral": return "Mistral AI"
-        case "anthropic": return "Anthropic"
-        case "openrouter": return "OpenRouter"
-        default: return "Unknown Provider"
+      }
+      Text(providerDescription)
+        .font(.subheadline)
+        .foregroundColor(.secondary)
+        .fixedSize(horizontal: false, vertical: true)
+      Link(destination: URL(string: apiKeyUrl)!) {
+        HStack {
+          Text("Get \(providerName) API Key")
+          Spacer()
+          Image(systemName: "arrow.up.right.square")
         }
+        .padding(12)
+        .background(Color.blue.opacity(0.1))
+        .foregroundColor(.blue)
+        .cornerRadius(8)
+      }
     }
-    private var hasApiKey: Bool {
-        switch provider {
-        case "gemini": return !settings.geminiApiKey.isEmpty
-        case "openai": return !settings.openAIApiKey.isEmpty
-        case "mistral": return !settings.mistralApiKey.isEmpty
-        case "anthropic": return !settings.anthropicApiKey.isEmpty
-        case "openrouter": return !settings.openRouterApiKey.isEmpty
-        default: return false
+    .padding()
+    .background(Color(.systemGray6))
+    .cornerRadius(12)
+    .padding(.horizontal)
+  }
+
+  private var providerIcon: String {
+    switch provider {
+    case "gemini": return "g.circle.fill"
+    case "openai": return "o.circle.fill"
+    case "mistral": return "m.circle.fill"
+    case "anthropic": return "a.circle.fill"
+    case "openrouter": return "r.circle.fill"
+    default: return "questionmark"
+    }
+  }
+  private var providerName: String {
+    switch provider {
+    case "gemini": return "Google Gemini"
+    case "openai": return "OpenAI"
+    case "mistral": return "Mistral AI"
+    case "anthropic": return "Anthropic"
+    case "openrouter": return "OpenRouter"
+    default: return "Unknown Provider"
+    }
+  }
+  private var hasApiKey: Bool {
+    switch provider {
+    case "gemini": return !settings.geminiApiKey.isEmpty
+    case "openai": return !settings.openAIApiKey.isEmpty
+    case "mistral": return !settings.mistralApiKey.isEmpty
+    case "anthropic": return !settings.anthropicApiKey.isEmpty
+    case "openrouter": return !settings.openRouterApiKey.isEmpty
+    default: return false
+    }
+  }
+  private var providerDescription: String {
+    switch provider {
+    case "gemini":
+      return
+        "Google Gemini is a versatile AI model optimized for creative writing and text processing tasks. It provides high-quality completions and reformulations."
+    case "openai":
+      return
+        "OpenAI offers powerful language models like GPT-4 that excel at understanding context and generating human-like text for various writing tasks."
+    case "mistral":
+      return
+        "Mistral AI delivers efficient language models that balance performance and speed, great for text transformations and creative writing assistance."
+    case "anthropic":
+      return
+        "Anthropic's Claude models are known for their safety and helpfulness, offering advanced language capabilities for writing and productivity."
+    case "openrouter":
+      return
+        "OpenRouter is a gateway to many top AI models, letting you choose from a variety of providers with a single API key."
+    default: return ""
+    }
+  }
+  private var apiKeyUrl: String {
+    switch provider {
+    case "gemini": return "https://ai.google.dev/tutorials/setup"
+    case "openai": return "https://platform.openai.com/account/api-keys"
+    case "mistral": return "https://console.mistral.ai/api-keys/"
+    case "anthropic": return "https://console.anthropic.com/settings/keys"
+    case "openrouter": return "https://openrouter.ai/keys"
+    default: return "https://example.com"
+    }
+  }
+}
+
+struct AboutLinkRow: View {
+  let iconName: String
+  let iconColor: Color
+  let title: String
+  let subtitle: String
+  let url: URL
+
+  var body: some View {
+    Link(destination: url) {
+      HStack(spacing: 10) {
+        ZStack {
+          RoundedRectangle(cornerRadius: 8, style: .continuous)
+            .fill(iconColor.opacity(0.12))
+            .frame(width: 36, height: 36)
+          Image(systemName: iconName)
+            .font(.system(size: 20, weight: .semibold))
+            .foregroundColor(iconColor)
         }
-    }
-    private var providerDescription: String {
-        switch provider {
-        case "gemini": return "Google Gemini is a versatile AI model optimized for creative writing and text processing tasks. It provides high-quality completions and reformulations."
-        case "openai": return "OpenAI offers powerful language models like GPT-4 that excel at understanding context and generating human-like text for various writing tasks."
-        case "mistral": return "Mistral AI delivers efficient language models that balance performance and speed, great for text transformations and creative writing assistance."
-        case "anthropic": return "Anthropic's Claude models are known for their safety and helpfulness, offering advanced language capabilities for writing and productivity."
-        case "openrouter": return "OpenRouter is a gateway to many top AI models, letting you choose from a variety of providers with a single API key."
-        default: return ""
+        VStack(alignment: .leading, spacing: 2) {
+          Text(title)
+            .font(.subheadline)
+            .fontWeight(.medium)
+            .foregroundColor(.accentColor)
+          Text(subtitle)
+            .font(.caption)
+            .foregroundColor(.secondary)
         }
+        Spacer()
+        Image(systemName: "arrow.up.right.square")
+          .foregroundColor(.gray)
+      }
+      .padding(.vertical, 12)
     }
-    private var apiKeyUrl: String {
-        switch provider {
-        case "gemini": return "https://ai.google.dev/tutorials/setup"
-        case "openai": return "https://platform.openai.com/account/api-keys"
-        case "mistral": return "https://console.mistral.ai/api-keys/"
-        case "anthropic": return "https://console.anthropic.com/settings/keys"
-        case "openrouter": return "https://openrouter.ai/keys"
-        default: return "https://example.com"
-        }
+  }
+}
+
+// MARK: - Darwin Notification Observer (Settings)
+
+final class SettingsDarwinObserver {
+  private let name = "com.aryamirsepasi.writingtools.keyboardStatusChanged" as CFString
+
+  init(callback: @escaping () -> Void) {
+    let center = CFNotificationCenterGetDarwinNotifyCenter()
+    let observer = UnsafeMutableRawPointer(Unmanaged.passUnretained(self).toOpaque())
+
+    CFNotificationCenterAddObserver(
+      center,
+      observer,
+      { _, observer, _, _, _ in
+        guard let observer = observer else { return }
+        let instance = Unmanaged<SettingsDarwinObserver>
+          .fromOpaque(observer)
+          .takeUnretainedValue()
+        instance._callback()
+      },
+      name,
+      nil,
+      .deliverImmediately
+    )
+    self._callback = {
+      DispatchQueue.main.async { callback() }
     }
+  }
+
+  deinit {
+    let center = CFNotificationCenterGetDarwinNotifyCenter()
+    let observer = UnsafeMutableRawPointer(Unmanaged.passUnretained(self).toOpaque())
+    CFNotificationCenterRemoveObserver(center, observer, CFNotificationName(name), nil)
+  }
+
+  private var _callback: () -> Void = {}
 }
 
 
@@ -663,42 +825,6 @@ struct ApiKeyHelpView: View {
             ]
         default:
             return []
-        }
-    }
-}
-
-struct AboutLinkRow: View {
-    let iconName: String
-    let iconColor: Color
-    let title: String
-    let subtitle: String
-    let url: URL
-
-    var body: some View {
-        Link(destination: url) {
-            HStack(spacing: 10) {
-                ZStack {
-                    RoundedRectangle(cornerRadius: 8, style: .continuous)
-                        .fill(iconColor.opacity(0.12))
-                        .frame(width: 36, height: 36)
-                    Image(systemName: iconName)
-                        .font(.system(size: 20, weight: .semibold))
-                        .foregroundColor(iconColor)
-                }
-                VStack(alignment: .leading, spacing: 2) {
-                    Text(title)
-                        .font(.subheadline)
-                        .fontWeight(.medium)
-                        .foregroundColor(.accentColor)
-                    Text(subtitle)
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                }
-                Spacer()
-                Image(systemName: "arrow.up.right.square")
-                    .foregroundColor(.gray)
-            }
-            .padding(.vertical, 12)
         }
     }
 }

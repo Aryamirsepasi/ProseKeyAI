@@ -11,7 +11,9 @@ final class HapticsManager {
     private let notificationGenerator = UINotificationFeedbackGenerator()
     
     private var isEnabled: Bool {
-        UserDefaults(suiteName: "group.com.aryamirsepasi.writingtools")?.bool(forKey: "enable_haptics") ?? true
+      UserDefaults(
+        suiteName: "group.com.aryamirsepasi.writingtools"
+      )?.bool(forKey: "enable_haptics") ?? true
     }
     
     // Cache the enabled state to avoid repeated UserDefaults calls

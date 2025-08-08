@@ -24,7 +24,7 @@ struct LabeledTextField: View {
                     .padding()
                     .background(Color(.systemGray6))
                     .cornerRadius(10)
-                    .autocapitalization(.none)
+                    .textInputAutocapitalization(.never)
                     .autocorrectionDisabled()
             }
         }

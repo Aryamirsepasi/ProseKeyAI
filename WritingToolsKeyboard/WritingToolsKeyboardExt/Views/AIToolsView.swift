@@ -11,6 +11,7 @@ struct AIToolsView: View {
     private let minKeyboardHeight: CGFloat = 240
     @State private var chosenCommand: KeyboardCommand? = nil
     @State private var customPrompt: String = ""
+    @State private var activeTask: Task<Void, Never>?
     
     @StateObject private var commandsManager = KeyboardCommandsManager()
     
@@ -225,17 +226,30 @@ struct AIToolsView: View {
             .padding(.top, 8)
             
             ZStack {
-                RoundedRectangle(cornerRadius: 10)
-                    .stroke(Color(.systemGray4), lineWidth: 1)
-                RoundedRectangle(cornerRadius: 10)
-                    .fill(Color(.systemGray6))
-                ScrollView {
-                    Markdown(aiResult)
-                        .font(.body)
-                        .padding(12)
-                        .frame(maxWidth: .infinity, alignment: .leading)
+              RoundedRectangle(cornerRadius: 10)
+                .stroke(Color(.systemGray4), lineWidth: 1)
+              RoundedRectangle(cornerRadius: 10)
+                .fill(Color(.systemGray6))
+              ScrollView {
+                if let attr = try? AttributedString(markdown: aiResult) {
+                  Text(attr)
+                    .font(.body)
+                    .padding(12)
+                    .frame(
+                      maxWidth: .infinity,
+                      alignment: .leading
+                    )
+                } else {
+                  Text(aiResult)
+                    .font(.body)
+                    .padding(12)
+                    .frame(
+                      maxWidth: .infinity,
+                      alignment: .leading
+                    )
                 }
-                .padding(1)
+              }
+              .padding(1)
             }
             .frame(height: 160)
             
@@ -308,31 +322,39 @@ struct AIToolsView: View {
     }
     
     // MARK: - Logic for calling AI
-    private func processAICommand(_ command: KeyboardCommand, userText: String) {
-        Task(priority: .userInitiated) {
-            do {
-                let truncatedText = userText.count > 8000 ? String(userText.prefix(8000)) : userText
-                let result = try await AppState.shared.activeProvider.processText(
-                    systemPrompt: command.prompt,
-                    userPrompt: truncatedText,
-                    images: [],
-                    streaming: false
-                )
-                await MainActor.run {
-                    aiResult = result
-                    isLoading = false
-                    state = .result(command)
-                    vm.errorMessage = nil
-                }
-            } catch {
-                await MainActor.run {
-                    vm.errorMessage = error.localizedDescription
-                    isLoading = false
-                    state = .toolList
-                    chosenCommand = nil
-                }
-            }
+    private func processAICommand(
+      _ command: KeyboardCommand,
+      userText: String
+    ) {
+      activeTask?.cancel()
+      activeTask = Task(priority: .userInitiated) {
+        do {
+          let truncated = userText.count > 8000
+            ? String(userText.prefix(8000))
+            : userText
+          let result = try await AppState.shared.activeProvider.processText(
+            systemPrompt: command.prompt,
+            userPrompt: truncated,
+            images: [],
+            streaming: false
+          )
+          guard !Task.isCancelled else { return }
+          await MainActor.run {
+            aiResult = result
+            isLoading = false
+            state = .result(command)
+            vm.errorMessage = nil
+          }
+        } catch {
+          guard !Task.isCancelled else { return }
+          await MainActor.run {
+            vm.errorMessage = error.localizedDescription
+            isLoading = false
+            state = .toolList
+            chosenCommand = nil
+          }
         }
+      }
     }
 }
 
