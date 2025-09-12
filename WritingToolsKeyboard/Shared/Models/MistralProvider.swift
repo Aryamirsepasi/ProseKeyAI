@@ -69,7 +69,7 @@ class MistralProvider: ObservableObject, AIProvider {
                 let stream = try await mistralService.streamingChatCompletionRequest(body: .init(
                     messages: messages,
                     model: config.model
-                ))
+                ), secondsToWait: 60)
                 
                 for try await chunk in stream {
                     if Task.isCancelled { break }
@@ -90,8 +90,8 @@ class MistralProvider: ObservableObject, AIProvider {
             } else {
                 let response = try await mistralService.chatCompletionRequest(body: .init(
                     messages: messages,
-                    model: config.model
-                ))
+                    model: config.model,
+                ), secondsToWait: 60)
                 
                 /*if let usage = response.usage {
                     print("""

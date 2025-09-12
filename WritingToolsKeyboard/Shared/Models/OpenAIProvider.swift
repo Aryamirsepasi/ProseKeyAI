@@ -92,7 +92,8 @@ class OpenAIProvider: ObservableObject, AIProvider {
                     let stream = try await openAIService.streamingChatCompletionRequest(body: .init(
                         model: config.model,
                         messages: messages
-                    ))
+                    ),
+                    secondsToWait: 60)
                     
                     for try await chunk in stream {
                         if Task.isCancelled { break }
@@ -106,7 +107,8 @@ class OpenAIProvider: ObservableObject, AIProvider {
                     let response = try await openAIService.chatCompletionRequest(body: .init(
                         model: config.model,
                         messages: messages
-                    ))
+                    ),
+                    secondsToWait: 60)
                     
                     return response.choices.first?.message.content ?? ""
                 }

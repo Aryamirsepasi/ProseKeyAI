@@ -8,20 +8,20 @@ build/
 DerivedData/
 
 # Xcode files
-*.xcworkspace
-*.xcuserdata
-*.xcuserstate
-*.xcarchive
+# *.xcworkspace
+# *.xcuserdata
+# *.xcuserstate
+# *.xcarchive
 *.log
 
 ### Xcode Patch ###
-*.xcodeproj/*
-!*.xcodeproj/project.pbxproj
-!*.xcodeproj/xcshareddata/
-!*.xcodeproj/project.xcworkspace/
-!*.xcworkspace/contents.xcworkspacedata
-/*.gcno
-**/xcshareddata/WorkspaceSettings.xcsettings
+#*.xcodeproj/*
+#!*.xcodeproj/project.pbxproj
+#!*.xcodeproj/xcshareddata/
+#!*.xcodeproj/project.xcworkspace/
+#!*.xcworkspace/contents.xcworkspacedata
+#/*.gcno
+#**/xcshareddata/WorkspaceSettings.xcsettings
 .aidigestignore
 codebase.md
 WritingToolsKeyboard/WritingToolsKeyboard.xcodeproj/xcuserdata/
@@ -34,9 +34,9 @@ Podfile.lock
 Carthage/Build/
 
 # Swift Package Manager
-.swiftpm
-Package.resolved
-.build/
+#.swiftpm
+#Package.resolved
+#.build/
 
 # Fastlane
 fastlane/report.xml
