@@ -66,11 +66,13 @@ struct AIToolsView: View {
                             .font(.system(size: 15, weight: .medium))
                     }
                     .padding(.horizontal, 12)
-                    .padding(.vertical, 8)
-                    .background(Color.blue)
-                    .foregroundColor(.white)
-                    .cornerRadius(8)
+                    .padding(.vertical, 10)
                 }
+                .frame(height: 44)
+                .background(Color.blue)
+                .foregroundColor(.white)
+                .cornerRadius(8)
+                .contentShape(Rectangle())
                 .buttonStyle(PlainButtonStyle())
                 
                 // Custom Prompt Button
@@ -90,10 +92,12 @@ struct AIToolsView: View {
                     }
                     .padding(.horizontal, 12)
                     .padding(.vertical, 10)
-                    .background(vm.selectedText?.isEmpty != false ? Color.gray : Color.purple)
-                    .foregroundColor(.white)
-                    .cornerRadius(8)
                 }
+                .frame(height: 44)
+                .background(vm.selectedText?.isEmpty != false ? Color.gray : Color.purple)
+                .foregroundColor(.white)
+                .cornerRadius(8)
+                .contentShape(Rectangle())
                 .buttonStyle(PlainButtonStyle())
                 .disabled(vm.selectedText?.isEmpty != false)
             }
