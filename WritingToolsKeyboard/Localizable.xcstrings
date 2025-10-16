@@ -172,6 +172,9 @@
     "Create a new secret key" : {
 
     },
+    "Custom" : {
+
+    },
     "Custom Commands" : {
 
     },
@@ -238,9 +241,6 @@
     "Google Gemini" : {
 
     },
-    "gpt-4o" : {
-
-    },
     "Help" : {
 
     },
@@ -272,9 +272,6 @@
 
     },
     "Mistral Settings" : {
-
-    },
-    "Model" : {
 
     },
     "Name" : {
@@ -364,7 +361,7 @@
     "Submit" : {
 
     },
-    "Suggested Models:" : {
+    "Suggested Models" : {
 
     },
     "Tap here to show the keyboard…" : {

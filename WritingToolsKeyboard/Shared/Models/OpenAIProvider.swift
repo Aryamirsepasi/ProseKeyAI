@@ -7,19 +7,19 @@ struct OpenAIConfig: Codable {
     var model: String
     
     static let defaultBaseURL = "https://api.openai.com"
-    static let defaultModel = "gpt-4o"
+    static let defaultModel = "gpt-5-mini"
 }
 
 enum OpenAIModel: String, CaseIterable {
-    case gpt4 = "gpt-4.1"
-    case gpt4o = "gpt-4o"
-    case gpt4oMini = "gpt-4o-mini"
+    case gpt5nano = "gpt-5-nano"
+    case gpt5mini = "gpt-5-mini"
+    case gpt5 = "gpt-5"
     
     var displayName: String {
         switch self {
-        case .gpt4: return "GPT-4.1 (Most Capable)"
-        case .gpt4o: return "GPT-4o (Optimized)"
-        case .gpt4oMini: return "GPT-4o Mini (Lightweight)"
+        case .gpt5nano: return "GPT-5 Nano (Small and Fast)"
+        case .gpt5mini: return "GPT-5 Mini (Better than Nano)"
+        case .gpt5: return "GPT-5 (Best)"
         }
     }
 }

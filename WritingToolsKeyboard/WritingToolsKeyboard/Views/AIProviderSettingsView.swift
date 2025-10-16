@@ -17,7 +17,8 @@ struct LabeledTextField: View {
                     .padding()
                     .background(Color(.systemGray6))
                     .cornerRadius(10)
-                    .autocapitalization(.none)
+                    .textInputAutocapitalization(.never)
+                    .textContentType(.password)
                     .autocorrectionDisabled()
             } else {
                 TextField(placeholder, text: $text)
@@ -25,6 +26,7 @@ struct LabeledTextField: View {
                     .background(Color(.systemGray6))
                     .cornerRadius(10)
                     .textInputAutocapitalization(.never)
+                    .textContentType(.none)
                     .autocorrectionDisabled()
             }
         }
@@ -34,7 +36,12 @@ struct LabeledTextField: View {
 
 struct GeminiSettingsView: View {
     @ObservedObject var appState: AppState
-    @ObservedObject var settings = AppSettings.shared
+    @State private var apiKey: String = AppSettings.shared.geminiApiKey
+    @State private var modelName: String = {
+        let current = AppSettings.shared.geminiModel
+        return current == .custom ? AppSettings.shared.geminiCustomModel : current.rawValue
+    }()
+    @State private var suggested: GeminiModel = AppSettings.shared.geminiModel
     
     var body: some View {
         ScrollView {
@@ -61,41 +68,59 @@ struct GeminiSettingsView: View {
                 LabeledTextField(
                     label: "API Key",
                     placeholder: "Enter your Gemini API key",
-                    text: $settings.geminiApiKey,
+                    text: $apiKey,
                     isSecure: true
                 )
                 
-                // Model selection
+                // Free-form model name input
+                LabeledTextField(
+                    label: "Model",
+                    placeholder: "e.g. gemini-1.5-flash",
+                    text: $modelName
+                )
+                .onChange(of: modelName) { newValue in
+                    if let matched = GeminiModel(rawValue: newValue) {
+                        suggested = matched
+                    } else {
+                        suggested = .custom
+                    }
+                }
+                
+                // Suggested models (picker)
                 VStack(alignment: .leading, spacing: 8) {
-                    Text("Model")
+                    Text("Suggested Models")
                         .font(.headline)
-                    Picker("Model", selection: $settings.geminiModel) { // Bind directly
-                        ForEach(GeminiModel.allCases, id: \.self) { model in
-                            Text(model.displayName).tag(model)
+                    Picker("Suggested Models", selection: $suggested) {
+                        ForEach(GeminiModel.allCases, id: \.self) { option in
+                            Text(option.displayName).tag(option)
                         }
                     }
                     .pickerStyle(MenuPickerStyle())
+                    .onChange(of: suggested) { newValue in
+                        if newValue != .custom {
+                            modelName = newValue.rawValue
+                        }
+                    }
                     .padding()
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .background(Color(.systemGray6))
                     .cornerRadius(10)
                 }
                 
-                // Custom model name field (conditional)
-                if settings.geminiModel == .custom {
-                    LabeledTextField(
-                        label: "Custom Model Name",
-                        placeholder: "Enter custom model identifier",
-                        text: $settings.geminiCustomModel // Bind directly
-                    )
-                    .transition(.opacity)
-                }
-                
                 Button(action: {
+                    let resolvedModel: GeminiModel
+                    let custom: String
+                    if let match = GeminiModel(rawValue: modelName) {
+                        resolvedModel = match
+                        custom = ""
+                    } else {
+                        resolvedModel = .custom
+                        custom = modelName
+                    }
                     appState.saveGeminiConfig(
-                        apiKey: settings.geminiApiKey,
-                        model: settings.geminiModel,
-                        customModelName: settings.geminiCustomModel
+                        apiKey: apiKey,
+                        model: resolvedModel,
+                        customModelName: custom
                     )
                     // Consider adding user feedback, e.g., an alert or dismiss action
                 }) {
@@ -146,15 +171,28 @@ struct GeminiSettingsView: View {
     }
     
     private var isFormValid: Bool {
-        !settings.geminiApiKey.isEmpty &&
-        (settings.geminiModel != .custom || !settings.geminiCustomModel.isEmpty)
+        // Allow empty API key to clear it; require a non-empty model name
+        !modelName.isEmpty
     }
 }
 
 
 struct OpenAISettingsView: View {
     @ObservedObject var appState: AppState
-    @ObservedObject var settings = AppSettings.shared
+    @State private var apiKey: String = AppSettings.shared.openAIApiKey
+    @State private var baseURL: String = AppSettings.shared.openAIBaseURL
+    @State private var modelName: String = AppSettings.shared.openAIModel
+    private enum SuggestedOpenAI: Hashable {
+        case custom
+        case model(OpenAIModel)
+    }
+    @State private var suggested: SuggestedOpenAI = {
+        if let match = OpenAIModel(rawValue: AppSettings.shared.openAIModel) {
+            return .model(match)
+        } else {
+            return .custom
+        }
+    }()
     
     
     var body: some View {
@@ -182,65 +220,57 @@ struct OpenAISettingsView: View {
                 LabeledTextField(
                     label: "API Key",
                     placeholder: "Enter your OpenAI API key",
-                    text: $settings.openAIApiKey, // Bind directly
+                    text: $apiKey,
                     isSecure: true
                 )
                 
                 LabeledTextField(
                     label: "Base URL",
                     placeholder: "https://api.openai.com",
-                    text: $settings.openAIBaseURL // Bind directly
+                    text: $baseURL
                 )
                 
-                VStack(alignment: .leading, spacing: 8) {
-                    Text("Model")
-                        .font(.headline)
-                    TextField("gpt-4o", text: $settings.openAIModel) // Bind directly
-                        .padding()
-                        .background(Color(.systemGray6))
-                        .cornerRadius(10)
-                        .autocapitalization(.none)
-                        .autocorrectionDisabled()
-                }
-                
-                // Suggested models
-                VStack(alignment: .leading, spacing: 10) {
-                    Text("Suggested Models:")
-                        .font(.subheadline)
-                        .fontWeight(.medium)
-                    ForEach(OpenAIModel.allCases, id: \.self) { model in
-                        Button(action: {
-                            settings.openAIModel = model.rawValue // Update settings directly
-                        }) {
-                            HStack {
-                                Text(model.displayName)
-                                    .font(.subheadline)
-                                Spacer()
-                                if settings.openAIModel == model.rawValue { // Check settings
-                                    Image(systemName: "checkmark")
-                                        .foregroundColor(.blue)
-                                }
-                            }
-                            .padding(.vertical, 8)
-                            .padding(.horizontal, 12)
-                            .background(
-                                settings.openAIModel == model.rawValue ?
-                                Color.blue.opacity(0.1) : Color.clear
-                            )
-                            .cornerRadius(8)
-                        }
-                        .buttonStyle(PlainButtonStyle())
+                // Free-form model name input
+                LabeledTextField(
+                    label: "Model",
+                    placeholder: "gpt-5-mini",
+                    text: $modelName
+                )
+                .onChange(of: modelName) { newValue in
+                    if let matched = OpenAIModel(rawValue: newValue) {
+                        suggested = .model(matched)
+                    } else {
+                        suggested = .custom
                     }
                 }
-                .padding()
-                .background(Color(.systemGray6))
-                .cornerRadius(10)
+                
+                // Suggested models (picker)
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("Suggested Models")
+                        .font(.headline)
+                    Picker("Suggested Models", selection: $suggested) {
+                        Text("Custom").tag(SuggestedOpenAI.custom)
+                        ForEach(OpenAIModel.allCases, id: \.self) { option in
+                            Text(option.displayName).tag(SuggestedOpenAI.model(option))
+                        }
+                    }
+                    .pickerStyle(MenuPickerStyle())
+                    .onChange(of: suggested) { newValue in
+                        if case let .model(m) = newValue {
+                            modelName = m.rawValue
+                        }
+                    }
+                    .padding()
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .background(Color(.systemGray6))
+                    .cornerRadius(10)
+                }
                 
                 Button(action: {
                     appState.saveOpenAIConfig(
-                        apiKey: settings.openAIApiKey,
-                        baseURL: settings.openAIBaseURL,
-                        model: settings.openAIModel
+                        apiKey: apiKey,
+                        baseURL: baseURL,
+                        model: modelName
                     )
                 }) {
                     Text("Save Changes")
@@ -290,15 +320,26 @@ struct OpenAISettingsView: View {
     }
     
     private var isFormValid: Bool {
-        !settings.openAIApiKey.isEmpty &&
-        !settings.openAIBaseURL.isEmpty &&
-        !settings.openAIModel.isEmpty
+        // Allow empty API key to clear it; require baseURL and model to avoid invalid config
+        !baseURL.isEmpty && !modelName.isEmpty
     }
 }
 
 struct MistralSettingsView: View {
     @ObservedObject var appState: AppState
-    @ObservedObject var settings = AppSettings.shared
+    @State private var apiKey: String = AppSettings.shared.mistralApiKey
+    @State private var modelName: String = AppSettings.shared.mistralModel
+    private enum SuggestedMistral: Hashable {
+        case custom
+        case model(MistralModel)
+    }
+    @State private var suggested: SuggestedMistral = {
+        if let match = MistralModel(rawValue: AppSettings.shared.mistralModel) {
+            return .model(match)
+        } else {
+            return .custom
+        }
+    }()
     
     
     var body: some View {
@@ -326,19 +367,40 @@ struct MistralSettingsView: View {
                 LabeledTextField(
                     label: "API Key",
                     placeholder: "Enter your Mistral API key",
-                    text: $settings.mistralApiKey, // Bind directly
+                    text: $apiKey,
                     isSecure: true
                 )
                 
+                // Free-form model name input
+                LabeledTextField(
+                    label: "Model",
+                    placeholder: MistralConfig.defaultModel,
+                    text: $modelName
+                )
+                .onChange(of: modelName) { newValue in
+                    if let matched = MistralModel(rawValue: newValue) {
+                        suggested = .model(matched)
+                    } else {
+                        suggested = .custom
+                    }
+                }
+
+                // Suggested models (picker)
                 VStack(alignment: .leading, spacing: 8) {
-                    Text("Model")
+                    Text("Suggested Models")
                         .font(.headline)
-                    Picker("Model", selection: $settings.mistralModel) { // Bind directly
-                        ForEach(MistralModel.allCases, id: \.self) { model in
-                            Text(model.displayName).tag(model.rawValue)
+                    Picker("Suggested Models", selection: $suggested) {
+                        Text("Custom").tag(SuggestedMistral.custom)
+                        ForEach(MistralModel.allCases, id: \.self) { option in
+                            Text(option.displayName).tag(SuggestedMistral.model(option))
                         }
                     }
                     .pickerStyle(MenuPickerStyle())
+                    .onChange(of: suggested) { newValue in
+                        if case let .model(m) = newValue {
+                            modelName = m.rawValue
+                        }
+                    }
                     .padding()
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .background(Color(.systemGray6))
@@ -347,21 +409,19 @@ struct MistralSettingsView: View {
                 
                 Button(action: {
                     appState.saveMistralConfig(
-                        apiKey: settings.mistralApiKey,
-                        model: settings.mistralModel
+                        apiKey: apiKey,
+                        model: modelName
                     )
                 }) {
                     Text("Save Changes")
                         .fontWeight(.medium)
                         .frame(maxWidth: .infinity)
                         .padding()
-                        .background(
-                            !settings.mistralApiKey.isEmpty ? Color.blue : Color.gray
-                        )
+                        .background(isFormValid ? Color.blue : Color.gray)
                         .foregroundColor(.white)
                         .cornerRadius(10)
                 }
-                .disabled(settings.mistralApiKey.isEmpty) // Validation based on settings
+                .disabled(!isFormValid)
                 .padding(.top, 20)
                 
                 // Help info
@@ -398,11 +458,16 @@ struct MistralSettingsView: View {
         .navigationTitle("Mistral Settings")
         .navigationBarTitleDisplayMode(.inline)
     }
+    
+    private var isFormValid: Bool {
+        !modelName.isEmpty
+    }
 }
 
 struct AnthropicSettingsView: View {
     @ObservedObject var appState: AppState
-    @ObservedObject var settings = AppSettings.shared
+    @State private var apiKey: String = AppSettings.shared.anthropicApiKey
+    @State private var model: String = AppSettings.shared.anthropicModel
 
     var body: some View {
         ScrollView {
@@ -424,29 +489,29 @@ struct AnthropicSettingsView: View {
                 LabeledTextField(
                     label: "API Key",
                     placeholder: "Enter your Anthropic API key",
-                    text: $settings.anthropicApiKey,
+                    text: $apiKey,
                     isSecure: true
                 )
                 LabeledTextField(
                     label: "Model",
                     placeholder: AnthropicConfig.defaultModel,
-                    text: $settings.anthropicModel
+                    text: $model
                 )
                 Button(action: {
                     appState.saveAnthropicConfig(
-                        apiKey: settings.anthropicApiKey,
-                        model: settings.anthropicModel
+                        apiKey: apiKey,
+                        model: model
                     )
                 }) {
                     Text("Save Changes")
                         .fontWeight(.medium)
                         .frame(maxWidth: .infinity)
                         .padding()
-                        .background(!settings.anthropicApiKey.isEmpty ? Color.purple : Color.gray)
+                        .background(!model.isEmpty ? Color.purple : Color.gray)
                         .foregroundColor(.white)
                         .cornerRadius(10)
                 }
-                .disabled(settings.anthropicApiKey.isEmpty)
+                .disabled(model.isEmpty)
                 .padding(.top, 20)
                 // Help text...
             }
@@ -459,7 +524,8 @@ struct AnthropicSettingsView: View {
 
 struct OpenRouterSettingsView: View {
     @ObservedObject var appState: AppState
-    @ObservedObject var settings = AppSettings.shared
+    @State private var apiKey: String = AppSettings.shared.openRouterApiKey
+    @State private var model: String = AppSettings.shared.openRouterModel
 
     var body: some View {
         ScrollView {
@@ -481,29 +547,29 @@ struct OpenRouterSettingsView: View {
                 LabeledTextField(
                     label: "API Key",
                     placeholder: "Enter your OpenRouter API key",
-                    text: $settings.openRouterApiKey,
+                    text: $apiKey,
                     isSecure: true
                 )
                 LabeledTextField(
                     label: "Model",
                     placeholder: OpenRouterConfig.defaultModel,
-                    text: $settings.openRouterModel
+                    text: $model
                 )
                 Button(action: {
                     appState.saveOpenRouterConfig(
-                        apiKey: settings.openRouterApiKey,
-                        model: settings.openRouterModel
+                        apiKey: apiKey,
+                        model: model
                     )
                 }) {
                     Text("Save Changes")
                         .fontWeight(.medium)
                         .frame(maxWidth: .infinity)
                         .padding()
-                        .background(!settings.openRouterApiKey.isEmpty ? Color.pink : Color.gray)
+                        .background(!model.isEmpty ? Color.pink : Color.gray)
                         .foregroundColor(.white)
                         .cornerRadius(10)
                 }
-                .disabled(settings.openRouterApiKey.isEmpty)
+                .disabled(model.isEmpty)
                 .padding(.top, 20)
                 // Help text...
             }
@@ -516,7 +582,8 @@ struct OpenRouterSettingsView: View {
 
 struct PerplexitySettingsView: View {
     @ObservedObject var appState: AppState
-    @ObservedObject var settings = AppSettings.shared
+    @State private var apiKey: String = AppSettings.shared.perplexityApiKey
+    @State private var model: String = AppSettings.shared.perplexityModel
 
     var body: some View {
         ScrollView {
@@ -541,7 +608,7 @@ struct PerplexitySettingsView: View {
                 LabeledTextField(
                     label: "API Key",
                     placeholder: "Enter your Perplexity API key",
-                    text: $settings.perplexityApiKey,
+                    text: $apiKey,
                     isSecure: true
                 )
 
@@ -549,24 +616,24 @@ struct PerplexitySettingsView: View {
                 LabeledTextField(
                     label: "Model",
                     placeholder: PerplexityConfig.defaultModel,
-                    text: $settings.perplexityModel
+                    text: $model
                 )
 
                 Button(action: {
                     appState.savePerplexityConfig(
-                        apiKey: settings.perplexityApiKey,
-                        model: settings.perplexityModel
+                        apiKey: apiKey,
+                        model: model
                     )
                 }) {
                     Text("Save Changes")
                         .fontWeight(.medium)
                         .frame(maxWidth: .infinity)
                         .padding()
-                        .background(!settings.perplexityApiKey.isEmpty ? Color.blue : Color.gray)
+                        .background(!model.isEmpty ? Color.blue : Color.gray)
                         .foregroundColor(.white)
                         .cornerRadius(10)
                 }
-                .disabled(settings.perplexityApiKey.isEmpty)
+                .disabled(model.isEmpty)
                 .padding(.top, 20)
 
                 // Optional help section
@@ -604,3 +671,4 @@ struct PerplexitySettingsView: View {
         .navigationBarTitleDisplayMode(.inline)
     }
 }
+

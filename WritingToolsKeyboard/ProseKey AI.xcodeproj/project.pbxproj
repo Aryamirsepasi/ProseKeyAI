@@ -11,7 +11,6 @@
 		2A1CC6262DC6B96700D0A451 /* AIProxy in Frameworks */ = {isa = PBXBuildFile; productRef = 2A1CC6252DC6B96700D0A451 /* AIProxy */; };
 		2A5B324F2D49A1F3006A5F4D /* MarkdownUI in Frameworks */ = {isa = PBXBuildFile; productRef = 2A5B324E2D49A1F3006A5F4D /* MarkdownUI */; };
 		2A96CFE12D862308002D819E /* OnboardingKit in Frameworks */ = {isa = PBXBuildFile; productRef = 2A96CFE02D862308002D819E /* OnboardingKit */; };
-		2A9BFDB62D1F3CEC00A8F121 /* ProseKey AIExt.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 2A9BFDAF2D1F3CEC00A8F121 /* ProseKey AIExt.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		2AEB8FCD2DC6D7C7007869EF /* MarkdownUI in Frameworks */ = {isa = PBXBuildFile; productRef = 2AEB8FCC2DC6D7C7007869EF /* MarkdownUI */; };
 		428B06E62E53991F004D9A94 /* MLXEmbedders in Frameworks */ = {isa = PBXBuildFile; productRef = 428B06E52E53991F004D9A94 /* MLXEmbedders */; };
 		428B06E82E53991F004D9A94 /* MLXLLM in Frameworks */ = {isa = PBXBuildFile; productRef = 428B06E72E53991F004D9A94 /* MLXLLM */; };
@@ -25,6 +24,8 @@
 		428B07DA2E53A726004D9A94 /* MLXVLM in Frameworks */ = {isa = PBXBuildFile; productRef = 428B07D92E53A726004D9A94 /* MLXVLM */; };
 		42CBBC442E74B31800E616DA /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 42CBBC432E74B31800E616DA /* Localizable.xcstrings */; };
 		42CBBC452E74B31800E616DA /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 42CBBC432E74B31800E616DA /* Localizable.xcstrings */; };
+		42DCA9BC2EA1309A007E9B52 /* WritingTools.icon in Resources */ = {isa = PBXBuildFile; fileRef = 42DCA9BB2EA13099007E9B52 /* WritingTools.icon */; };
+		42DCA9BD2EA1309A007E9B52 /* WritingTools.icon in Resources */ = {isa = PBXBuildFile; fileRef = 42DCA9BB2EA13099007E9B52 /* WritingTools.icon */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -44,7 +45,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
-				2A9BFDB62D1F3CEC00A8F121 /* ProseKey AIExt.appex in Embed Foundation Extensions */,
 			);
 			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -52,9 +52,10 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		2A9BFD7E2D1F3CCF00A8F121 /* ProseKey AI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "ProseKey AI.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		2A9BFDAF2D1F3CEC00A8F121 /* ProseKey AIExt.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "ProseKey AIExt.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
 		42CBBC432E74B31800E616DA /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
+		42DCA9BB2EA13099007E9B52 /* WritingTools.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = WritingTools.icon; sourceTree = "<group>"; };
+		42DCA9C12EA13101007E9B52 /* ProseKey AI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "ProseKey AI.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		42DCA9C22EA131BD007E9B52 /* ProseKey AIExt.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "ProseKey AIExt.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -139,17 +140,10 @@
 				2A9BFDB02D1F3CEC00A8F121 /* WritingToolsKeyboardExt */,
 				42CBBC432E74B31800E616DA /* Localizable.xcstrings */,
 				2AEB8FCB2DC6D7C7007869EF /* Frameworks */,
-				2A9BFD7F2D1F3CCF00A8F121 /* Products */,
+				42DCA9C12EA13101007E9B52 /* ProseKey AI.app */,
+				42DCA9BB2EA13099007E9B52 /* WritingTools.icon */,
+				42DCA9C22EA131BD007E9B52 /* ProseKey AIExt.appex */,
 			);
-			sourceTree = "<group>";
-		};
-		2A9BFD7F2D1F3CCF00A8F121 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				2A9BFD7E2D1F3CCF00A8F121 /* ProseKey AI.app */,
-				2A9BFDAF2D1F3CEC00A8F121 /* ProseKey AIExt.appex */,
-			);
-			name = Products;
 			sourceTree = "<group>";
 		};
 		2AEB8FCB2DC6D7C7007869EF /* Frameworks */ = {
@@ -192,7 +186,7 @@
 				428B06ED2E53991F004D9A94 /* MLXVLM */,
 			);
 			productName = WritingToolsKeyboard;
-			productReference = 2A9BFD7E2D1F3CCF00A8F121 /* ProseKey AI.app */;
+			productReference = 42DCA9C12EA13101007E9B52 /* ProseKey AI.app */;
 			productType = "com.apple.product-type.application";
 		};
 		2A9BFDAE2D1F3CEC00A8F121 /* ProseKey AIExt */ = {
@@ -222,7 +216,7 @@
 				428B07D92E53A726004D9A94 /* MLXVLM */,
 			);
 			productName = WritingToolsKeyboardExt;
-			productReference = 2A9BFDAF2D1F3CEC00A8F121 /* ProseKey AIExt.appex */;
+			productReference = 42DCA9C22EA131BD007E9B52 /* ProseKey AIExt.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
 /* End PBXNativeTarget section */
@@ -261,7 +255,7 @@
 				428B06E42E53991F004D9A94 /* XCRemoteSwiftPackageReference "mlx-swift-examples" */,
 			);
 			preferredProjectObjectVersion = 77;
-			productRefGroup = 2A9BFD7F2D1F3CCF00A8F121 /* Products */;
+			productRefGroup = 2A9BFD752D1F3CCF00A8F121;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
@@ -276,6 +270,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				42DCA9BC2EA1309A007E9B52 /* WritingTools.icon in Resources */,
 				42CBBC442E74B31800E616DA /* Localizable.xcstrings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -285,6 +280,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				42CBBC452E74B31800E616DA /* Localizable.xcstrings in Resources */,
+				42DCA9BD2EA1309A007E9B52 /* WritingTools.icon in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -445,11 +441,12 @@
 		2A9BFDA32D1F3CD000A8F121 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = WritingTools;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = WritingToolsKeyboard/WritingToolsKeyboard.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_ASSET_PATHS = "\"WritingToolsKeyboard/Preview Content\"";
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
@@ -484,11 +481,12 @@
 		2A9BFDA42D1F3CD000A8F121 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = WritingTools;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = WritingToolsKeyboard/WritingToolsKeyboard.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_ASSET_PATHS = "\"WritingToolsKeyboard/Preview Content\"";
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
@@ -526,7 +524,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = WritingToolsKeyboardExt/WritingToolsKeyboardExt.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = "$(SRCROOT)/WritingToolsKeyboardExt/Resources/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "ProseKey AI Keyboard Extension";
@@ -559,7 +557,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = WritingToolsKeyboardExt/WritingToolsKeyboardExt.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = "$(SRCROOT)/WritingToolsKeyboardExt/Resources/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "ProseKey AI Keyboard Extension";
