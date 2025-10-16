@@ -1,0 +1,420 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "%@ Ready" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ Bereit"
+          }
+        }
+      }
+    },
+    "%@ Result" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@Ergebnis"
+          }
+        }
+      }
+    },
+    "%lld" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld"
+          }
+        }
+      }
+    },
+    "%lld." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld."
+          }
+        }
+      }
+    },
+    "%lld%%" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld%%"
+          }
+        }
+      }
+    },
+    "⚠️ If you just enabled Full Access, please close and reopen the keyboard, and restart the app, for the change to take effect." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "⚠️ Wenn Sie gerade den Vollzugriff aktiviert haben, schließen und öffnen Sie bitte die Tastatur erneut und starten Sie die App neu, damit die Änderung wirksam wird."
+          }
+        }
+      }
+    },
+    "Anthropic Claude" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Anthropic Claude"
+          }
+        }
+      }
+    },
+    "Anthropic Settings" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Anthropic Einstellungen"
+          }
+        }
+      }
+    },
+    "API Key Configured" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "API-Schlüssel konfiguriert"
+          }
+        }
+      }
+    },
+    "API Key Guide" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "API-Schlüsselleitfaden"
+          }
+        }
+      }
+    },
+    "API Key Required" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "API-Schlüssel erforderlich"
+          }
+        }
+      }
+    },
+    "Apple Silicon Required" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apple-Silicon erforderlich"
+          }
+        }
+      }
+    },
+    "Applying %@..." : {
+
+    },
+    "Back" : {
+
+    },
+    "Built-in Commands" : {
+
+    },
+    "Cancel" : {
+
+    },
+    "Change" : {
+
+    },
+    "Command Info" : {
+
+    },
+    "Configure" : {
+
+    },
+    "Configure your Anthropic API access" : {
+
+    },
+    "Configure your Gemini API access" : {
+
+    },
+    "Configure your Mistral API access" : {
+
+    },
+    "Configure your OpenAI API access" : {
+
+    },
+    "Configure your OpenRouter API access" : {
+
+    },
+    "Configure your Perplexity API access" : {
+
+    },
+    "Copy" : {
+
+    },
+    "Create a new API key and copy it" : {
+
+    },
+    "Create a new secret key" : {
+
+    },
+    "Custom Commands" : {
+
+    },
+    "Custom Prompt" : {
+
+    },
+    "Done" : {
+
+    },
+    "Edit Command" : {
+
+    },
+    "Enable" : {
+
+    },
+    "Enable Full Access" : {
+
+    },
+    "Enable Haptic Feedback" : {
+
+    },
+    "Enable the Keyboard" : {
+
+    },
+    "Enhance your writing with AI" : {
+
+    },
+    "Enjoy your new AI-powered writing experience" : {
+
+    },
+    "Full access is required for the keyboard to access AI tools and use copy/paste features" : {
+
+    },
+    "Gemini Settings" : {
+
+    },
+    "Get %@ API Key" : {
+
+    },
+    "Get Started" : {
+
+    },
+    "Getting a Gemini API Key:" : {
+
+    },
+    "Getting a Mistral API Key:" : {
+
+    },
+    "Getting a Perplexity API Key:" : {
+
+    },
+    "Getting an OpenAI API Key:" : {
+
+    },
+    "Go to %@ API Key Page" : {
+
+    },
+    "Go to API → Get API Key" : {
+
+    },
+    "Go to platform.openai.com" : {
+
+    },
+    "Google Gemini" : {
+
+    },
+    "gpt-4o" : {
+
+    },
+    "Help" : {
+
+    },
+    "How to Get Your %@ API Key" : {
+
+    },
+    "Icon" : {
+
+    },
+    "Important Notes:" : {
+
+    },
+    "Insert" : {
+
+    },
+    "Keyboard Commands" : {
+
+    },
+    "Keyboard Status" : {
+
+    },
+    "Let's set up your AI writing keyboard to start enhancing your text" : {
+
+    },
+    "Manage AI Commands" : {
+
+    },
+    "Mistral AI" : {
+
+    },
+    "Mistral Settings" : {
+
+    },
+    "Model" : {
+
+    },
+    "Name" : {
+
+    },
+    "Navigate to API Keys and create a new key" : {
+
+    },
+    "Navigate to your account/API keys page" : {
+
+    },
+    "New Command" : {
+
+    },
+    "Next" : {
+
+    },
+    "No text selected" : {
+
+    },
+    "Open Settings" : {
+
+    },
+    "OpenAI" : {
+
+    },
+    "OpenAI Settings" : {
+
+    },
+    "OpenRouter" : {
+
+    },
+    "OpenRouter Settings" : {
+
+    },
+    "Perplexity" : {
+
+    },
+    "Perplexity Settings" : {
+
+    },
+    "Preferences" : {
+
+    },
+    "Prompt" : {
+
+    },
+    "ProseKey AI" : {
+
+    },
+    "Quick Tips:" : {
+
+    },
+    "Ready to use" : {
+
+    },
+    "Regenerate" : {
+
+    },
+    "Save" : {
+
+    },
+    "Save Changes" : {
+
+    },
+    "Select AI Provider" : {
+
+    },
+    "Select API keys from settings" : {
+
+    },
+    "Selected Text:" : {
+
+    },
+    "Setup required" : {
+
+    },
+    "Sign in with your Google account" : {
+
+    },
+    "Sign up or log in to your account" : {
+
+    },
+    "Skip" : {
+
+    },
+    "Submit" : {
+
+    },
+    "Suggested Models:" : {
+
+    },
+    "Tap here to show the keyboard…" : {
+
+    },
+    "These are the default commands available in the keyboard. You can edit them but not delete them." : {
+
+    },
+    "These are your custom commands available in the keyboard." : {
+
+    },
+    "This is a built-in command. While you can modify it, you cannot delete it." : {
+
+    },
+    "Tip: Tap below to show the keyboard, then switch to “ProseKey AI” using the globe key. We’ll detect Full Access automatically." : {
+
+    },
+    "Tip: Tap below to show the keyboard, then switch to “ProseKey AI” using the globe key. We’ll update your status automatically." : {
+
+    },
+    "Transform your writing with AI tools directly from your keyboard" : {
+
+    },
+    "Type your custom instructions for the AI…" : {
+
+    },
+    "Use Copied Text" : {
+
+    },
+    "Using Text Selection" : {
+
+    },
+    "Visit console.mistral.ai" : {
+
+    },
+    "Visit Google AI Studio (ai.google.dev)" : {
+
+    },
+    "Visit perplexity.ai and create an account" : {
+
+    },
+    "Welcome to ProseKey AI" : {
+
+    },
+    "You're All Set!" : {
+
+    },
+    "Your Prompt:" : {
+
+    }
+  },
+  "version" : "1.1"
+}

@@ -1,37 +1,5 @@
 import SwiftUI
 
-// MARK: - Helpers
-final class Debouncer {
-    private var workItem: DispatchWorkItem?
-    func schedule(after delay: TimeInterval = 0.5, _ block: @escaping () -> Void) {
-        workItem?.cancel()
-        let item = DispatchWorkItem(block: block)
-        workItem = item
-        DispatchQueue.main.asyncAfter(deadline: .now() + delay, execute: item)
-    }
-}
-
-struct SavedToast: View {
-    @Binding var isVisible: Bool
-    var body: some View {
-        Group {
-            if isVisible {
-                HStack(spacing: 8) {
-                    Image(systemName: "checkmark.circle.fill").foregroundColor(.white)
-                    Text("Saved").foregroundColor(.white).font(.subheadline).bold()
-                }
-                .padding(.horizontal, 14)
-                .padding(.vertical, 10)
-                .background(.green)
-                .clipShape(Capsule())
-                .padding(.top, 8)
-                .transition(.move(edge: .top).combined(with: .opacity))
-                .animation(.spring(response: 0.35, dampingFraction: 0.9), value: isVisible)
-            }
-        }
-    }
-}
-
 struct LabeledTextField: View {
     let label: String
     let placeholder: String
@@ -49,7 +17,7 @@ struct LabeledTextField: View {
                     .padding()
                     .background(Color(.systemGray6))
                     .cornerRadius(10)
-                    .textInputAutocapitalization(.never)
+                    .autocapitalization(.none)
                     .autocorrectionDisabled()
             } else {
                 TextField(placeholder, text: $text)
@@ -67,12 +35,6 @@ struct LabeledTextField: View {
 struct GeminiSettingsView: View {
     @ObservedObject var appState: AppState
     @ObservedObject var settings = AppSettings.shared
-    
-    @State private var apiKey: String = ""
-    @State private var selectedModel: GeminiModel = .twoflash
-    @State private var customModel: String = ""
-    @State private var showSavedToast: Bool = false
-    @State private var debouncer = Debouncer()
     
     var body: some View {
         ScrollView {
@@ -99,7 +61,7 @@ struct GeminiSettingsView: View {
                 LabeledTextField(
                     label: "API Key",
                     placeholder: "Enter your Gemini API key",
-                    text: $apiKey,
+                    text: $settings.geminiApiKey,
                     isSecure: true
                 )
                 
@@ -107,7 +69,7 @@ struct GeminiSettingsView: View {
                 VStack(alignment: .leading, spacing: 8) {
                     Text("Model")
                         .font(.headline)
-                    Picker("Model", selection: $selectedModel) {
+                    Picker("Model", selection: $settings.geminiModel) { // Bind directly
                         ForEach(GeminiModel.allCases, id: \.self) { model in
                             Text(model.displayName).tag(model)
                         }
@@ -120,22 +82,22 @@ struct GeminiSettingsView: View {
                 }
                 
                 // Custom model name field (conditional)
-                if selectedModel == .custom {
+                if settings.geminiModel == .custom {
                     LabeledTextField(
                         label: "Custom Model Name",
                         placeholder: "Enter custom model identifier",
-                        text: $customModel
+                        text: $settings.geminiCustomModel // Bind directly
                     )
                     .transition(.opacity)
                 }
                 
                 Button(action: {
                     appState.saveGeminiConfig(
-                        apiKey: apiKey,
-                        model: selectedModel,
-                        customModelName: customModel
+                        apiKey: settings.geminiApiKey,
+                        model: settings.geminiModel,
+                        customModelName: settings.geminiCustomModel
                     )
-                    showSavedToastTemporarily()
+                    // Consider adding user feedback, e.g., an alert or dismiss action
                 }) {
                     Text("Save Changes")
                         .fontWeight(.medium)
@@ -179,40 +141,13 @@ struct GeminiSettingsView: View {
             }
             .padding()
         }
-        .onAppear {
-            apiKey = settings.geminiApiKey
-            selectedModel = settings.geminiModel
-            customModel = settings.geminiCustomModel
-        }
-        .onChange(of: apiKey) { _ in scheduleAutoSave() }
-        .onChange(of: selectedModel) { _ in scheduleAutoSave() }
-        .onChange(of: customModel) { _ in scheduleAutoSave() }
         .navigationTitle("Gemini Settings")
         .navigationBarTitleDisplayMode(.inline)
-        .overlay(SavedToast(isVisible: $showSavedToast), alignment: .top)
-    }
-    
-    private func scheduleAutoSave() {
-        guard isFormValid else { return }
-        debouncer.schedule { saveIfNeeded() }
-    }
-    private func saveIfNeeded() {
-        // Only save if values differ from persisted settings
-        if settings.geminiApiKey != apiKey || settings.geminiModel != selectedModel || (selectedModel == .custom && settings.geminiCustomModel != customModel) {
-            appState.saveGeminiConfig(apiKey: apiKey, model: selectedModel, customModelName: customModel)
-            showSavedToastTemporarily()
-        }
-    }
-    private func showSavedToastTemporarily() {
-        withAnimation { showSavedToast = true }
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
-            withAnimation { showSavedToast = false }
-        }
     }
     
     private var isFormValid: Bool {
-        !apiKey.isEmpty &&
-        (selectedModel != .custom || !customModel.isEmpty)
+        !settings.geminiApiKey.isEmpty &&
+        (settings.geminiModel != .custom || !settings.geminiCustomModel.isEmpty)
     }
 }
 
@@ -221,11 +156,6 @@ struct OpenAISettingsView: View {
     @ObservedObject var appState: AppState
     @ObservedObject var settings = AppSettings.shared
     
-    @State private var apiKey: String = ""
-    @State private var baseURL: String = ""
-    @State private var model: String = ""
-    @State private var showSavedToast: Bool = false
-    @State private var debouncer = Debouncer()
     
     var body: some View {
         ScrollView {
@@ -252,24 +182,24 @@ struct OpenAISettingsView: View {
                 LabeledTextField(
                     label: "API Key",
                     placeholder: "Enter your OpenAI API key",
-                    text: $apiKey,
+                    text: $settings.openAIApiKey, // Bind directly
                     isSecure: true
                 )
                 
                 LabeledTextField(
                     label: "Base URL",
                     placeholder: "https://api.openai.com",
-                    text: $baseURL
+                    text: $settings.openAIBaseURL // Bind directly
                 )
                 
                 VStack(alignment: .leading, spacing: 8) {
                     Text("Model")
                         .font(.headline)
-                    TextField("gpt-4o", text: $model)
+                    TextField("gpt-4o", text: $settings.openAIModel) // Bind directly
                         .padding()
                         .background(Color(.systemGray6))
                         .cornerRadius(10)
-                        .textInputAutocapitalization(.never)
+                        .autocapitalization(.none)
                         .autocorrectionDisabled()
                 }
                 
@@ -278,15 +208,15 @@ struct OpenAISettingsView: View {
                     Text("Suggested Models:")
                         .font(.subheadline)
                         .fontWeight(.medium)
-                    ForEach(OpenAIModel.allCases, id: \.self) { candidate in
+                    ForEach(OpenAIModel.allCases, id: \.self) { model in
                         Button(action: {
-                            model = candidate.rawValue
+                            settings.openAIModel = model.rawValue // Update settings directly
                         }) {
                             HStack {
-                                Text(candidate.displayName)
+                                Text(model.displayName)
                                     .font(.subheadline)
                                 Spacer()
-                                if model == candidate.rawValue {
+                                if settings.openAIModel == model.rawValue { // Check settings
                                     Image(systemName: "checkmark")
                                         .foregroundColor(.blue)
                                 }
@@ -294,7 +224,7 @@ struct OpenAISettingsView: View {
                             .padding(.vertical, 8)
                             .padding(.horizontal, 12)
                             .background(
-                                model == candidate.rawValue ?
+                                settings.openAIModel == model.rawValue ?
                                 Color.blue.opacity(0.1) : Color.clear
                             )
                             .cornerRadius(8)
@@ -308,11 +238,10 @@ struct OpenAISettingsView: View {
                 
                 Button(action: {
                     appState.saveOpenAIConfig(
-                        apiKey: apiKey,
-                        baseURL: baseURL,
-                        model: model
+                        apiKey: settings.openAIApiKey,
+                        baseURL: settings.openAIBaseURL,
+                        model: settings.openAIModel
                     )
-                    showSavedToastTemporarily()
                 }) {
                     Text("Save Changes")
                         .fontWeight(.medium)
@@ -356,40 +285,14 @@ struct OpenAISettingsView: View {
             }
             .padding()
         }
-        .onAppear {
-            apiKey = settings.openAIApiKey
-            baseURL = settings.openAIBaseURL
-            model = settings.openAIModel
-        }
-        .onChange(of: apiKey) { _ in scheduleAutoSave() }
-        .onChange(of: baseURL) { _ in scheduleAutoSave() }
-        .onChange(of: model) { _ in scheduleAutoSave() }
         .navigationTitle("OpenAI Settings")
         .navigationBarTitleDisplayMode(.inline)
-        .overlay(SavedToast(isVisible: $showSavedToast), alignment: .top)
-    }
-    
-    private func scheduleAutoSave() {
-        guard isFormValid else { return }
-        debouncer.schedule { saveIfNeeded() }
-    }
-    private func saveIfNeeded() {
-        if settings.openAIApiKey != apiKey || settings.openAIBaseURL != baseURL || settings.openAIModel != model {
-            appState.saveOpenAIConfig(apiKey: apiKey, baseURL: baseURL, model: model)
-            showSavedToastTemporarily()
-        }
-    }
-    private func showSavedToastTemporarily() {
-        withAnimation { showSavedToast = true }
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
-            withAnimation { showSavedToast = false }
-        }
     }
     
     private var isFormValid: Bool {
-        !apiKey.isEmpty &&
-        !baseURL.isEmpty &&
-        !model.isEmpty
+        !settings.openAIApiKey.isEmpty &&
+        !settings.openAIBaseURL.isEmpty &&
+        !settings.openAIModel.isEmpty
     }
 }
 
@@ -397,10 +300,6 @@ struct MistralSettingsView: View {
     @ObservedObject var appState: AppState
     @ObservedObject var settings = AppSettings.shared
     
-    @State private var apiKey: String = ""
-    @State private var model: String = MistralConfig.defaultModel
-    @State private var showSavedToast: Bool = false
-    @State private var debouncer = Debouncer()
     
     var body: some View {
         ScrollView {
@@ -427,16 +326,16 @@ struct MistralSettingsView: View {
                 LabeledTextField(
                     label: "API Key",
                     placeholder: "Enter your Mistral API key",
-                    text: $apiKey,
+                    text: $settings.mistralApiKey, // Bind directly
                     isSecure: true
                 )
                 
                 VStack(alignment: .leading, spacing: 8) {
                     Text("Model")
                         .font(.headline)
-                    Picker("Model", selection: $model) {
-                        ForEach(MistralModel.allCases, id: \.self) { modelCase in
-                            Text(modelCase.displayName).tag(modelCase.rawValue)
+                    Picker("Model", selection: $settings.mistralModel) { // Bind directly
+                        ForEach(MistralModel.allCases, id: \.self) { model in
+                            Text(model.displayName).tag(model.rawValue)
                         }
                     }
                     .pickerStyle(MenuPickerStyle())
@@ -448,22 +347,21 @@ struct MistralSettingsView: View {
                 
                 Button(action: {
                     appState.saveMistralConfig(
-                        apiKey: apiKey,
-                        model: model
+                        apiKey: settings.mistralApiKey,
+                        model: settings.mistralModel
                     )
-                    showSavedToastTemporarily()
                 }) {
                     Text("Save Changes")
                         .fontWeight(.medium)
                         .frame(maxWidth: .infinity)
                         .padding()
                         .background(
-                            !apiKey.isEmpty ? Color.blue : Color.gray
+                            !settings.mistralApiKey.isEmpty ? Color.blue : Color.gray
                         )
                         .foregroundColor(.white)
                         .cornerRadius(10)
                 }
-                .disabled(apiKey.isEmpty)
+                .disabled(settings.mistralApiKey.isEmpty) // Validation based on settings
                 .padding(.top, 20)
                 
                 // Help info
@@ -497,43 +395,14 @@ struct MistralSettingsView: View {
             }
             .padding()
         }
-        .onAppear {
-            apiKey = settings.mistralApiKey
-            model = settings.mistralModel
-        }
-        .onChange(of: apiKey) { _ in scheduleAutoSave() }
-        .onChange(of: model) { _ in scheduleAutoSave() }
         .navigationTitle("Mistral Settings")
         .navigationBarTitleDisplayMode(.inline)
-        .overlay(SavedToast(isVisible: $showSavedToast), alignment: .top)
-    }
-    
-    private func scheduleAutoSave() {
-        guard !apiKey.isEmpty else { return }
-        debouncer.schedule { saveIfNeeded() }
-    }
-    private func saveIfNeeded() {
-        if settings.mistralApiKey != apiKey || settings.mistralModel != model {
-            appState.saveMistralConfig(apiKey: apiKey, model: model)
-            showSavedToastTemporarily()
-        }
-    }
-    private func showSavedToastTemporarily() {
-        withAnimation { showSavedToast = true }
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
-            withAnimation { showSavedToast = false }
-        }
     }
 }
 
 struct AnthropicSettingsView: View {
     @ObservedObject var appState: AppState
     @ObservedObject var settings = AppSettings.shared
-    
-    @State private var apiKey: String = ""
-    @State private var model: String = AnthropicConfig.defaultModel
-    @State private var showSavedToast: Bool = false
-    @State private var debouncer = Debouncer()
 
     var body: some View {
         ScrollView {
@@ -555,72 +424,42 @@ struct AnthropicSettingsView: View {
                 LabeledTextField(
                     label: "API Key",
                     placeholder: "Enter your Anthropic API key",
-                    text: $apiKey,
+                    text: $settings.anthropicApiKey,
                     isSecure: true
                 )
                 LabeledTextField(
                     label: "Model",
                     placeholder: AnthropicConfig.defaultModel,
-                    text: $model
+                    text: $settings.anthropicModel
                 )
                 Button(action: {
                     appState.saveAnthropicConfig(
-                        apiKey: apiKey,
-                        model: model
+                        apiKey: settings.anthropicApiKey,
+                        model: settings.anthropicModel
                     )
-                    showSavedToastTemporarily()
                 }) {
                     Text("Save Changes")
                         .fontWeight(.medium)
                         .frame(maxWidth: .infinity)
                         .padding()
-                        .background(!apiKey.isEmpty ? Color.purple : Color.gray)
+                        .background(!settings.anthropicApiKey.isEmpty ? Color.purple : Color.gray)
                         .foregroundColor(.white)
                         .cornerRadius(10)
                 }
-                .disabled(apiKey.isEmpty)
+                .disabled(settings.anthropicApiKey.isEmpty)
                 .padding(.top, 20)
                 // Help text...
             }
             .padding()
         }
-        .onAppear {
-            apiKey = settings.anthropicApiKey
-            model = settings.anthropicModel
-        }
-        .onChange(of: apiKey) { _ in scheduleAutoSave() }
-        .onChange(of: model) { _ in scheduleAutoSave() }
         .navigationTitle("Anthropic Settings")
         .navigationBarTitleDisplayMode(.inline)
-        .overlay(SavedToast(isVisible: $showSavedToast), alignment: .top)
-    }
-    
-    private func scheduleAutoSave() {
-        guard !apiKey.isEmpty else { return }
-        debouncer.schedule { saveIfNeeded() }
-    }
-    private func saveIfNeeded() {
-        if settings.anthropicApiKey != apiKey || settings.anthropicModel != model {
-            appState.saveAnthropicConfig(apiKey: apiKey, model: model)
-            showSavedToastTemporarily()
-        }
-    }
-    private func showSavedToastTemporarily() {
-        withAnimation { showSavedToast = true }
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
-            withAnimation { showSavedToast = false }
-        }
     }
 }
 
 struct OpenRouterSettingsView: View {
     @ObservedObject var appState: AppState
     @ObservedObject var settings = AppSettings.shared
-    
-    @State private var apiKey: String = ""
-    @State private var model: String = OpenRouterConfig.defaultModel
-    @State private var showSavedToast: Bool = false
-    @State private var debouncer = Debouncer()
 
     var body: some View {
         ScrollView {
@@ -642,72 +481,42 @@ struct OpenRouterSettingsView: View {
                 LabeledTextField(
                     label: "API Key",
                     placeholder: "Enter your OpenRouter API key",
-                    text: $apiKey,
+                    text: $settings.openRouterApiKey,
                     isSecure: true
                 )
                 LabeledTextField(
                     label: "Model",
                     placeholder: OpenRouterConfig.defaultModel,
-                    text: $model
+                    text: $settings.openRouterModel
                 )
                 Button(action: {
                     appState.saveOpenRouterConfig(
-                        apiKey: apiKey,
-                        model: model
+                        apiKey: settings.openRouterApiKey,
+                        model: settings.openRouterModel
                     )
-                    showSavedToastTemporarily()
                 }) {
                     Text("Save Changes")
                         .fontWeight(.medium)
                         .frame(maxWidth: .infinity)
                         .padding()
-                        .background(!apiKey.isEmpty ? Color.pink : Color.gray)
+                        .background(!settings.openRouterApiKey.isEmpty ? Color.pink : Color.gray)
                         .foregroundColor(.white)
                         .cornerRadius(10)
                 }
-                .disabled(apiKey.isEmpty)
+                .disabled(settings.openRouterApiKey.isEmpty)
                 .padding(.top, 20)
                 // Help text...
             }
             .padding()
         }
-        .onAppear {
-            apiKey = settings.openRouterApiKey
-            model = settings.openRouterModel
-        }
-        .onChange(of: apiKey) { _ in scheduleAutoSave() }
-        .onChange(of: model) { _ in scheduleAutoSave() }
         .navigationTitle("OpenRouter Settings")
         .navigationBarTitleDisplayMode(.inline)
-        .overlay(SavedToast(isVisible: $showSavedToast), alignment: .top)
-    }
-    
-    private func scheduleAutoSave() {
-        guard !apiKey.isEmpty else { return }
-        debouncer.schedule { saveIfNeeded() }
-    }
-    private func saveIfNeeded() {
-        if settings.openRouterApiKey != apiKey || settings.openRouterModel != model {
-            appState.saveOpenRouterConfig(apiKey: apiKey, model: model)
-            showSavedToastTemporarily()
-        }
-    }
-    private func showSavedToastTemporarily() {
-        withAnimation { showSavedToast = true }
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
-            withAnimation { showSavedToast = false }
-        }
     }
 }
 
 struct PerplexitySettingsView: View {
     @ObservedObject var appState: AppState
     @ObservedObject var settings = AppSettings.shared
-    
-    @State private var apiKey: String = ""
-    @State private var model: String = PerplexityConfig.defaultModel
-    @State private var showSavedToast: Bool = false
-    @State private var debouncer = Debouncer()
 
     var body: some View {
         ScrollView {
@@ -719,111 +528,79 @@ struct PerplexitySettingsView: View {
                         .foregroundColor(.blue)
                     VStack(alignment: .leading) {
                         Text("Perplexity")
-                            .font(.title2).fontWeight(.bold)
+                            .font(.title2)
+                            .fontWeight(.bold)
                         Text("Configure your Perplexity API access")
-                            .font(.subheadline).foregroundColor(.secondary)
+                            .font(.subheadline)
+                            .foregroundColor(.secondary)
                     }
                 }
                 .padding(.bottom, 20)
 
-                // API Key
+                // API Key field
                 LabeledTextField(
                     label: "API Key",
                     placeholder: "Enter your Perplexity API key",
-                    text: $apiKey,
+                    text: $settings.perplexityApiKey,
                     isSecure: true
                 )
 
-                // Model
-                VStack(alignment: .leading, spacing: 8) {
-                    Text("Model").font(.headline)
-                    TextField(PerplexityConfig.defaultModel, text: $model)
-                        .padding()
-                        .background(Color(.systemGray6))
-                        .cornerRadius(10)
-                        .textInputAutocapitalization(.never)
-                        .autocorrectionDisabled()
-                }
+                // Model field
+                LabeledTextField(
+                    label: "Model",
+                    placeholder: PerplexityConfig.defaultModel,
+                    text: $settings.perplexityModel
+                )
 
-                // Suggested models
-                VStack(alignment: .leading, spacing: 10) {
-                    Text("Suggested Models:")
-                        .font(.subheadline).fontWeight(.medium)
-                    ForEach(PerplexityModel.allCases, id: \.self) { candidate in
-                        Button {
-                            model = candidate.rawValue
-                        } label: {
-                            HStack {
-                                Text(candidate.displayName).font(.subheadline)
-                                Spacer()
-                                if model == candidate.rawValue {
-                                    Image(systemName: "checkmark").foregroundColor(.blue)
-                                }
-                            }
-                            .padding(.vertical, 8)
-                            .padding(.horizontal, 12)
-                            .background(model == candidate.rawValue ? Color.blue.opacity(0.1) : Color.clear)
-                            .cornerRadius(8)
-                        }
-                    }
-                }
-
-                Button {
+                Button(action: {
                     appState.savePerplexityConfig(
-                        apiKey: apiKey,
-                        model: model
+                        apiKey: settings.perplexityApiKey,
+                        model: settings.perplexityModel
                     )
-                    showSavedToastTemporarily()
-                } label: {
+                }) {
                     Text("Save Changes")
                         .fontWeight(.medium)
                         .frame(maxWidth: .infinity)
                         .padding()
-                        .background(apiKey.isEmpty ? Color.gray : Color.blue)
+                        .background(!settings.perplexityApiKey.isEmpty ? Color.blue : Color.gray)
                         .foregroundColor(.white)
                         .cornerRadius(10)
                 }
-                .disabled(apiKey.isEmpty)
+                .disabled(settings.perplexityApiKey.isEmpty)
+                .padding(.top, 20)
 
-                // Help box
+                // Optional help section
                 VStack(alignment: .leading, spacing: 8) {
-                    Text("Getting a Perplexity API Key:").font(.headline).padding(.top, 8)
-                    Label("Go to perplexity.ai → Settings → API", systemImage: "1.circle.fill").foregroundColor(.blue)
-                    Label("Create a key and copy it", systemImage: "2.circle.fill").foregroundColor(.blue)
-                    Label("Paste the key above and Save", systemImage: "3.circle.fill").foregroundColor(.blue)
+                    Text("Getting a Perplexity API Key:")
+                        .font(.headline)
+                        .padding(.top, 8)
+
+                    HStack(alignment: .top) {
+                        Image(systemName: "1.circle.fill")
+                            .foregroundColor(.blue)
+                        Text("Visit perplexity.ai and create an account")
+                    }
+
+                    HStack(alignment: .top) {
+                        Image(systemName: "2.circle.fill")
+                            .foregroundColor(.blue)
+                        Text("Navigate to your account/API keys page")
+                    }
+
+                    HStack(alignment: .top) {
+                        Image(systemName: "3.circle.fill")
+                            .foregroundColor(.blue)
+                        Text("Create a new API key and copy it")
+                    }
                 }
                 .padding()
                 .background(Color(.systemGray6))
                 .cornerRadius(12)
-                .padding(.top, 10)
+                .padding(.top, 20)
             }
             .padding()
         }
-        .onAppear {
-            apiKey = settings.perplexityApiKey
-            model = settings.perplexityModel
-        }
-        .onChange(of: apiKey) { _ in scheduleAutoSave() }
-        .onChange(of: model) { _ in scheduleAutoSave() }
         .navigationTitle("Perplexity Settings")
         .navigationBarTitleDisplayMode(.inline)
-        .overlay(SavedToast(isVisible: $showSavedToast), alignment: .top)
-    }
-    
-    private func scheduleAutoSave() {
-        guard !apiKey.isEmpty else { return }
-        debouncer.schedule { saveIfNeeded() }
-    }
-    private func saveIfNeeded() {
-        if settings.perplexityApiKey != apiKey || settings.perplexityModel != model {
-            appState.savePerplexityConfig(apiKey: apiKey, model: model)
-            showSavedToastTemporarily()
-        }
-    }
-    private func showSavedToastTemporarily() {
-        withAnimation { showSavedToast = true }
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
-            withAnimation { showSavedToast = false }
-        }
     }
 }

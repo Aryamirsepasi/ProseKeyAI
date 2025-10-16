@@ -4,20 +4,20 @@ import SwiftUI
 class AppState: ObservableObject {
   static let shared = AppState()
 
-  // Existing providers
+  // Use new references to providers
   @Published var geminiProvider: GeminiProvider
   @Published var openAIProvider: OpenAIProvider
   @Published var mistralProvider: MistralProvider
   @Published var anthropicProvider: AnthropicProvider
   @Published var openRouterProvider: OpenRouterProvider
-@Published var perplexityProvider: PerplexityProvider
+  @Published var perplexityProvider: PerplexityProvider
+  //@Published var aiProxyProvider: AIProxyProvider
 
-  // NEW: Local model provider (MLX)
-  @Published var localModelProvider: LocalModelProvider
-
+  // Other app state
   @Published var selectedText: String = ""
   @Published var isProcessing: Bool = false
 
+  // Current provider with UI binding support
   @Published private(set) var currentProvider: String
 
   var activeProvider: any AIProvider {
@@ -28,20 +28,19 @@ class AppState: ObservableObject {
     case "anthropic": return anthropicProvider
     case "openrouter": return openRouterProvider
     case "perplexity": return perplexityProvider
-    case "local": return localModelProvider // NEW
     default: return geminiProvider
     }
   }
 
   private init() {
+    // Read from AppSettings
     let asettings = AppSettings.shared
     self.currentProvider = asettings.currentProvider
 
-    // Initialize Gemini
+    // Initialize Gemini with custom model support
     let geminiModelEnum = asettings.geminiModel
-    let geminiModelName =
-      (geminiModelEnum == .custom) ? asettings.geminiCustomModel
-      : geminiModelEnum.rawValue
+    let geminiModelName = (geminiModelEnum == .custom)
+      ? asettings.geminiCustomModel : geminiModelEnum.rawValue
     let geminiConfig = GeminiConfig(
       apiKey: asettings.geminiApiKey,
       modelName: geminiModelName
@@ -63,35 +62,27 @@ class AppState: ObservableObject {
     )
     self.mistralProvider = MistralProvider(config: mistralConfig)
 
-    // Anthropic
     self.anthropicProvider = AnthropicProvider(
       config: AnthropicConfig(
         apiKey: asettings.anthropicApiKey,
         model: asettings.anthropicModel
       )
     )
-
-    // OpenRouter
     self.openRouterProvider = OpenRouterProvider(
       config: OpenRouterConfig(
         apiKey: asettings.openRouterApiKey,
         model: asettings.openRouterModel
       )
     )
-      
-      self.perplexityProvider = PerplexityProvider(
-        config: PerplexityConfig(
-          apiKey: asettings.perplexityApiKey,
-          model: asettings.perplexityModel
-        )
+    self.perplexityProvider = PerplexityProvider(
+      config: PerplexityConfig(
+        apiKey: asettings.perplexityApiKey,
+        model: asettings.perplexityModel
       )
-
-
-    // NEW: Local MLX provider
-    self.localModelProvider = LocalModelProvider()
+    )
 
     if asettings.openAIApiKey.isEmpty, asettings.geminiApiKey.isEmpty,
-       asettings.mistralApiKey.isEmpty
+      asettings.mistralApiKey.isEmpty
     {
       print("Warning: No API keys configured.")
     }
@@ -140,16 +131,15 @@ class AppState: ObservableObject {
       config: OpenRouterConfig(apiKey: apiKey, model: model)
     )
   }
-    
-    func savePerplexityConfig(apiKey: String, model: String) {
-      let asettings = AppSettings.shared
-      asettings.perplexityApiKey = apiKey
-      asettings.perplexityModel = model
-      perplexityProvider = PerplexityProvider(
-        config: PerplexityConfig(apiKey: apiKey, model: model)
-      )
-    }
 
+  func savePerplexityConfig(apiKey: String, model: String) {
+    let asettings = AppSettings.shared
+    asettings.perplexityApiKey = apiKey
+    asettings.perplexityModel = model
+    perplexityProvider = PerplexityProvider(
+      config: PerplexityConfig(apiKey: apiKey, model: model)
+    )
+  }
 
   func setCurrentProvider(_ provider: String) {
     currentProvider = provider
@@ -161,22 +151,21 @@ class AppState: ObservableObject {
     asettings.mistralApiKey = apiKey
     asettings.mistralModel = model
 
-    let config = MistralConfig(apiKey: apiKey, model: model)
+    let config = MistralConfig(
+      apiKey: apiKey,
+      model: model
+    )
     mistralProvider = MistralProvider(config: config)
   }
 
   func reloadProviders() {
     let asettings = AppSettings.shared
-    // Rebuild remote providers from settings
+    // Re-initialize all providers with the latest config
     let geminiModelEnum = asettings.geminiModel
-    let geminiModelName =
-      (geminiModelEnum == .custom) ? asettings.geminiCustomModel
-      : geminiModelEnum.rawValue
+    let geminiModelName = (geminiModelEnum == .custom)
+      ? asettings.geminiCustomModel : geminiModelEnum.rawValue
     self.geminiProvider = GeminiProvider(
-      config: GeminiConfig(
-        apiKey: asettings.geminiApiKey,
-        modelName: geminiModelName
-      )
+      config: GeminiConfig(apiKey: asettings.geminiApiKey, modelName: geminiModelName)
     )
     self.openAIProvider = OpenAIProvider(
       config: OpenAIConfig(
@@ -203,15 +192,12 @@ class AppState: ObservableObject {
         model: asettings.openRouterModel
       )
     )
-      
-      self.perplexityProvider = PerplexityProvider(
-        config: PerplexityConfig(
-          apiKey: asettings.perplexityApiKey,
-          model: asettings.perplexityModel
-        )
+    self.perplexityProvider = PerplexityProvider(
+      config: PerplexityConfig(
+        apiKey: asettings.perplexityApiKey,
+        model: asettings.perplexityModel
       )
-
-    // Keep the same LocalModelProvider instance so downloads/state persist
+    )
     self.currentProvider = asettings.currentProvider
   }
 }

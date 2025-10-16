@@ -343,17 +343,14 @@ struct SetupStepView: View {
 struct ProviderTabView: View {
   @Binding var currentProvider: String
 
-  private let providers: [(id: String, icon: String, name: String, color: Color)] =
-    [
-      ("gemini", "g.circle.fill", "Gemini", .blue),
-      ("openai", "o.circle.fill", "OpenAI", .green),
-      ("mistral", "m.circle.fill", "Mistral", .orange),
-      ("anthropic", "a.circle.fill", "Anthropic", .purple),
-      ("openrouter", "r.circle.fill", "OpenRouter", .pink),
-      ("perplexity", "p.circle.fill", "Perplexity", .indigo),
-      // NEW: Local LLM provider
-      //("local", "brain.head.profile", "Local LLM", .teal),
-    ]
+  private let providers: [(id: String, icon: String, name: String, color: Color)] = [
+    ("gemini", "g.circle.fill", "Gemini", .blue),
+    ("openai", "o.circle.fill", "OpenAI", .green),
+    ("mistral", "m.circle.fill", "Mistral", .orange),
+    ("anthropic", "a.circle.fill", "Anthropic", .purple),
+    ("openrouter", "r.circle.fill", "OpenRouter", .pink),
+    ("perplexity", "p.circle.fill", "Perplexity", .teal),
+  ]
 
   var body: some View {
     ScrollView(.horizontal, showsIndicators: false) {
@@ -376,14 +373,15 @@ struct ProviderTabView: View {
             .foregroundColor(
               currentProvider == provider.id ? provider.color : .primary
             )
-            .cornerRadius(20)
+            .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
             .overlay(
-              RoundedRectangle(cornerRadius: 20)
-                .stroke(
+              RoundedRectangle(cornerRadius: 20, style: .continuous)
+                .strokeBorder(
                   currentProvider == provider.id ? provider.color : Color.clear,
                   lineWidth: 2
                 )
             )
+            .contentShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
           }
           .buttonStyle(PlainButtonStyle())
         }
@@ -408,57 +406,60 @@ struct ProviderSetupCard: View {
         Text(providerName)
           .font(.headline)
         Spacer()
-        if provider != "local" {
-          Button(action: { showApiKeyHelp = true }) {
-            Label("Help", systemImage: "questionmark.circle")
-              .font(.subheadline)
-              .foregroundColor(.blue)
-          }
+        Button(action: { showApiKeyHelp = true }) {
+          Label("Help", systemImage: "questionmark.circle")
+            .font(.subheadline)
+            .foregroundColor(.blue)
         }
       }
-
-      // Status row
-      if provider == "local" {
-        localStatusRow
-      } else {
-        remoteStatusRow
+      HStack {
+        Image(systemName: hasApiKey ? "checkmark.shield.fill" : "key.fill")
+          .foregroundColor(hasApiKey ? .green : .orange)
+        Text(hasApiKey ? "API Key Configured" : "API Key Required")
+          .font(.subheadline)
+        Spacer()
+        switch provider {
+        case "gemini":
+          NavigationLink(destination: GeminiSettingsView(appState: appState)) {
+            Text(hasApiKey ? "Change" : "Configure").foregroundColor(.blue)
+          }
+        case "openai":
+          NavigationLink(destination: OpenAISettingsView(appState: appState)) {
+            Text(hasApiKey ? "Change" : "Configure").foregroundColor(.blue)
+          }
+        case "mistral":
+          NavigationLink(destination: MistralSettingsView(appState: appState)) {
+            Text(hasApiKey ? "Change" : "Configure").foregroundColor(.blue)
+          }
+        case "anthropic":
+          NavigationLink(
+            destination: AnthropicSettingsView(appState: appState)
+          ) { Text(hasApiKey ? "Change" : "Configure").foregroundColor(.blue) }
+        case "openrouter":
+          NavigationLink(
+            destination: OpenRouterSettingsView(appState: appState)
+          ) { Text(hasApiKey ? "Change" : "Configure").foregroundColor(.blue) }
+        case "perplexity":
+          NavigationLink(
+            destination: PerplexitySettingsView(appState: appState)
+          ) { Text(hasApiKey ? "Change" : "Configure").foregroundColor(.blue) }
+        default: EmptyView()
+        }
       }
-
-      // Description
       Text(providerDescription)
         .font(.subheadline)
         .foregroundColor(.secondary)
         .fixedSize(horizontal: false, vertical: true)
-
-      // Action/Link
-      if provider == "local" {
-        NavigationLink(
-          destination: LocalLLMSettingsView(
-            provider: appState.localModelProvider
-          )
-        ) {
-          HStack {
-            Text("Manage Local Models")
-            Spacer()
-            Image(systemName: "chevron.right")
-          }
-          .padding(12)
-          .background(Color.teal.opacity(0.1))
-          .foregroundColor(.teal)
-          .cornerRadius(8)
+      Link(destination: URL(string: apiKeyUrl)!) {
+        HStack {
+          Text("Get \(providerName) API Key")
+          Spacer()
+          Image(systemName: "arrow.up.right.square")
         }
-      } else {
-        Link(destination: URL(string: apiKeyUrl)!) {
-          HStack {
-            Text("Get \(providerName) API Key")
-            Spacer()
-            Image(systemName: "arrow.up.right.square")
-          }
-          .padding(12)
-          .background(Color.blue.opacity(0.1))
-          .foregroundColor(.blue)
-          .cornerRadius(8)
-        }
+        .padding(12)
+        .background(Color.blue.opacity(0.1))
+        .foregroundColor(.blue)
+        .cornerRadius(8)
       }
     }
     .padding()
@@ -466,78 +467,6 @@ struct ProviderSetupCard: View {
     .cornerRadius(12)
     .padding(.horizontal)
   }
-
-  // MARK: - Rows
-
-  private var localStatusRow: some View {
-    let p = appState.localModelProvider
-    let (icon, color, text) = localStatus(for: p)
-
-    return HStack {
-      Image(systemName: icon).foregroundColor(color)
-      Text(text).font(.subheadline)
-      Spacer()
-    }
-  }
-
-  private var remoteStatusRow: some View {
-    HStack {
-      Image(systemName: hasApiKey ? "checkmark.shield.fill" : "key.fill")
-        .foregroundColor(hasApiKey ? .green : .orange)
-      Text(hasApiKey ? "API Key Configured" : "API Key Required")
-        .font(.subheadline)
-      Spacer()
-      switch provider {
-      case "gemini":
-        NavigationLink(destination: GeminiSettingsView(appState: appState)) {
-          Text(hasApiKey ? "Change" : "Configure").foregroundColor(.blue)
-        }
-      case "openai":
-        NavigationLink(destination: OpenAISettingsView(appState: appState)) {
-          Text(hasApiKey ? "Change" : "Configure").foregroundColor(.blue)
-        }
-      case "mistral":
-        NavigationLink(destination: MistralSettingsView(appState: appState)) {
-          Text(hasApiKey ? "Change" : "Configure").foregroundColor(.blue)
-        }
-      case "anthropic":
-        NavigationLink(destination: AnthropicSettingsView(appState: appState)) {
-          Text(hasApiKey ? "Change" : "Configure").foregroundColor(.blue)
-        }
-      case "openrouter":
-        NavigationLink(destination: OpenRouterSettingsView(appState: appState)) {
-          Text(hasApiKey ? "Change" : "Configure").foregroundColor(.blue)
-        }
-      case "perplexity":
-        NavigationLink(destination: PerplexitySettingsView(appState: appState)) {
-          Text(hasApiKey ? "Change" : "Configure").foregroundColor(.blue)
-        }
-
-      default:
-        EmptyView()
-      }
-    }
-  }
-
-  private func localStatus(for p: LocalModelProvider) -> (String, Color, String) {
-    switch p.loadState {
-    case .idle, .checking, .needsDownload:
-      if p.isDownloading {
-        return ("arrow.down.circle.fill", .blue, "Downloading model...")
-      }
-      return ("externaldrive.fill", .orange, "No model downloaded")
-    case .downloaded:
-      return ("checkmark.circle.fill", .green, "Model downloaded")
-    case .loading:
-      return ("clock.arrow.circlepath", .blue, "Loading model...")
-    case .loaded:
-      return ("checkmark.seal.fill", .green, "Model loaded and ready")
-    case .error(let message):
-      return ("exclamationmark.triangle.fill", .red, "Error: \(message)")
-    }
-  }
-
-  // MARK: - Mappings
 
   private var providerIcon: String {
     switch provider {
@@ -547,11 +476,9 @@ struct ProviderSetupCard: View {
     case "anthropic": return "a.circle.fill"
     case "openrouter": return "r.circle.fill"
     case "perplexity": return "p.circle.fill"
-    //case "local": return "brain.head.profile" // NEW
     default: return "questionmark"
     }
   }
-
   private var providerName: String {
     switch provider {
     case "gemini": return "Google Gemini"
@@ -560,11 +487,9 @@ struct ProviderSetupCard: View {
     case "anthropic": return "Anthropic"
     case "openrouter": return "OpenRouter"
     case "perplexity": return "Perplexity"
-    //case "local": return "Local LLM (On-Device)" // NEW
     default: return "Unknown Provider"
     }
   }
-
   private var hasApiKey: Bool {
     switch provider {
     case "gemini": return !settings.geminiApiKey.isEmpty
@@ -576,7 +501,6 @@ struct ProviderSetupCard: View {
     default: return false
     }
   }
-
   private var providerDescription: String {
     switch provider {
     case "gemini":
@@ -595,15 +519,10 @@ struct ProviderSetupCard: View {
       return
         "OpenRouter is a gateway to many top AI models, letting you choose from a variety of providers with a single API key."
     case "perplexity":
-      return "Perplexity Sonar uses live web search to ground answers and can return citations for transparency."
-/*
-    case "local":
-      return
-        "Run small LLMs fully on-device using MLX. Download a model once, then use it offline with no API key."*/
+      return "Perplexity provides fast, high-quality models like Sonar for search-augmented writing assistance."
     default: return ""
     }
   }
-
   private var apiKeyUrl: String {
     switch provider {
     case "gemini": return "https://ai.google.dev/tutorials/setup"
@@ -616,6 +535,7 @@ struct ProviderSetupCard: View {
     }
   }
 }
+
 
 struct AboutLinkRow: View {
   let iconName: String
@@ -877,6 +797,12 @@ struct ApiKeyHelpView: View {
                 (title: "Create a new API key", description: "Click 'Create Key', give it a name, and copy it."),
                 (title: "Enter the API key in ProseKey AI", description: "Paste the key in the OpenRouter settings section.")
             ]
+        case "perplexity":
+            return [
+                (title: "Create a Perplexity account", description: "Go to perplexity.ai and sign up or log in."),
+                (title: "Generate an API key", description: "Open settings → API and create a new key."),
+                (title: "Enter the API key in ProseKey AI", description: "Paste the key in the Perplexity settings section.")
+            ]
         default: return []
         }
     }
@@ -919,8 +845,15 @@ struct ApiKeyHelpView: View {
                 "Check your usage and billing in your OpenRouter dashboard.",
                 "Your API key is stored only on your device."
             ]
+        case "perplexity":
+            return [
+                "API usage may incur charges; review your plan.",
+                "Keep your key private; it is stored only on your device.",
+                "You can revoke keys anytime from your Perplexity settings."
+            ]
         default:
             return []
         }
     }
 }
+
