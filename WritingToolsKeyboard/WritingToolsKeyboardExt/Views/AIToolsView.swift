@@ -8,6 +8,9 @@ struct AIToolsView: View {
     @State private var state: AIToolsUIState = .toolList
     @State private var isLoading = false
     @State private var aiResult: String = ""
+    
+    // Keyboard height adapts to content but maintains reasonable minimum
+    // Standard iOS keyboard is ~291pt portrait, ~210pt landscape on iPhone
     private let minKeyboardHeight: CGFloat = 240
     @State private var chosenCommand: KeyboardCommand? = nil
     @State private var customPrompt: String = ""
@@ -57,6 +60,7 @@ struct AIToolsView: View {
         VStack(spacing: 12) {
             HStack(spacing: 12) {
                 Button(action: {
+                    HapticsManager.shared.keyPress()
                     vm.handleCopiedText()
                 }) {
                     HStack {
@@ -74,13 +78,17 @@ struct AIToolsView: View {
                 .cornerRadius(8)
                 .contentShape(Rectangle())
                 .buttonStyle(PlainButtonStyle())
+                .accessibilityLabel("Use copied text")
+                .accessibilityHint("Pastes text from clipboard for processing")
                 
                 // Custom Prompt Button
                 Button(action: {
                     guard vm.selectedText != nil && !vm.selectedText!.isEmpty else {
+                        HapticsManager.shared.error()
                         vm.errorMessage = "No text is selected."
                         return
                     }
+                    HapticsManager.shared.keyPress()
                     customPrompt = ""
                     state = .customPrompt
                 }) {
@@ -203,12 +211,17 @@ struct AIToolsView: View {
             Text("Applying \(command.name)...")
                 .font(.headline)
                 .padding(.top, 20)
+                .accessibilityAddTraits(.updatesFrequently)
             ProgressView()
                 .scaleEffect(1.2)
                 .padding(.top, 8)
+                .accessibilityLabel("Processing")
             Spacer()
         }
         .frame(maxWidth: .infinity)
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("Applying \(command.name)")
+        .accessibilityAddTraits(.updatesFrequently)
     }
     
     private func resultView(_ command: KeyboardCommand) -> some View {
@@ -260,7 +273,7 @@ struct AIToolsView: View {
             HStack(spacing: 6) {
                 Button(action: {
                     UIPasteboard.general.string = aiResult
-                    UINotificationFeedbackGenerator().notificationOccurred(.success)
+                    HapticsManager.shared.success()
                 }) {
                     HStack {
                         Image(systemName: "doc.on.doc")
@@ -275,6 +288,7 @@ struct AIToolsView: View {
                 .buttonStyle(PlainButtonStyle())
                 
                 Button(action: {
+                    HapticsManager.shared.success()
                     vm.viewController?.textDocumentProxy.insertText(aiResult)
                     state = .toolList
                     aiResult = ""
@@ -293,6 +307,7 @@ struct AIToolsView: View {
                 
                 Button(action: {
                     guard let text = vm.selectedText, let chosen = chosenCommand else { return }
+                    HapticsManager.shared.keyPress()
                     isLoading = true
                     state = .generating(chosen)
                     aiResult = ""
@@ -330,7 +345,9 @@ struct AIToolsView: View {
       _ command: KeyboardCommand,
       userText: String
     ) {
+      // Cancel any previous task
       activeTask?.cancel()
+      
       activeTask = Task(priority: .userInitiated) {
         do {
           let truncated = userText.count > 8000
@@ -342,12 +359,26 @@ struct AIToolsView: View {
             images: [],
             streaming: false
           )
-          guard !Task.isCancelled else { return }
+          
+          // Check for cancellation before updating UI
+          guard !Task.isCancelled else { 
+            await MainActor.run {
+              isLoading = false
+            }
+            return 
+          }
+          
           await MainActor.run {
             aiResult = result
             isLoading = false
             state = .result(command)
             vm.errorMessage = nil
+            HapticsManager.shared.success()
+          }
+        } catch is CancellationError {
+          // Task was cancelled, just clean up
+          await MainActor.run {
+            isLoading = false
           }
         } catch {
           guard !Task.isCancelled else { return }
@@ -356,6 +387,7 @@ struct AIToolsView: View {
             isLoading = false
             state = .toolList
             chosenCommand = nil
+            HapticsManager.shared.error()
           }
         }
       }

@@ -8,7 +8,10 @@ class AIToolsViewModel: ObservableObject {
     
     weak var viewController: KeyboardViewController?
     
-    private lazy var hapticsManager = HapticsManager()
+    private let hapticsManager = HapticsManager.shared
+    
+    // Debouncing to avoid excessive checks
+    private var checkTextTask: Task<Void, Never>?
     
     init(viewController: KeyboardViewController?) {
         self.viewController = viewController
@@ -17,7 +20,15 @@ class AIToolsViewModel: ObservableObject {
     }
     
     func checkSelectedText() {
-        Task { @MainActor in
+        // Cancel any pending check
+        checkTextTask?.cancel()
+        
+        checkTextTask = Task { @MainActor in
+            // Small delay to debounce rapid calls
+            try? await Task.sleep(nanoseconds: 100_000_000) // 0.1 seconds
+            
+            guard !Task.isCancelled else { return }
+            
             let docText = viewController?.getSelectedText() ?? ""
             selectedText = docText.isEmpty ? nil : docText
         }

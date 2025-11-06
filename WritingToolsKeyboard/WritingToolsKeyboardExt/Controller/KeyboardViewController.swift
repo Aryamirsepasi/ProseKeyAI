@@ -30,6 +30,24 @@ class KeyboardViewController: UIInputViewController {
     print("Mistral API key (exists): \(!settings.mistralApiKey.isEmpty)")
     print("Anthropic API key (exists): \(!settings.anthropicApiKey.isEmpty)")
     print("OpenRouter API key (exists): \(!settings.openRouterApiKey.isEmpty)")
+    
+    // Handle memory warnings
+    NotificationCenter.default.addObserver(
+      self,
+      selector: #selector(handleMemoryWarning),
+      name: UIApplication.didReceiveMemoryWarningNotification,
+      object: nil
+    )
+  }
+  
+  @objc private func handleMemoryWarning() {
+    // Clean up resources when memory is low
+    print("Memory warning received in keyboard extension")
+    viewModel.selectedText = nil
+  }
+  
+  deinit {
+    NotificationCenter.default.removeObserver(self)
   }
 
   override func viewDidLayoutSubviews() {
@@ -38,6 +56,8 @@ class KeyboardViewController: UIInputViewController {
       let rootView = KeyboardView(viewController: self, vm: viewModel)
       let hostingController = UIHostingController(rootView: rootView)
       hostingController.view.backgroundColor = .clear
+      // Set the input view's background to clear to prevent double-layering
+      self.view.backgroundColor = .clear
       keyboardViewHostingController = hostingController
       attachHostingController(hostingController)
     }
@@ -96,17 +116,23 @@ class KeyboardViewController: UIInputViewController {
   func getSelectedText() -> String? {
     guard hasFullAccess else { return nil }
 
+    // iOS 16+ has direct selectedText API
     if #available(iOS 16.0, *) {
       if let selectedText = textDocumentProxy.selectedText, !selectedText.isEmpty {
         return selectedText
       }
     }
 
+    // Fallback: Get context before and after cursor
+    // Note: This is a best-effort approach and may not capture all text
     let before = textDocumentProxy.documentContextBeforeInput ?? ""
     let after = textDocumentProxy.documentContextAfterInput ?? ""
+    
+    // Only return combined text if it seems reasonable
     let combined = (before + after).trimmingCharacters(in: .whitespacesAndNewlines)
-
-    if !combined.isEmpty && combined.count <= 200 {
+    
+    // Limit to prevent overwhelming the UI with large documents
+    if !combined.isEmpty && combined.count <= 1000 {
       return combined
     }
 

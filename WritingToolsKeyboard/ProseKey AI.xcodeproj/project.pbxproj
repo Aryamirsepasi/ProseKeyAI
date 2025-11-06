@@ -13,11 +13,6 @@
 		2A96CFE12D862308002D819E /* OnboardingKit in Frameworks */ = {isa = PBXBuildFile; productRef = 2A96CFE02D862308002D819E /* OnboardingKit */; };
 		2A9BFDB62D1F3CEC00A8F121 /* ProseKey AIExt.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 2A9BFDAF2D1F3CEC00A8F121 /* ProseKey AIExt.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		2AEB8FCD2DC6D7C7007869EF /* MarkdownUI in Frameworks */ = {isa = PBXBuildFile; productRef = 2AEB8FCC2DC6D7C7007869EF /* MarkdownUI */; };
-		428B06E62E53991F004D9A94 /* MLXEmbedders in Frameworks */ = {isa = PBXBuildFile; productRef = 428B06E52E53991F004D9A94 /* MLXEmbedders */; };
-		428B06E82E53991F004D9A94 /* MLXLLM in Frameworks */ = {isa = PBXBuildFile; productRef = 428B06E72E53991F004D9A94 /* MLXLLM */; };
-		428B06EA2E53991F004D9A94 /* MLXLMCommon in Frameworks */ = {isa = PBXBuildFile; productRef = 428B06E92E53991F004D9A94 /* MLXLMCommon */; };
-		428B06EC2E53991F004D9A94 /* MLXMNIST in Frameworks */ = {isa = PBXBuildFile; productRef = 428B06EB2E53991F004D9A94 /* MLXMNIST */; };
-		428B06EE2E53991F004D9A94 /* MLXVLM in Frameworks */ = {isa = PBXBuildFile; productRef = 428B06ED2E53991F004D9A94 /* MLXVLM */; };
 		428B07D22E53A726004D9A94 /* MLXEmbedders in Frameworks */ = {isa = PBXBuildFile; productRef = 428B07D12E53A726004D9A94 /* MLXEmbedders */; };
 		428B07D42E53A726004D9A94 /* MLXLLM in Frameworks */ = {isa = PBXBuildFile; productRef = 428B07D32E53A726004D9A94 /* MLXLLM */; };
 		428B07D62E53A726004D9A94 /* MLXLMCommon in Frameworks */ = {isa = PBXBuildFile; productRef = 428B07D52E53A726004D9A94 /* MLXLMCommon */; };
@@ -100,13 +95,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				428B06EC2E53991F004D9A94 /* MLXMNIST in Frameworks */,
-				428B06E82E53991F004D9A94 /* MLXLLM in Frameworks */,
-				428B06E62E53991F004D9A94 /* MLXEmbedders in Frameworks */,
 				2A1CC6262DC6B96700D0A451 /* AIProxy in Frameworks */,
 				2A96CFE12D862308002D819E /* OnboardingKit in Frameworks */,
-				428B06EA2E53991F004D9A94 /* MLXLMCommon in Frameworks */,
-				428B06EE2E53991F004D9A94 /* MLXVLM in Frameworks */,
 				2A5B324F2D49A1F3006A5F4D /* MarkdownUI in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -181,11 +171,6 @@
 				2A5B324E2D49A1F3006A5F4D /* MarkdownUI */,
 				2A96CFE02D862308002D819E /* OnboardingKit */,
 				2A1CC6252DC6B96700D0A451 /* AIProxy */,
-				428B06E52E53991F004D9A94 /* MLXEmbedders */,
-				428B06E72E53991F004D9A94 /* MLXLLM */,
-				428B06E92E53991F004D9A94 /* MLXLMCommon */,
-				428B06EB2E53991F004D9A94 /* MLXMNIST */,
-				428B06ED2E53991F004D9A94 /* MLXVLM */,
 			);
 			productName = WritingToolsKeyboard;
 			productReference = 2A9BFD7E2D1F3CCF00A8F121 /* ProseKey AI.app */;
@@ -229,7 +214,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1620;
-				LastUpgradeCheck = 2600;
+				LastUpgradeCheck = 2610;
 				TargetAttributes = {
 					2A9BFD7D2D1F3CCF00A8F121 = {
 						CreatedOnToolsVersion = 16.2;
@@ -443,7 +428,7 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = WritingToolsKeyboard/WritingToolsKeyboard.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_ASSET_PATHS = "\"WritingToolsKeyboard/Preview Content\"";
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
@@ -462,7 +447,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.4;
+				MARKETING_VERSION = 2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.aryamirsepasi.WritingToolsKeyboard;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -483,7 +468,7 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = WritingToolsKeyboard/WritingToolsKeyboard.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_ASSET_PATHS = "\"WritingToolsKeyboard/Preview Content\"";
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
@@ -502,7 +487,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.4;
+				MARKETING_VERSION = 2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.aryamirsepasi.WritingToolsKeyboard;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -521,7 +506,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = WritingToolsKeyboardExt/WritingToolsKeyboardExt.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 4;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = "$(SRCROOT)/WritingToolsKeyboardExt/Resources/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "ProseKey AI Keyboard Extension";
@@ -532,7 +517,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.4;
+				MARKETING_VERSION = 2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.aryamirsepasi.WritingToolsKeyboard.WritingToolsKeyboardExt;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -554,7 +539,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = WritingToolsKeyboardExt/WritingToolsKeyboardExt.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 4;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = "$(SRCROOT)/WritingToolsKeyboardExt/Resources/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "ProseKey AI Keyboard Extension";
@@ -565,7 +550,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.4;
+				MARKETING_VERSION = 2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.aryamirsepasi.WritingToolsKeyboard.WritingToolsKeyboardExt;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -672,31 +657,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 2A5B324D2D49A1F3006A5F4D /* XCRemoteSwiftPackageReference "swift-markdown-ui" */;
 			productName = MarkdownUI;
-		};
-		428B06E52E53991F004D9A94 /* MLXEmbedders */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 428B06E42E53991F004D9A94 /* XCRemoteSwiftPackageReference "mlx-swift-examples" */;
-			productName = MLXEmbedders;
-		};
-		428B06E72E53991F004D9A94 /* MLXLLM */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 428B06E42E53991F004D9A94 /* XCRemoteSwiftPackageReference "mlx-swift-examples" */;
-			productName = MLXLLM;
-		};
-		428B06E92E53991F004D9A94 /* MLXLMCommon */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 428B06E42E53991F004D9A94 /* XCRemoteSwiftPackageReference "mlx-swift-examples" */;
-			productName = MLXLMCommon;
-		};
-		428B06EB2E53991F004D9A94 /* MLXMNIST */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 428B06E42E53991F004D9A94 /* XCRemoteSwiftPackageReference "mlx-swift-examples" */;
-			productName = MLXMNIST;
-		};
-		428B06ED2E53991F004D9A94 /* MLXVLM */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 428B06E42E53991F004D9A94 /* XCRemoteSwiftPackageReference "mlx-swift-examples" */;
-			productName = MLXVLM;
 		};
 		428B07D12E53A726004D9A94 /* MLXEmbedders */ = {
 			isa = XCSwiftPackageProductDependency;

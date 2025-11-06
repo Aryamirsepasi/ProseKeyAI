@@ -4,8 +4,14 @@ import SwiftUI
 class AppSettings: ObservableObject {
   static let shared = AppSettings()
 
-  private let defaults =
-    UserDefaults(suiteName: "group.com.aryamirsepasi.writingtools")!
+  private let defaults: UserDefaults
+  
+  private static func getSharedDefaults() -> UserDefaults {
+    guard let defaults = UserDefaults(suiteName: "group.com.aryamirsepasi.writingtools") else {
+      fatalError("Failed to create UserDefaults with app group. Ensure 'group.com.aryamirsepasi.writingtools' is configured in your entitlements.")
+    }
+    return defaults
+  }
 
   @Published var geminiApiKey: String {
     didSet { defaults.set(geminiApiKey, forKey: "gemini_api_key") }
@@ -107,6 +113,8 @@ class AppSettings: ObservableObject {
 
   // MARK: - Init
   private init() {
+    self.defaults = Self.getSharedDefaults()
+    
     self.geminiApiKey = self.defaults.string(forKey: "gemini_api_key") ?? ""
     let geminiModelStr = self.defaults.string(forKey: "gemini_model")
       ?? GeminiModel.twoflash.rawValue

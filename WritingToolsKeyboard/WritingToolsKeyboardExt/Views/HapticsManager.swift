@@ -21,9 +21,17 @@ final class HapticsManager {
     private var lastEnabledCheck: Date = .distantPast
     private let enabledCheckInterval: TimeInterval = 1.0
     
-    init() {
+    private init() {
+        // Initialize cached state before preparing generators
+        cachedIsEnabled = isEnabled
+        lastEnabledCheck = Date()
+        
         // Prepare generators on initialization to reduce first-time latency
-        prepareAll()
+        if cachedIsEnabled {
+            keyPressGenerator.prepare()
+            aiButtonGenerator.prepare()
+            notificationGenerator.prepare()
+        }
     }
     
     private func shouldCheckEnabled() -> Bool {

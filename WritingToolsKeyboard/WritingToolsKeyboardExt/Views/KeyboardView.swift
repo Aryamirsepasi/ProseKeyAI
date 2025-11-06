@@ -21,7 +21,6 @@ struct KeyboardView: View {
 
   var body: some View {
     AIToolsView(vm: vm)
-      .background(.ultraThinMaterial) // Prefer SwiftUI material
       .ignoresSafeArea(.container, edges: .all)
       .dynamicTypeSize(.large)
       .onAppear {
@@ -34,3 +33,4 @@ struct KeyboardView: View {
       .accessibilityElement(children: .contain)
   }
 }
+
