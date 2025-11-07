@@ -22,6 +22,11 @@ class KeyboardViewController: UIInputViewController {
 
     AppSettings.shared.reload()
     AppState.shared.reloadProviders()
+    
+    // Initialize clipboard history manager
+    Task { @MainActor in
+      _ = ClipboardHistoryManager.shared
+    }
 
     let settings = AppSettings.shared
     print("Current provider: \(settings.currentProvider)")

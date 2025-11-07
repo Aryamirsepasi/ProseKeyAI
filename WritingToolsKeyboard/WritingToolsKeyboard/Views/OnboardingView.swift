@@ -20,7 +20,7 @@ struct OnboardingView: View {
   // Darwin observer to react instantly when keyboard posts its status
   @State private var darwinObserver: OnboardingDarwinObserver?
 
-  private let totalPages = 5
+  private let totalPages = 6
 
   // Color theme
   private let accentColor = Color.blue
@@ -70,12 +70,15 @@ struct OnboardingView: View {
 
           fullAccessPage
             .tag(2)
-
-          textSelectionPage
+          
+          pastePermissionPage
             .tag(3)
 
-          finishPage
+          featuresPage
             .tag(4)
+
+          finishPage
+            .tag(5)
         }
         .tabViewStyle(.page(indexDisplayMode: .never))
         .animation(.easeInOut, value: currentPage)
@@ -161,7 +164,7 @@ struct OnboardingView: View {
         .bold()
         .multilineTextAlignment(.center)
 
-      Text("Transform your writing with AI tools directly from your keyboard")
+      Text("Transform your writing with AI-powered tools, now with clipboard history")
         .font(.title3)
         .multilineTextAlignment(.center)
         .foregroundColor(.secondary)
@@ -319,6 +322,146 @@ struct OnboardingView: View {
     .padding(.horizontal, 24)
   }
 
+  private var pastePermissionPage: some View {
+    ScrollView {
+      VStack(spacing: 20) {
+        Image(systemName: "doc.on.clipboard.fill")
+          .font(.system(size: 60))
+          .foregroundColor(.orange)
+          .padding(.bottom, 10)
+
+        Text("Allow Paste Permission")
+          .font(.title)
+          .bold()
+          .multilineTextAlignment(.center)
+
+        Text(
+          "ProseKey AI needs paste permission to access clipboard for the new Clipboard History feature"
+        )
+        .font(.body)
+        .multilineTextAlignment(.center)
+        .foregroundColor(.secondary)
+        .padding(.horizontal, 32)
+
+        // Important notice about paste notifications
+        VStack(alignment: .leading, spacing: 12) {
+          HStack(alignment: .top, spacing: 12) {
+            Image(systemName: "info.circle.fill")
+              .font(.title2)
+              .foregroundColor(.blue)
+            
+            VStack(alignment: .leading, spacing: 8) {
+              Text("Important")
+                .font(.headline)
+              
+              Text("The first time you use clipboard features, iOS will ask permission. Tap \"Allow Paste\" or \"Paste from [app]\" to enable the feature.")
+                .font(.subheadline)
+                .foregroundColor(.secondary)
+                .fixedSize(horizontal: false, vertical: true)
+            }
+          }
+          
+          Divider()
+            .padding(.vertical, 4)
+          
+          HStack(alignment: .top, spacing: 12) {
+            Image(systemName: "bell.slash.fill")
+              .font(.title2)
+              .foregroundColor(.green)
+            
+            VStack(alignment: .leading, spacing: 8) {
+              Text("Stop Repeated Notifications")
+                .font(.headline)
+              
+              Text("Choose \"Allow Paste\" instead of \"Paste\" to avoid seeing this notification every time you use clipboard features.")
+                .font(.subheadline)
+                .foregroundColor(.secondary)
+                .fixedSize(horizontal: false, vertical: true)
+            }
+          }
+        }
+        .padding()
+        .background(Color.gray.opacity(0.15))
+        .cornerRadius(16)
+        .padding(.horizontal, 24)
+
+        // What paste permission enables
+        VStack(alignment: .leading, spacing: 12) {
+          Text("What This Enables:")
+            .font(.headline)
+            .padding(.bottom, 4)
+
+          FeatureBullet(text: "24-hour clipboard history")
+          FeatureBullet(text: "Quick access to copied text")
+          FeatureBullet(text: "\"Use Copied Text\" button")
+          FeatureBullet(text: "Seamless text operations")
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding()
+        .background(Color.gray.opacity(0.15))
+        .cornerRadius(16)
+        .padding(.horizontal, 24)
+
+        Spacer(minLength: 20)
+      }
+      .padding(.top, 30)
+      .padding(.bottom, 20)
+    }
+  }
+  
+  private var featuresPage: some View {
+    ScrollView {
+      VStack(spacing: 20) {
+        Image(systemName: "sparkles")
+          .font(.system(size: 60))
+          .foregroundColor(accentColor)
+          .padding(.bottom, 10)
+
+        Text("Powerful Features")
+          .font(.title)
+          .bold()
+          .multilineTextAlignment(.center)
+
+        Text("Discover what makes ProseKey AI special")
+          .font(.body)
+          .multilineTextAlignment(.center)
+          .foregroundColor(.secondary)
+          .padding(.horizontal, 32)
+
+        VStack(spacing: 16) {
+          FeatureCard(
+            icon: "clock.arrow.circlepath",
+            title: "Clipboard History",
+            description: "Access your last 24 hours of copied text. Tap the orange clock icon to view and reuse any copied content."
+          )
+          
+          FeatureCard(
+            icon: "wand.and.stars",
+            title: "AI Writing Tools",
+            description: "Transform your text with one tap: proofread, rewrite, summarize, translate, and more powered by your choice of AI provider."
+          )
+          
+          FeatureCard(
+            icon: "text.cursor",
+            title: "Smart Text Selection",
+            description: "Select text automatically (up to 200 characters) or use the \"Use Copied Text\" button for longer passages."
+          )
+          
+          FeatureCard(
+            icon: "magnifyingglass",
+            title: "Custom Prompts",
+            description: "Create your own AI instructions for specialized writing tasks tailored to your needs."
+          )
+        }
+        .padding(.horizontal, 24)
+
+        Spacer(minLength: 20)
+      }
+      .padding(.top, 30)
+      .padding(.bottom, 20)
+    }
+  }
+
   private var textSelectionPage: some View {
     VStack(spacing: 24) {
       Image(systemName: "text.cursor")
@@ -354,41 +497,65 @@ struct OnboardingView: View {
   }
 
   private var finishPage: some View {
-    VStack(spacing: 24) {
-      Image(systemName: "checkmark.circle.fill")
-        .font(.system(size: 80))
-        .foregroundColor(.green)
-        .padding(.bottom, 20)
+    ScrollView {
+      VStack(spacing: 20) {
+        Image(systemName: "checkmark.circle.fill")
+          .font(.system(size: 80))
+          .foregroundColor(.green)
+          .padding(.bottom, 10)
 
-      Text("You're All Set!")
-        .font(.largeTitle)
-        .bold()
-        .multilineTextAlignment(.center)
+        Text("You're All Set!")
+          .font(.largeTitle)
+          .bold()
+          .multilineTextAlignment(.center)
 
-      Text("Enjoy your new AI-powered writing experience")
-        .font(.title3)
-        .multilineTextAlignment(.center)
-        .foregroundColor(.secondary)
-        .padding(.horizontal, 32)
+        Text("Start transforming your writing with AI")
+          .font(.body)
+          .multilineTextAlignment(.center)
+          .foregroundColor(.secondary)
+          .padding(.horizontal, 32)
 
-      VStack(alignment: .leading, spacing: 16) {
-        Text("Quick Tips:")
-          .font(.headline)
-          .padding(.bottom, 4)
+        VStack(alignment: .leading, spacing: 14) {
+          Text("Quick Tips:")
+            .font(.headline)
+            .padding(.bottom, 4)
 
-        FeatureBullet(text: "Select text by placing cursor before/after it")
-        FeatureBullet(text: "Use the clipboard for longer passages")
-        FeatureBullet(text: "Try different writing styles with a single tap")
-        FeatureBullet(text: "Explore all the AI tools available")
+          FeatureBullet(text: "Tap 🕐 for clipboard history anytime")
+          FeatureBullet(text: "Use \"Allow Paste\" to avoid repeated notifications")
+          FeatureBullet(text: "Select text or tap \"Use Copied Text\"")
+          FeatureBullet(text: "Explore AI writing tools and custom prompts")
+          FeatureBullet(text: "Configure your AI provider in Settings")
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding()
+        .background(Color.gray.opacity(0.15))
+        .cornerRadius(16)
+        .padding(.horizontal, 24)
+        
+        // Privacy notice
+        VStack(alignment: .leading, spacing: 8) {
+          HStack {
+            Image(systemName: "lock.shield.fill")
+              .foregroundColor(.blue)
+            Text("Your Privacy Matters")
+              .font(.headline)
+          }
+          
+          Text("Clipboard history is stored locally on your device for 24 hours. We never send your clipboard content to our servers.")
+            .font(.caption)
+            .foregroundColor(.secondary)
+            .fixedSize(horizontal: false, vertical: true)
+        }
+        .padding()
+        .background(Color.blue.opacity(0.1))
+        .cornerRadius(12)
+        .padding(.horizontal, 24)
+
+        Spacer(minLength: 20)
       }
-      .padding()
-      .background(Color.gray.opacity(0.4))
-      .cornerRadius(16)
-
-      Spacer()
+      .padding(.top, 40)
+      .padding(.bottom, 20)
     }
-    .padding(.top, 60)
-    .padding(.horizontal, 24)
   }
 
   // MARK: - Helper Methods
@@ -487,6 +654,7 @@ struct FeatureCard: View {
         .fixedSize(horizontal: false, vertical: true)
         .lineLimit(nil)
     }
+    .frame(maxWidth: .infinity, minHeight: 140, alignment: .topLeading)
     .padding()
     .background(Color.gray.opacity(0.4))
     .cornerRadius(16)
@@ -546,4 +714,47 @@ final class OnboardingDarwinObserver {
   }
 
   private var _callback: () -> Void = {}
+}
+
+// MARK: - Previews
+
+#Preview("Onboarding Flow") {
+  OnboardingView()
+}
+
+#Preview("Welcome Page") {
+  OnboardingView()
+    .onAppear {
+      // Preview shows first page by default
+    }
+}
+
+#Preview("Feature Cards") {
+  VStack(spacing: 16) {
+    FeatureCard(
+      icon: "clock.arrow.circlepath",
+      title: "Clipboard History",
+      description: "Access your last 24 hours of copied text. Tap the orange clock icon to view and reuse any copied content."
+    )
+    
+    FeatureCard(
+      icon: "wand.and.stars",
+      title: "AI Writing Tools",
+      description: "Transform your text with one tap: proofread, rewrite, summarize, translate, and more powered by your choice of AI provider."
+    )
+    
+    FeatureCard(
+      icon: "text.cursor",
+      title: "Smart Text Selection",
+      description: "Select text automatically (up to 200 characters) or use the \"Use Copied Text\" button for longer passages."
+    )
+    
+    FeatureCard(
+      icon: "magnifyingglass",
+      title: "Custom Prompts",
+      description: "Create your own AI instructions for specialized writing tasks tailored to your needs."
+    )
+  }
+  .padding()
+  .background(Color.gray.opacity(0.1))
 }

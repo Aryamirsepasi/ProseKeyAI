@@ -17,6 +17,7 @@ struct AIToolsView: View {
     @State private var activeTask: Task<Void, Never>?
     
     @StateObject private var commandsManager = KeyboardCommandsManager()
+    @StateObject private var clipboardManager = ClipboardHistoryManager.shared
     
 
     var body: some View {
@@ -50,6 +51,8 @@ struct AIToolsView: View {
                     resultView(command)
                 case .customPrompt:
                     customPromptView
+                case .clipboardHistory:
+                    clipboardHistoryView
                 }
             }
             .frame(minHeight: minKeyboardHeight)
@@ -58,7 +61,7 @@ struct AIToolsView: View {
     
     private var toolListView: some View {
         VStack(spacing: 12) {
-            HStack(spacing: 12) {
+            HStack(spacing: 8) {
                 Button(action: {
                     HapticsManager.shared.keyPress()
                     vm.handleCopiedText()
@@ -66,20 +69,43 @@ struct AIToolsView: View {
                     HStack {
                         Image(systemName: "doc.on.clipboard")
                             .font(.system(size: 16))
-                        Text("Use Copied Text")
+                        Text("Use Text")
                             .font(.system(size: 15, weight: .medium))
                     }
                     .padding(.horizontal, 12)
                     .padding(.vertical, 10)
                 }
-                .frame(height: 44)
+                .frame(maxWidth: .infinity, maxHeight: 44)
                 .background(Color.blue)
                 .foregroundColor(.white)
                 .cornerRadius(8)
                 .contentShape(Rectangle())
                 .buttonStyle(PlainButtonStyle())
-                .accessibilityLabel("Use copied text")
-                .accessibilityHint("Pastes text from clipboard for processing")
+                .accessibilityLabel("Paste from clipboard")
+                .accessibilityHint("Uses text from clipboard for processing")
+                
+                // Clipboard History Button
+                Button(action: {
+                    HapticsManager.shared.keyPress()
+                    state = .clipboardHistory
+                }) {
+                    HStack {
+                        Image(systemName: "clock.arrow.circlepath")
+                            .font(.system(size: 16))
+                        Text("Clipboard")
+                            .font(.system(size: 15, weight: .medium))
+                    }
+                    .padding(.horizontal, 12)
+                    .padding(.vertical, 10)
+                }
+                .frame(maxWidth: .infinity, maxHeight: 44)
+                .background(Color.orange)
+                .foregroundColor(.white)
+                .cornerRadius(8)
+                .contentShape(Rectangle())
+                .buttonStyle(PlainButtonStyle())
+                .accessibilityLabel("Clipboard history")
+                .accessibilityHint("View and access your clipboard history")
                 
                 // Custom Prompt Button
                 Button(action: {
@@ -95,21 +121,23 @@ struct AIToolsView: View {
                     HStack {
                         Image(systemName: "magnifyingglass")
                             .font(.system(size: 16))
-                        Text("Custom Prompt")
+                        Text("Ask AI")
                             .font(.system(size: 15, weight: .medium))
                     }
                     .padding(.horizontal, 12)
                     .padding(.vertical, 10)
                 }
-                .frame(height: 44)
+                .frame(maxWidth: .infinity, maxHeight: 44)
                 .background(vm.selectedText?.isEmpty != false ? Color.gray : Color.purple)
                 .foregroundColor(.white)
                 .cornerRadius(8)
                 .contentShape(Rectangle())
                 .buttonStyle(PlainButtonStyle())
                 .disabled(vm.selectedText?.isEmpty != false)
+                .accessibilityLabel("Custom Prompt")
+
             }
-            .padding(.horizontal)
+            .padding(.horizontal, 10)
             
             HStack(spacing: 12) {
                 // Text preview with fixed width and horizontal scrolling
@@ -149,11 +177,12 @@ struct AIToolsView: View {
                         .cornerRadius(6)
                 }
             }
-            .padding(.horizontal)
+            .padding(.horizontal, 10)
+
             
             ScrollView {
                 allCommandsView
-                    .padding(.horizontal)
+                    .padding(.horizontal, 5)
             }
         }
         .onChange(of: vm.selectedText) { _ in }
@@ -184,6 +213,16 @@ struct AIToolsView: View {
             onCancel: {
                 state = .toolList
                 customPrompt = ""
+            }
+        )
+    }
+    
+    private var clipboardHistoryView: some View {
+        ClipboardHistoryView(
+            manager: clipboardManager,
+            viewController: vm.viewController,
+            onDismiss: {
+                state = .toolList
             }
         )
     }
@@ -400,4 +439,6 @@ enum AIToolsUIState {
     case generating(KeyboardCommand)
     case result(KeyboardCommand)
     case customPrompt
+    case clipboardHistory
 }
+
