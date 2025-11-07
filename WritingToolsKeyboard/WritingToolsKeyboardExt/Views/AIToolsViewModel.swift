@@ -41,10 +41,12 @@ class AIToolsViewModel: ObservableObject {
             if !clipboardText.isEmpty {
                 selectedText = clipboardText
                 errorMessage = nil
+                ClipboardHistoryManager.shared.addItem(content: clipboardText)
             } else {
-                errorMessage = "Clipboard is empty"
+                errorMessage = "History is empty"
                 selectedText = nil
             }
         }
     }
 }
+

@@ -92,7 +92,7 @@ struct AIToolsView: View {
                     HStack {
                         Image(systemName: "clock.arrow.circlepath")
                             .font(.system(size: 16))
-                        Text("Clipboard")
+                        Text("History")
                             .font(.system(size: 15, weight: .medium))
                     }
                     .padding(.horizontal, 12)
@@ -104,8 +104,8 @@ struct AIToolsView: View {
                 .cornerRadius(8)
                 .contentShape(Rectangle())
                 .buttonStyle(PlainButtonStyle())
-                .accessibilityLabel("Clipboard history")
-                .accessibilityHint("View and access your clipboard history")
+                .accessibilityLabel("History")
+                .accessibilityHint("View and access your history")
                 
                 // Custom Prompt Button
                 Button(action: {

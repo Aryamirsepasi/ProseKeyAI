@@ -18,50 +18,14 @@ class ClipboardHistoryManager: ObservableObject {
     private let storageKey = "clipboard_history"
     private let maxItems = 50 // Maximum number of items to store
     
-    // Track the last known clipboard content to detect changes
-    private var lastClipboardContent: String?
-    private var clipboardCheckTimer: Timer?
-    
     private init() {
         self.defaults = UserDefaults(suiteName: "group.com.aryamirsepasi.writingtools")
         loadItems()
-        startMonitoring()
+        // No clipboard monitoring; only add explicitly.
     }
     
     deinit {
-        // Timer.invalidate() can be called from any thread
-        clipboardCheckTimer?.invalidate()
-        clipboardCheckTimer = nil
-    }
-    
-    // MARK: - Monitoring
-    
-    func startMonitoring() {
-        // Initial check
-        checkClipboard()
-        
-        // Check periodically (every 2 seconds when keyboard is active)
-        clipboardCheckTimer = Timer.scheduledTimer(withTimeInterval: 2.0, repeats: true) { [weak self] _ in
-            Task { @MainActor in
-                self?.checkClipboard()
-            }
-        }
-    }
-    
-    func stopMonitoring() {
-        clipboardCheckTimer?.invalidate()
-        clipboardCheckTimer = nil
-    }
-    
-    private func checkClipboard() {
-        guard let clipboardString = UIPasteboard.general.string,
-              !clipboardString.isEmpty,
-              clipboardString != lastClipboardContent else {
-            return
-        }
-        
-        lastClipboardContent = clipboardString
-        addItem(content: clipboardString)
+        // No timer to clean up
     }
     
     // MARK: - Public Methods
@@ -90,9 +54,8 @@ class ClipboardHistoryManager: ObservableObject {
     
     func copyItem(_ item: ClipboardItem) {
         UIPasteboard.general.string = item.content
-        lastClipboardContent = item.content
-        
-        // Move item to top
+        // Do not update lastClipboardContent—clipboard monitoring is not used
+        // But update timestamp for the item
         if let index = items.firstIndex(where: { $0.id == item.id }) {
             let updatedItem = ClipboardItem(id: item.id, content: item.content, timestamp: Date())
             items.remove(at: index)
@@ -158,3 +121,4 @@ class ClipboardHistoryManager: ObservableObject {
         items.filter { !$0.isExpired }
     }
 }
+

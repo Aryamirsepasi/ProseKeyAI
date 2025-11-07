@@ -164,7 +164,7 @@ struct OnboardingView: View {
         .bold()
         .multilineTextAlignment(.center)
 
-      Text("Transform your writing with AI-powered tools, now with clipboard history")
+      Text("Transform your writing with AI-powered tools")
         .font(.title3)
         .multilineTextAlignment(.center)
         .foregroundColor(.secondary)
@@ -336,7 +336,7 @@ struct OnboardingView: View {
           .multilineTextAlignment(.center)
 
         Text(
-          "ProseKey AI needs paste permission to access clipboard for the new Clipboard History feature"
+          "ProseKey AI needs paste permission to access copied text for use in writing features."
         )
         .font(.body)
         .multilineTextAlignment(.center)
@@ -354,7 +354,7 @@ struct OnboardingView: View {
               Text("Important")
                 .font(.headline)
               
-              Text("The first time you use clipboard features, iOS will ask permission. Tap \"Allow Paste\" or \"Paste from [app]\" to enable the feature.")
+              Text("The first time you use paste features, iOS will ask permission. Tap \"Allow Paste\" or \"Paste from [app]\" to enable the feature.")
                 .font(.subheadline)
                 .foregroundColor(.secondary)
                 .fixedSize(horizontal: false, vertical: true)
@@ -373,7 +373,7 @@ struct OnboardingView: View {
               Text("Stop Repeated Notifications")
                 .font(.headline)
               
-              Text("Choose \"Allow Paste\" instead of \"Paste\" to avoid seeing this notification every time you use clipboard features.")
+              Text("Choose \"Allow Paste\" instead of \"Paste\" to avoid seeing this notification every time you use paste features.")
                 .font(.subheadline)
                 .foregroundColor(.secondary)
                 .fixedSize(horizontal: false, vertical: true)
@@ -391,7 +391,6 @@ struct OnboardingView: View {
             .font(.headline)
             .padding(.bottom, 4)
 
-          FeatureBullet(text: "24-hour clipboard history")
           FeatureBullet(text: "Quick access to copied text")
           FeatureBullet(text: "\"Use Copied Text\" button")
           FeatureBullet(text: "Seamless text operations")
@@ -429,12 +428,6 @@ struct OnboardingView: View {
           .padding(.horizontal, 32)
 
         VStack(spacing: 16) {
-          FeatureCard(
-            icon: "clock.arrow.circlepath",
-            title: "Clipboard History",
-            description: "Access your last 24 hours of copied text. Tap the orange clock icon to view and reuse any copied content."
-          )
-          
           FeatureCard(
             icon: "wand.and.stars",
             title: "AI Writing Tools",
@@ -520,7 +513,6 @@ struct OnboardingView: View {
             .font(.headline)
             .padding(.bottom, 4)
 
-          FeatureBullet(text: "Tap 🕐 for clipboard history anytime")
           FeatureBullet(text: "Use \"Allow Paste\" to avoid repeated notifications")
           FeatureBullet(text: "Select text or tap \"Use Copied Text\"")
           FeatureBullet(text: "Explore AI writing tools and custom prompts")
@@ -541,7 +533,7 @@ struct OnboardingView: View {
               .font(.headline)
           }
           
-          Text("Clipboard history is stored locally on your device for 24 hours. We never send your clipboard content to our servers.")
+          Text("We never send your copied content to our servers.")
             .font(.caption)
             .foregroundColor(.secondary)
             .fixedSize(horizontal: false, vertical: true)
@@ -731,12 +723,6 @@ final class OnboardingDarwinObserver {
 
 #Preview("Feature Cards") {
   VStack(spacing: 16) {
-    FeatureCard(
-      icon: "clock.arrow.circlepath",
-      title: "Clipboard History",
-      description: "Access your last 24 hours of copied text. Tap the orange clock icon to view and reuse any copied content."
-    )
-    
     FeatureCard(
       icon: "wand.and.stars",
       title: "AI Writing Tools",
