@@ -61,12 +61,11 @@ final class CustomInstructionKeyboardView: UIView {
   }
 
   private func setup() {
-    backgroundColor = UIColor.systemGray5
+    backgroundColor = .clear
     stack.axis = .vertical
     stack.distribution = .fillEqually
     stack.alignment = .fill
-      stack.spacing = 6
-      backgroundColor = UIColor.systemGray5
+    stack.spacing = 6
     addSubview(stack)
     stack.translatesAutoresizingMaskIntoConstraints = false
     NSLayoutConstraint.activate([
@@ -86,7 +85,7 @@ final class CustomInstructionKeyboardView: UIView {
   }
 
   private func makeKey(title: String,
-                       buttonBackground: UIColor = UIColor.systemGray6,
+                       buttonBackground: UIColor = UIColor.systemGray5,
                        width: CGFloat? = nil,
                        action: @escaping () -> Void) -> UIButton {
     let button = UIButton(type: .system)

@@ -34,7 +34,6 @@ struct CustomPromptView: View {
             }
             .padding(.horizontal, 10)
             .padding(.vertical, 6)
-            .background(Color(.systemGray6))
             
             // Compact text preview (one row like main view)
             VStack(alignment: .leading, spacing: 8) {
@@ -111,7 +110,6 @@ struct CustomPromptView: View {
               }
             )
             .frame(height: 190)
-            .background(Color(.systemGray5))
         }
         
         .onAppear {
