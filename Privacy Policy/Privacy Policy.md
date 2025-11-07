@@ -1,15 +1,16 @@
 # Privacy Policy
 
-_Last updated: May 5, 2025_
+_Last updated: Nov 7, 2025_
 
 ## Overview
 
-Your privacy is important to us. This app (“Writing Tools AI Keyboard”) does **not** collect, store, or transmit any personal data or usage information.
+Your privacy is important to us. This app ("ProseKey AI") does **not** collect, store, or transmit any personal data or usage information.
 
 ## Data Collection
 
 - **We do not collect any data.**
 - The app does not track, store, or share any information about you or your usage.
+- **History Feature:** When you explicitly save texts using the History feature, they are stored locally on your device in temporary storage for 24 hours. No servers are used, and this data remains private on your phone.
 
 ## Third-Party AI Providers
 
@@ -33,7 +34,7 @@ You can always review the latest version within the app or on our website.
 
 ## Contact
 
-If you have any questions about this privacy policy, please contact us at [your email or website].
+If you have any questions about this privacy policy, please contact us through our support page.
 
 ---
 
