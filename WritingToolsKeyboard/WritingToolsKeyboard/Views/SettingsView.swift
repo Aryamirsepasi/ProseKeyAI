@@ -16,7 +16,11 @@ struct SettingsView: View {
     )
     private var enableHaptics = true
 
-  @AppStorage("hasCompletedOnboarding") private var hasCompletedOnboarding: Bool = false
+  @AppStorage(
+    "has_completed_onboarding",
+    store: UserDefaults(suiteName: "group.com.aryamirsepasi.writingtools")
+  ) private var hasCompletedOnboarding: Bool = false
+    
   @State private var showOnboarding: Bool = false
   @State private var showApiKeyHelp: Bool = false
 

@@ -4,7 +4,11 @@ import CoreFoundation
 
 struct OnboardingView: View {
   @Environment(\.dismiss) private var dismiss
-  @AppStorage("hasCompletedOnboarding") private var hasCompletedOnboarding: Bool = false
+  @AppStorage(
+    "hasCompletedOnboarding",
+    store: UserDefaults(suiteName: "group.com.aryamirsepasi.writingtools")
+  ) private var hasCompletedOnboarding: Bool = false
+    
   @State private var currentPage: Int = 0
 
   // Setup status

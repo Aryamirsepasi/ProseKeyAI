@@ -36,6 +36,13 @@ class AIToolsViewModel: ObservableObject {
     
     func handleCopiedText() {
         Task { @MainActor in
+            // Check if keyboard has full access before attempting to read from pasteboard
+            guard viewController?.hasFullAccess == true else {
+                errorMessage = "Full Access required to use clipboard"
+                selectedText = nil
+                return
+            }
+            
             let clipboardText = UIPasteboard.general.string ?? ""
             
             if !clipboardText.isEmpty {
@@ -43,7 +50,7 @@ class AIToolsViewModel: ObservableObject {
                 errorMessage = nil
                 ClipboardHistoryManager.shared.addItem(content: clipboardText)
             } else {
-                errorMessage = "History is empty"
+                errorMessage = "Clipboard is empty"
                 selectedText = nil
             }
         }
