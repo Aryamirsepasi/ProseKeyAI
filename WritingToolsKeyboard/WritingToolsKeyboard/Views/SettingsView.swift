@@ -2,6 +2,33 @@ import SwiftUI
 import Combine
 import CoreFoundation
 
+// MARK: - Color Extension for Hex Support
+extension Color {
+  init(hex: String) {
+    let hex = hex.trimmingCharacters(in: CharacterSet.alphanumerics.inverted)
+    var int: UInt64 = 0
+    Scanner(string: hex).scanHexInt64(&int)
+    let a, r, g, b: UInt64
+    switch hex.count {
+    case 3: // RGB (12-bit)
+      (a, r, g, b) = (255, (int >> 8) * 17, (int >> 4 & 0xF) * 17, (int & 0xF) * 17)
+    case 6: // RGB (24-bit)
+      (a, r, g, b) = (255, int >> 16, int >> 8 & 0xFF, int & 0xFF)
+    case 8: // ARGB (32-bit)
+      (a, r, g, b) = (int >> 24, int >> 16 & 0xFF, int >> 8 & 0xFF, int & 0xFF)
+    default:
+      (a, r, g, b) = (255, 0, 0, 0)
+    }
+    self.init(
+      .sRGB,
+      red: Double(r) / 255,
+      green: Double(g) / 255,
+      blue: Double(b) / 255,
+      opacity: Double(a) / 255
+    )
+  }
+}
+
 struct SettingsView: View {
   @StateObject var appState = AppState.shared
   @ObservedObject var settings = AppSettings.shared
@@ -347,14 +374,19 @@ struct SetupStepView: View {
 struct ProviderTabView: View {
   @Binding var currentProvider: String
 
-  private let providers: [(id: String, icon: String, name: String, color: Color)] = [
-    ("gemini", "g.circle.fill", "Gemini", .blue),
-    ("openai", "o.circle.fill", "OpenAI", .green),
-    ("mistral", "m.circle.fill", "Mistral", .orange),
-    ("anthropic", "a.circle.fill", "Anthropic", .purple),
-    ("openrouter", "r.circle.fill", "OpenRouter", .pink),
-    ("perplexity", "p.circle.fill", "Perplexity", .teal),
+  private let providers: [(id: String, iconType: IconType, name: String, color: Color)] = [
+    ("gemini", .asset("google"), "Google", Color(hex: "4285F4")),
+    ("openai", .asset("openai"), "OpenAI", .white),
+    ("mistral", .asset("mistralai"), "Mistral", Color(hex: "FA520F")),
+    ("anthropic", .asset("anthropic"), "Anthropic", Color(hex: "c15f3c")),
+    ("openrouter", .system("o.circle.fill"), "OpenRouter", Color(hex: "7FADF2")),
+    ("perplexity", .asset("perplexity"), "Perplexity", Color(hex: "1FB8CD")),
   ]
+  
+  enum IconType {
+    case system(String)
+    case asset(String)
+  }
 
   var body: some View {
     ScrollView(.horizontal, showsIndicators: false) {
@@ -362,8 +394,18 @@ struct ProviderTabView: View {
         ForEach(providers, id: \.id) { provider in
           Button(action: { currentProvider = provider.id }) {
             HStack(spacing: 6) {
-              Image(systemName: provider.icon)
-                .foregroundColor(provider.color)
+              switch provider.iconType {
+              case .system(let name):
+                Image(systemName: name)
+                  .foregroundColor(provider.color)
+              case .asset(let name):
+                Image(name)
+                  .renderingMode(.template)
+                  .resizable()
+                  .aspectRatio(contentMode: .fit)
+                  .frame(width: 16, height: 16)
+                  .foregroundColor(provider.color)
+              }
               Text(provider.name)
                 .font(.subheadline)
                 .fontWeight(.medium)
@@ -404,9 +446,19 @@ struct ProviderSetupCard: View {
   var body: some View {
     VStack(alignment: .leading, spacing: 16) {
       HStack {
-        Image(systemName: providerIcon)
-          .font(.system(size: 22))
-          .foregroundColor(.blue)
+        switch providerIconType {
+        case .system(let name):
+          Image(systemName: name)
+            .font(.system(size: 22))
+            .foregroundColor(.blue)
+        case .asset(let name):
+          Image(name)
+            .renderingMode(.template)
+            .resizable()
+            .aspectRatio(contentMode: .fit)
+            .frame(width: 22, height: 22)
+            .foregroundColor(.blue)
+        }
         Text(providerName)
           .font(.headline)
         Spacer()
@@ -472,20 +524,26 @@ struct ProviderSetupCard: View {
     .padding(.horizontal)
   }
 
-  private var providerIcon: String {
+  enum IconType {
+    case system(String)
+    case asset(String)
+  }
+
+  private var providerIconType: IconType {
     switch provider {
-    case "gemini": return "g.circle.fill"
-    case "openai": return "o.circle.fill"
-    case "mistral": return "m.circle.fill"
-    case "anthropic": return "a.circle.fill"
-    case "openrouter": return "r.circle.fill"
-    case "perplexity": return "p.circle.fill"
-    default: return "questionmark"
+    case "gemini": return .asset("google")
+    case "openai": return .asset("openai")
+    case "mistral": return .asset("mistralai")
+    case "anthropic": return .asset("anthropic")
+    case "openrouter": return .system("o.circle.fill")
+    case "perplexity": return .asset("perplexity")
+    default: return .system("questionmark")
     }
   }
+  
   private var providerName: String {
     switch provider {
-    case "gemini": return "Google Gemini"
+    case "gemini": return "Google"
     case "openai": return "OpenAI"
     case "mistral": return "Mistral AI"
     case "anthropic": return "Anthropic"

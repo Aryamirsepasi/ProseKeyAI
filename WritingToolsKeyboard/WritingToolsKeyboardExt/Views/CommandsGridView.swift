@@ -40,7 +40,7 @@ struct AICommandButton: View {
                 RoundedRectangle(cornerRadius: 10)
                     .fill(isPressed
                           ? Color(.systemGray4)
-                          : (colorScheme == .dark ? Color(.systemGray6) : Color(.systemGray6)))
+                          : (colorScheme == .dark ? Color(.systemGray5) : Color(.systemGray5)))
                     .shadow(color: Color.black.opacity(0.1), radius: 1, x: 0, y: 1)
             )
             .overlay(

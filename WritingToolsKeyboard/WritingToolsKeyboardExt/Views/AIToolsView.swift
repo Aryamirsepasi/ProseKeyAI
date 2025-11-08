@@ -36,12 +36,6 @@ struct AIToolsView: View {
                     .padding(.top, 4)
                 }
                 
-                if let error = vm.errorMessage {
-                    Text(error)
-                        .foregroundColor(.red)
-                        .font(.caption)
-                }
-                
                 switch state {
                 case .toolList:
                     toolListView
@@ -57,6 +51,7 @@ struct AIToolsView: View {
             }
             .frame(minHeight: minKeyboardHeight)
         }
+        .errorBanner(error: $vm.currentError)
     }
     
     private var toolListView: some View {
@@ -111,7 +106,7 @@ struct AIToolsView: View {
                 Button(action: {
                     guard vm.selectedText != nil && !vm.selectedText!.isEmpty else {
                         HapticsManager.shared.error()
-                        vm.errorMessage = "No text is selected."
+                        vm.currentError = .invalidSelection
                         return
                     }
                     HapticsManager.shared.keyPress()
@@ -194,7 +189,7 @@ struct AIToolsView: View {
             selectedText: vm.selectedText ?? "",
             onSubmit: { prompt in
                 guard let text = vm.selectedText, !text.isEmpty else {
-                    vm.errorMessage = "No text is selected."
+                    vm.currentError = .invalidSelection
                     return
                 }
                 
@@ -205,7 +200,7 @@ struct AIToolsView: View {
                 )
                 
                 isLoading = true
-                vm.errorMessage = nil
+                vm.clearError()
                 chosenCommand = command
                 state = .generating(command)
                 processAICommand(command, userText: text)
@@ -232,11 +227,11 @@ struct AIToolsView: View {
             commands: commandsManager.commands,
             onCommandSelected: { command in
                 guard let text = vm.selectedText, !text.isEmpty else {
-                    vm.errorMessage = "No text is selected."
+                    vm.currentError = .invalidSelection
                     return
                 }
                 isLoading = true
-                vm.errorMessage = nil
+                vm.clearError()
                 chosenCommand = command
                 state = .generating(command)
                 processAICommand(command, userText: text)
@@ -287,23 +282,15 @@ struct AIToolsView: View {
               RoundedRectangle(cornerRadius: 10)
                 .fill(Color(.systemGray6))
               ScrollView {
-                if let attr = try? AttributedString(markdown: aiResult) {
-                  Text(attr)
-                    .font(.body)
-                    .padding(12)
-                    .frame(
-                      maxWidth: .infinity,
-                      alignment: .leading
-                    )
-                } else {
-                  Text(aiResult)
-                    .font(.body)
-                    .padding(12)
-                    .frame(
-                      maxWidth: .infinity,
-                      alignment: .leading
-                    )
-                }
+                Markdown(aiResult)
+                  .markdownTextStyle(\.text) {
+                    FontSize(15)
+                  }
+                  .padding(12)
+                  .frame(
+                    maxWidth: .infinity,
+                    alignment: .leading
+                  )
               }
               .padding(1)
             }
@@ -411,7 +398,7 @@ struct AIToolsView: View {
             aiResult = result
             isLoading = false
             state = .result(command)
-            vm.errorMessage = nil
+            vm.clearError()
             HapticsManager.shared.success()
           }
         } catch is CancellationError {
@@ -422,7 +409,7 @@ struct AIToolsView: View {
         } catch {
           guard !Task.isCancelled else { return }
           await MainActor.run {
-            vm.errorMessage = error.localizedDescription
+            vm.setError(error)
             isLoading = false
             state = .toolList
             chosenCommand = nil

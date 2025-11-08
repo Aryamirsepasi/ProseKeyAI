@@ -4,7 +4,7 @@ import UIKit
 @MainActor
 class AIToolsViewModel: ObservableObject {
     @Published var selectedText: String?
-    @Published var errorMessage: String?
+    @Published var currentError: AIError?
     
     weak var viewController: KeyboardViewController?
     
@@ -38,7 +38,7 @@ class AIToolsViewModel: ObservableObject {
         Task { @MainActor in
             // Check if keyboard has full access before attempting to read from pasteboard
             guard viewController?.hasFullAccess == true else {
-                errorMessage = "Full Access required to use clipboard"
+                currentError = .generic("Full Access required")
                 selectedText = nil
                 return
             }
@@ -47,13 +47,27 @@ class AIToolsViewModel: ObservableObject {
             
             if !clipboardText.isEmpty {
                 selectedText = clipboardText
-                errorMessage = nil
+                currentError = nil
                 ClipboardHistoryManager.shared.addItem(content: clipboardText)
             } else {
-                errorMessage = "Clipboard is empty"
+                currentError = .emptyClipboard
                 selectedText = nil
             }
         }
+    }
+    
+    /// Sets an error from any Error type
+    func setError(_ error: Error) {
+        if let aiError = error as? AIError {
+            currentError = aiError
+        } else {
+            currentError = AIError.from(error)
+        }
+    }
+    
+    /// Clears the current error
+    func clearError() {
+        currentError = nil
     }
 }
 

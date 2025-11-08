@@ -48,9 +48,12 @@ struct GeminiSettingsView: View {
             VStack(alignment: .leading, spacing: 20) {
                 // Header
                 HStack {
-                    Image(systemName: "g.circle.fill")
-                        .font(.system(size: 36))
-                        .foregroundColor(.blue)
+                    Image("google")
+                        .renderingMode(.template)
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: 36, height: 36)
+                        .foregroundColor(Color(hex: "4285F4"))
                     
                     VStack(alignment: .leading) {
                         Text("Google Gemini")
@@ -128,7 +131,7 @@ struct GeminiSettingsView: View {
                         .fontWeight(.medium)
                         .frame(maxWidth: .infinity)
                         .padding()
-                        .background(isFormValid ? Color.blue : Color.gray)
+                        .background(isFormValid ? Color(hex: "4285F4") : Color.gray)
                         .foregroundColor(.white)
                         .cornerRadius(10)
                 }
@@ -143,19 +146,19 @@ struct GeminiSettingsView: View {
                     
                     HStack(alignment: .top) {
                         Image(systemName: "1.circle.fill")
-                            .foregroundColor(.blue)
+                            .foregroundColor(Color(hex: "4285F4"))
                         Text("Visit Google AI Studio (ai.google.dev)")
                     }
                     
                     HStack(alignment: .top) {
                         Image(systemName: "2.circle.fill")
-                            .foregroundColor(.blue)
+                            .foregroundColor(Color(hex: "4285F4"))
                         Text("Sign in with your Google account")
                     }
                     
                     HStack(alignment: .top) {
                         Image(systemName: "3.circle.fill")
-                            .foregroundColor(.blue)
+                            .foregroundColor(Color(hex: "4285F4"))
                         Text("Go to API → Get API Key")
                     }
                 }
@@ -200,9 +203,12 @@ struct OpenAISettingsView: View {
             VStack(alignment: .leading, spacing: 20) {
                 // Header
                 HStack {
-                    Image(systemName: "o.circle.fill")
-                        .font(.system(size: 36))
-                        .foregroundColor(.blue)
+                    Image("openai")
+                        .renderingMode(.template)
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: 36, height: 36)
+                        .foregroundColor(.white)
                     
                     VStack(alignment: .leading) {
                         Text("OpenAI")
@@ -277,7 +283,7 @@ struct OpenAISettingsView: View {
                         .fontWeight(.medium)
                         .frame(maxWidth: .infinity)
                         .padding()
-                        .background(isFormValid ? Color.blue : Color.gray)
+                        .background(isFormValid ? Color(hex: "412991") : Color.gray)
                         .foregroundColor(.white)
                         .cornerRadius(10)
                 }
@@ -292,19 +298,19 @@ struct OpenAISettingsView: View {
                     
                     HStack(alignment: .top) {
                         Image(systemName: "1.circle.fill")
-                            .foregroundColor(.blue)
+                            .foregroundColor(Color(hex: "412991"))
                         Text("Go to platform.openai.com")
                     }
                     
                     HStack(alignment: .top) {
                         Image(systemName: "2.circle.fill")
-                            .foregroundColor(.blue)
+                            .foregroundColor(Color(hex: "412991"))
                         Text("Select API keys from settings")
                     }
                     
                     HStack(alignment: .top) {
                         Image(systemName: "3.circle.fill")
-                            .foregroundColor(.blue)
+                            .foregroundColor(Color(hex: "412991"))
                         Text("Create a new secret key")
                     }
                 }
@@ -347,9 +353,12 @@ struct MistralSettingsView: View {
             VStack(alignment: .leading, spacing: 20) {
                 // Header
                 HStack {
-                    Image(systemName: "m.circle.fill")
-                        .font(.system(size: 36))
-                        .foregroundColor(.blue)
+                    Image("mistralai")
+                        .renderingMode(.template)
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: 36, height: 36)
+                        .foregroundColor(Color(hex: "FA520F"))
                     
                     VStack(alignment: .leading) {
                         Text("Mistral AI")
@@ -417,7 +426,7 @@ struct MistralSettingsView: View {
                         .fontWeight(.medium)
                         .frame(maxWidth: .infinity)
                         .padding()
-                        .background(isFormValid ? Color.blue : Color.gray)
+                        .background(isFormValid ? Color(hex: "FA520F") : Color.gray)
                         .foregroundColor(.white)
                         .cornerRadius(10)
                 }
@@ -432,19 +441,19 @@ struct MistralSettingsView: View {
                     
                     HStack(alignment: .top) {
                         Image(systemName: "1.circle.fill")
-                            .foregroundColor(.blue)
+                            .foregroundColor(Color(hex: "FA520F"))
                         Text("Visit console.mistral.ai")
                     }
                     
                     HStack(alignment: .top) {
                         Image(systemName: "2.circle.fill")
-                            .foregroundColor(.blue)
+                            .foregroundColor(Color(hex: "FA520F"))
                         Text("Sign up or log in to your account")
                     }
                     
                     HStack(alignment: .top) {
                         Image(systemName: "3.circle.fill")
-                            .foregroundColor(.blue)
+                            .foregroundColor(Color(hex: "FA520F"))
                         Text("Navigate to API Keys and create a new key")
                     }
                 }
@@ -473,9 +482,12 @@ struct AnthropicSettingsView: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
                 HStack {
-                    Image(systemName: "a.circle.fill")
-                        .font(.system(size: 36))
-                        .foregroundColor(.purple)
+                    Image("anthropic")
+                        .renderingMode(.template)
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: 36, height: 36)
+                        .foregroundColor(Color(hex: "c15f3c"))
                     VStack(alignment: .leading) {
                         Text("Anthropic Claude")
                             .font(.title2)
@@ -507,7 +519,7 @@ struct AnthropicSettingsView: View {
                         .fontWeight(.medium)
                         .frame(maxWidth: .infinity)
                         .padding()
-                        .background(!model.isEmpty ? Color.purple : Color.gray)
+                        .background(!model.isEmpty ? Color(hex: "c15f3c") : Color.gray)
                         .foregroundColor(.white)
                         .cornerRadius(10)
                 }
@@ -531,9 +543,9 @@ struct OpenRouterSettingsView: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
                 HStack {
-                    Image(systemName: "r.circle.fill")
+                    Image(systemName: "o.circle.fill")
                         .font(.system(size: 36))
-                        .foregroundColor(.pink)
+                        .foregroundColor(Color(hex: "7FADF2"))
                     VStack(alignment: .leading) {
                         Text("OpenRouter")
                             .font(.title2)
@@ -565,7 +577,7 @@ struct OpenRouterSettingsView: View {
                         .fontWeight(.medium)
                         .frame(maxWidth: .infinity)
                         .padding()
-                        .background(!model.isEmpty ? Color.pink : Color.gray)
+                        .background(!model.isEmpty ? Color(hex: "7FADF2") : Color.gray)
                         .foregroundColor(.white)
                         .cornerRadius(10)
                 }
@@ -590,9 +602,12 @@ struct PerplexitySettingsView: View {
             VStack(alignment: .leading, spacing: 20) {
                 // Header
                 HStack {
-                    Image(systemName: "p.circle.fill")
-                        .font(.system(size: 36))
-                        .foregroundColor(.blue)
+                    Image("perplexity")
+                        .renderingMode(.template)
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: 36, height: 36)
+                        .foregroundColor(Color(hex: "1FB8CD"))
                     VStack(alignment: .leading) {
                         Text("Perplexity")
                             .font(.title2)
@@ -629,7 +644,7 @@ struct PerplexitySettingsView: View {
                         .fontWeight(.medium)
                         .frame(maxWidth: .infinity)
                         .padding()
-                        .background(!model.isEmpty ? Color.blue : Color.gray)
+                        .background(!model.isEmpty ? Color(hex: "1FB8CD") : Color.gray)
                         .foregroundColor(.white)
                         .cornerRadius(10)
                 }
@@ -644,19 +659,19 @@ struct PerplexitySettingsView: View {
 
                     HStack(alignment: .top) {
                         Image(systemName: "1.circle.fill")
-                            .foregroundColor(.blue)
+                            .foregroundColor(Color(hex: "1FB8CD"))
                         Text("Visit perplexity.ai and create an account")
                     }
 
                     HStack(alignment: .top) {
                         Image(systemName: "2.circle.fill")
-                            .foregroundColor(.blue)
+                            .foregroundColor(Color(hex: "1FB8CD"))
                         Text("Navigate to your account/API keys page")
                     }
 
                     HStack(alignment: .top) {
                         Image(systemName: "3.circle.fill")
-                            .foregroundColor(.blue)
+                            .foregroundColor(Color(hex: "1FB8CD"))
                         Text("Create a new API key and copy it")
                     }
                 }
