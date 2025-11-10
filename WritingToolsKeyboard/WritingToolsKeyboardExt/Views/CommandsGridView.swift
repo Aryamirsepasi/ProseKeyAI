@@ -1,23 +1,36 @@
-//
-//  CommandsGridView.swift
-//  ProseKey AI
-//
-//  Created by Arya Mirsepasi on 04.08.25.
-//
-
 import SwiftUI
+
+private struct AICommandCardStyle: ButtonStyle {
+    @Environment(\.colorScheme) private var colorScheme
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .padding(.vertical, 8)
+            .frame(maxWidth: .infinity)
+            .frame(height: 64)
+            .background(
+                RoundedRectangle(cornerRadius: 10)
+                    .fill(Color(.systemGray5))
+                    .shadow(color: Color.black.opacity(0.1), radius: 1, x: 0, y: 1)
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: 10)
+                    .stroke(configuration.isPressed ? Color.blue.opacity(0.5) : Color(.systemGray4), lineWidth: 1)
+            )
+            .scaleEffect(configuration.isPressed ? 0.97 : 1.0)
+            .animation(.easeInOut(duration: 0.1), value: configuration.isPressed)
+            .contentShape(RoundedRectangle(cornerRadius: 10))
+    }
+}
 
 struct AICommandButton: View {
     let command: KeyboardCommand
+    let isDisabled: Bool
     let action: () -> Void
-    
-    @State private var isPressed = false
-    @Environment(\.colorScheme) private var colorScheme
     
     var body: some View {
         Button(action: {
-          HapticsManager.shared.keyPress()
-          action()
+            HapticsManager.shared.keyPress()
+            action()
         }) {
             VStack(spacing: 6) {
                 Image(systemName: command.icon)
@@ -33,53 +46,37 @@ struct AICommandButton: View {
                     .lineLimit(1)
                     .minimumScaleFactor(0.8)
             }
-            .padding(.vertical, 8)
-            .frame(maxWidth: .infinity)
-            .frame(height: 64)
-            .background(
-                RoundedRectangle(cornerRadius: 10)
-                    .fill(isPressed
-                          ? Color(.systemGray4)
-                          : (colorScheme == .dark ? Color(.systemGray5) : Color(.systemGray5)))
-                    .shadow(color: Color.black.opacity(0.1), radius: 1, x: 0, y: 1)
-            )
-            .overlay(
-                RoundedRectangle(cornerRadius: 10)
-                    .stroke(isPressed ? Color.blue.opacity(0.5) : Color(.systemGray4), lineWidth: 1)
-            )
         }
-        .buttonStyle(PlainButtonStyle())
+        .buttonStyle(AICommandCardStyle())
         .accessibilityLabel(command.name)
-        .simultaneousGesture(
-             DragGesture(minimumDistance: 0)
-               .onChanged { _ in isPressed = true }
-               .onEnded { _ in isPressed = false }
-           )
+        .opacity(isDisabled ? 0.5 : 1.0)
+        .allowsHitTesting(!isDisabled)
     }
 }
-
 
 struct CommandsGridView: View {
     let commands: [KeyboardCommand]
     let onCommandSelected: (KeyboardCommand) -> Void
     let isDisabled: Bool
     
+    // Fixed 4-column layout
+    private let columns = [
+        GridItem(.flexible(), spacing: 8),
+        GridItem(.flexible(), spacing: 8),
+        GridItem(.flexible(), spacing: 8),
+        GridItem(.flexible(), spacing: 8)
+    ]
+    
     var body: some View {
-        LazyVGrid(
-            columns: [
-                GridItem(.adaptive(minimum: 90, maximum: 110), spacing: 12)
-            ],
-            spacing: 12
-        ) {
+        LazyVGrid(columns: columns, spacing: 8) {
             ForEach(commands) { cmd in
-                AICommandButton(command: cmd) {
-                    onCommandSelected(cmd)
-                }
-                .disabled(isDisabled)
-                .opacity(isDisabled ? 0.6 : 1.0)
+                AICommandButton(
+                    command: cmd,
+                    isDisabled: isDisabled,
+                    action: { onCommandSelected(cmd) }
+                )
             }
         }
-        .padding(.bottom, 8)
+        .padding(.vertical, 8)
     }
 }
-

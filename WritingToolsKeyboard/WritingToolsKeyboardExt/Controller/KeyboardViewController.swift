@@ -4,7 +4,7 @@ import CoreFoundation
 
 class KeyboardViewController: UIInputViewController {
   private var keyboardViewHostingController: UIHostingController<KeyboardView>?
-  private var isHostingControllerAttached = false
+  private var heightConstraint: NSLayoutConstraint?
 
   private lazy var viewModel: AIToolsViewModel = {
     return AIToolsViewModel(viewController: self)
@@ -13,6 +13,9 @@ class KeyboardViewController: UIInputViewController {
   private let appGroupID = "group.com.aryamirsepasi.writingtools"
   private let darwinName =
     "com.aryamirsepasi.writingtools.keyboardStatusChanged" as CFString
+  
+  // Fixed keyboard height — now sized for exactly 2 command rows
+  private let keyboardHeight: CGFloat = 330
 
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -45,34 +48,16 @@ class KeyboardViewController: UIInputViewController {
     )
   }
   
-  @objc private func handleMemoryWarning() {
-    // Clean up resources when memory is low
-    print("Memory warning received in keyboard extension")
-    viewModel.selectedText = nil
-  }
-  
-  deinit {
-    NotificationCenter.default.removeObserver(self)
-  }
-
-  override func viewDidLayoutSubviews() {
-    super.viewDidLayoutSubviews()
-    if keyboardViewHostingController == nil {
-      let rootView = KeyboardView(viewController: self, vm: viewModel)
-      let hostingController = UIHostingController(rootView: rootView)
-      hostingController.view.backgroundColor = .clear
-      // Set the input view's background to clear to prevent double-layering
-      self.view.backgroundColor = .clear
-      keyboardViewHostingController = hostingController
-      attachHostingController(hostingController)
-    }
-  }
-
   override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
+    
+    // Setup keyboard view on first appearance only
+    if keyboardViewHostingController == nil {
+      setupKeyboardView()
+    }
+    
     // Refresh status every time we appear, then notify app
     updateSharedStatusAndNotify()
-    keyboardViewHostingController?.view.isHidden = false
 
     Task { @MainActor in
       if !hasFullAccess {
@@ -80,19 +65,47 @@ class KeyboardViewController: UIInputViewController {
       }
     }
   }
-
-  override func viewDidDisappear(_ animated: Bool) {
-    super.viewDidDisappear(animated)
-    keyboardViewHostingController?.view.isHidden = true
+  
+  override func viewWillLayoutSubviews() {
+    super.viewWillLayoutSubviews()
+    
+    // Set height constraint before layout (Apple recommends controlling height via constraint).
+    if heightConstraint == nil {
+      let constraint = NSLayoutConstraint(
+        item: view!,
+        attribute: .height,
+        relatedBy: .equal,
+        toItem: nil,
+        attribute: .notAnAttribute,
+        multiplier: 1.0,
+        constant: keyboardHeight
+      )
+      constraint.priority = .required
+      view.addConstraint(constraint)
+      heightConstraint = constraint
+    }
   }
-
-  private func attachHostingController(
-    _ hostingController: UIHostingController<KeyboardView>
-  ) {
+  
+  private func setupKeyboardView() {
+    // Create SwiftUI hosting controller
+    let rootView = KeyboardView(viewController: self, vm: viewModel)
+    let hostingController = UIHostingController(rootView: rootView)
+    
+    // Prevent SwiftUI from sizing outside our fixed height
+    hostingController.sizingOptions = []
+    
+    // Clear backgrounds
+    hostingController.view.backgroundColor = .clear
+    self.view.backgroundColor = .clear
+    
+    keyboardViewHostingController = hostingController
+    
+    // Add to view hierarchy
     addChild(hostingController)
     view.addSubview(hostingController.view)
     hostingController.didMove(toParent: self)
-
+    
+    // Pin to edges
     hostingController.view.translatesAutoresizingMaskIntoConstraints = false
     NSLayoutConstraint.activate([
       hostingController.view.topAnchor.constraint(equalTo: view.topAnchor),
@@ -100,7 +113,15 @@ class KeyboardViewController: UIInputViewController {
       hostingController.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
       hostingController.view.trailingAnchor.constraint(equalTo: view.trailingAnchor),
     ])
-    isHostingControllerAttached = true
+  }
+  
+  @objc private func handleMemoryWarning() {
+    print("Memory warning received in keyboard extension")
+    viewModel.selectedText = nil
+  }
+  
+  deinit {
+    NotificationCenter.default.removeObserver(self)
   }
 
   private func updateSharedStatusAndNotify() {
@@ -129,14 +150,10 @@ class KeyboardViewController: UIInputViewController {
     }
 
     // Fallback: Get context before and after cursor
-    // Note: This is a best-effort approach and may not capture all text
     let before = textDocumentProxy.documentContextBeforeInput ?? ""
     let after = textDocumentProxy.documentContextAfterInput ?? ""
     
-    // Only return combined text if it seems reasonable
     let combined = (before + after).trimmingCharacters(in: .whitespacesAndNewlines)
-    
-    // Limit to prevent overwhelming the UI with large documents
     if !combined.isEmpty && combined.count <= 1000 {
       return combined
     }

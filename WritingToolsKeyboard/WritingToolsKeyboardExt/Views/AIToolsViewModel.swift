@@ -70,4 +70,3 @@ class AIToolsViewModel: ObservableObject {
         currentError = nil
     }
 }
-

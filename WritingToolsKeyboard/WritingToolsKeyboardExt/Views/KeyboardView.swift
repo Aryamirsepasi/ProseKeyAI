@@ -9,6 +9,9 @@ struct KeyboardView: View {
     store: UserDefaults(suiteName: "group.com.aryamirsepasi.writingtools")
   )
   private var enableHaptics = true
+  
+  // Mirror controller height (2 command rows visible)
+  private let keyboardHeight: CGFloat = 340
 
   init(viewController: KeyboardViewController?, vm: AIToolsViewModel? = nil) {
     self.viewController = viewController
@@ -21,8 +24,8 @@ struct KeyboardView: View {
 
   var body: some View {
     AIToolsView(vm: vm)
-      .ignoresSafeArea(.container, edges: .all)
-      .dynamicTypeSize(.large)
+      .frame(width: UIScreen.main.bounds.width, height: keyboardHeight)
+      .ignoresSafeArea(.all, edges: .all)
       .onAppear {
         vm.checkSelectedText()
         UIAccessibility.post(
@@ -33,4 +36,3 @@ struct KeyboardView: View {
       .accessibilityElement(children: .contain)
   }
 }
-

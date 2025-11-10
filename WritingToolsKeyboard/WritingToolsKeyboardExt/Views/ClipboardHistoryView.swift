@@ -1,10 +1,3 @@
-//
-//  ClipboardHistoryView.swift
-//  ProseKey AI
-//
-//  Created on 2025-11-07.
-//
-
 import SwiftUI
 
 struct ClipboardHistoryView: View {
@@ -14,6 +7,9 @@ struct ClipboardHistoryView: View {
     
     @State private var copiedItemId: UUID?
     
+    // For keyboardHeight = 256, header (44 + 1 divider) = 45 -> content = 211
+    private let contentHeight: CGFloat = 295
+    
     private let columns = [
         GridItem(.flexible(), spacing: 8),
         GridItem(.flexible(), spacing: 8)
@@ -21,9 +17,8 @@ struct ClipboardHistoryView: View {
     
     var body: some View {
         VStack(spacing: 0) {
-            // Header
+            // Header - 45pt (44 frame + 1 divider)
             headerView
-            
             Divider()
             
             // Content
@@ -69,7 +64,6 @@ struct ClipboardHistoryView: View {
                 }
                 .buttonStyle(PlainButtonStyle())
             } else {
-                // Invisible button for layout balance
                 Text("Clear")
                     .font(.system(size: 17))
                     .foregroundColor(.clear)
@@ -77,6 +71,7 @@ struct ClipboardHistoryView: View {
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 12)
+        .frame(height: 44)
     }
     
     private var emptyStateView: some View {
@@ -99,48 +94,57 @@ struct ClipboardHistoryView: View {
             Spacer()
         }
         .frame(maxWidth: .infinity)
+        .frame(height: contentHeight)
         .padding()
     }
     
     private var clipboardGridView: some View {
-        ScrollView {
+        ScrollView(.vertical, showsIndicators: true) {
             LazyVGrid(columns: columns, spacing: 8) {
                 ForEach(manager.nonExpiredItems) { item in
                     ClipboardItemCard(
                         item: item,
                         isCopied: copiedItemId == item.id,
-                        onTap: {
-                            handleItemTap(item)
-                        },
-                        onDelete: {
-                            manager.deleteItem(item)
-                        }
+                        onTap: { handleItemTap(item) },
+                        onDelete: { manager.deleteItem(item) }
                     )
                 }
             }
             .padding(12)
         }
+        .frame(height: contentHeight)
     }
     
     private func handleItemTap(_ item: ClipboardItem) {
-        // Copy to clipboard
         manager.copyItem(item)
-        
-        // Show copied animation
         withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
             copiedItemId = item.id
         }
-        
-        // Insert into text field if we have a view controller
         viewController?.textDocumentProxy.insertText(item.content)
-        
-        // Reset animation and dismiss after a delay
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-            withAnimation {
-                copiedItemId = nil
-            }
+            withAnimation { copiedItemId = nil }
             onDismiss()
         }
+    }
+}
+
+private struct ClipboardCardStyle: ButtonStyle {
+    let isCopied: Bool
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .padding(12)
+            .frame(height: 100)
+            .background(
+                RoundedRectangle(cornerRadius: 12)
+                    .fill(isCopied ? Color.green.opacity(0.1) : Color(.secondarySystemGroupedBackground))
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: 12)
+                    .stroke(isCopied ? Color.green.opacity(0.5) : Color(.separator), lineWidth: isCopied ? 2 : 0.5)
+            )
+            .scaleEffect(configuration.isPressed ? 0.96 : 1.0)
+            .animation(.easeInOut(duration: 0.1), value: configuration.isPressed)
+            .contentShape(RoundedRectangle(cornerRadius: 12))
     }
 }
 
@@ -150,13 +154,10 @@ struct ClipboardItemCard: View {
     let onTap: () -> Void
     let onDelete: () -> Void
     
-    @State private var isPressing = false
-    
     var body: some View {
         ZStack(alignment: .topTrailing) {
             Button(action: onTap) {
                 VStack(alignment: .leading, spacing: 8) {
-                    // Content
                     Text(item.displayText)
                         .font(.system(size: 14))
                         .foregroundColor(.primary)
@@ -166,7 +167,6 @@ struct ClipboardItemCard: View {
                     
                     Spacer()
                     
-                    // Timestamp
                     HStack {
                         Image(systemName: isCopied ? "checkmark.circle.fill" : "doc.on.doc")
                             .font(.system(size: 12))
@@ -179,34 +179,9 @@ struct ClipboardItemCard: View {
                         Spacer()
                     }
                 }
-                .padding(12)
-                .frame(height: 100)
-                .background(
-                    RoundedRectangle(cornerRadius: 12)
-                        .fill(isCopied ? Color.green.opacity(0.1) : Color(.secondarySystemGroupedBackground))
-                )
-                .overlay(
-                    RoundedRectangle(cornerRadius: 12)
-                        .stroke(isCopied ? Color.green.opacity(0.5) : Color(.separator), lineWidth: isCopied ? 2 : 0.5)
-                )
-                .scaleEffect(isPressing ? 0.95 : 1.0)
             }
-            .buttonStyle(PlainButtonStyle())
-            .simultaneousGesture(
-                DragGesture(minimumDistance: 0)
-                    .onChanged { _ in
-                        withAnimation(.easeInOut(duration: 0.1)) {
-                            isPressing = true
-                        }
-                    }
-                    .onEnded { _ in
-                        withAnimation(.easeInOut(duration: 0.1)) {
-                            isPressing = false
-                        }
-                    }
-            )
+            .buttonStyle(ClipboardCardStyle(isCopied: isCopied))
             
-            // Delete button
             if !isCopied {
                 Button(action: onDelete) {
                     Image(systemName: "xmark.circle.fill")
@@ -224,4 +199,3 @@ struct ClipboardItemCard: View {
         }
     }
 }
-
