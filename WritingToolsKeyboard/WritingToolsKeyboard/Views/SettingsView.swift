@@ -51,8 +51,6 @@ struct SettingsView: View {
   @State private var showOnboarding: Bool = false
   @State private var showApiKeyHelp: Bool = false
 
-  @StateObject private var commandsManager = KeyboardCommandsManager()
-
   // Darwin observer + optional polling after returning from Settings
   @State private var darwinObserver: SettingsDarwinObserver?
   @State private var pollingCancellable: AnyCancellable?
@@ -129,20 +127,6 @@ struct SettingsView: View {
             VStack {
               Toggle("Enable Haptic Feedback", isOn: $enableHaptics)
                 .padding()
-
-              NavigationLink(
-                destination: CommandsView(commandsManager: commandsManager)
-              ) {
-                HStack {
-                  Image(systemName: "list.bullet.rectangle")
-                    .foregroundColor(.blue)
-                  Text("Manage AI Commands")
-                  Spacer()
-                  Image(systemName: "chevron.right")
-                    .foregroundColor(.gray)
-                }
-                .padding()
-              }
             }
             .background(Color(.systemGray6))
             .cornerRadius(12)

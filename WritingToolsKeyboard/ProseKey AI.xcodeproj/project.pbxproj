@@ -18,6 +18,8 @@
 		428B07D62E53A726004D9A94 /* MLXLMCommon in Frameworks */ = {isa = PBXBuildFile; productRef = 428B07D52E53A726004D9A94 /* MLXLMCommon */; };
 		428B07D82E53A726004D9A94 /* MLXMNIST in Frameworks */ = {isa = PBXBuildFile; productRef = 428B07D72E53A726004D9A94 /* MLXMNIST */; };
 		428B07DA2E53A726004D9A94 /* MLXVLM in Frameworks */ = {isa = PBXBuildFile; productRef = 428B07D92E53A726004D9A94 /* MLXVLM */; };
+		42C858A22ED5073F0014C80D /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 42C858A12ED5073F0014C80D /* Localizable.xcstrings */; };
+		42C858A32ED5073F0014C80D /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 42C858A12ED5073F0014C80D /* Localizable.xcstrings */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -47,6 +49,7 @@
 /* Begin PBXFileReference section */
 		2A9BFD7E2D1F3CCF00A8F121 /* ProseKey AI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "ProseKey AI.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2A9BFDAF2D1F3CEC00A8F121 /* ProseKey AIExt.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "ProseKey AIExt.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		42C858A12ED5073F0014C80D /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -121,6 +124,7 @@
 		2A9BFD752D1F3CCF00A8F121 = {
 			isa = PBXGroup;
 			children = (
+				42C858A12ED5073F0014C80D /* Localizable.xcstrings */,
 				2A9BFF382D1F455400A8F121 /* Shared */,
 				2A9BFD802D1F3CCF00A8F121 /* WritingToolsKeyboard */,
 				2A9BFDB02D1F3CEC00A8F121 /* WritingToolsKeyboardExt */,
@@ -231,6 +235,7 @@
 			knownRegions = (
 				en,
 				Base,
+				de,
 			);
 			mainGroup = 2A9BFD752D1F3CCF00A8F121;
 			minimizedProjectReferenceProxies = 1;
@@ -256,6 +261,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				42C858A32ED5073F0014C80D /* Localizable.xcstrings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -263,6 +269,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				42C858A22ED5073F0014C80D /* Localizable.xcstrings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
