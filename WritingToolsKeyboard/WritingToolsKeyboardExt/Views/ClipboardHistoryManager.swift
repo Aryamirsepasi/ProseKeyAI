@@ -120,5 +120,16 @@ class ClipboardHistoryManager: ObservableObject {
     var nonExpiredItems: [ClipboardItem] {
         items.filter { !$0.isExpired }
     }
+
+    // MARK: - Memory Warning Handler
+
+    /// Reduces clipboard items to free memory
+    func handleMemoryWarning() {
+        // Keep only 5 most recent items under memory pressure
+        if items.count > 5 {
+            items = Array(items.prefix(5))
+            saveItems()
+        }
+    }
 }
 

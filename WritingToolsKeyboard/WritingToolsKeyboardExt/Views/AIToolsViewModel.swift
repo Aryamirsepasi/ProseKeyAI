@@ -69,4 +69,14 @@ class AIToolsViewModel: ObservableObject {
     func clearError() {
         currentError = nil
     }
+
+    // MARK: - Memory Warning Handler
+
+    /// Cleans up resources to free memory
+    func handleMemoryWarning() {
+        checkTextTask?.cancel()
+        checkTextTask = nil
+        selectedText = nil
+        currentError = nil
+    }
 }

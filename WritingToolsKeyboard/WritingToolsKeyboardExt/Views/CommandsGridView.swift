@@ -39,7 +39,7 @@ struct AICommandButton: View {
                     .frame(height: 24)
                     .accessibility(hidden: false)
                 
-                Text(command.name)
+                Text(command.displayName)
                     .font(.system(size: 14))
                     .fontWeight(.medium)
                     .foregroundColor(.primary)
@@ -48,7 +48,7 @@ struct AICommandButton: View {
             }
         }
         .buttonStyle(AICommandCardStyle())
-        .accessibilityLabel(command.name)
+        .accessibilityLabel(command.displayName)
         .opacity(isDisabled ? 0.5 : 1.0)
         .allowsHitTesting(!isDisabled)
     }

@@ -363,7 +363,7 @@ struct ProviderTabView: View {
     
     // Add Foundation Models first on iOS 26+
     if #available(iOS 26.0, *) {
-      list.append(("foundationmodels", .system("brain.head.profile"), "Apple", .blue))
+      list.append(("foundationmodels", .system("apple.logo"), "Apple", .blue))
     }
     
     // Add other providers

@@ -8,18 +8,40 @@ struct KeyboardCommand: Codable, Identifiable, Equatable {
     var prompt: String
     var icon: String
     var isBuiltIn: Bool
-    
-    init(id: UUID = UUID(), name: String, prompt: String, icon: String, isBuiltIn: Bool = false) {
+    /// For built-in commands, this stores the localization key (e.g., "Proofread")
+    /// For custom commands, this is nil
+    var nameKey: String?
+
+    init(id: UUID = UUID(), name: String, prompt: String, icon: String, isBuiltIn: Bool = false, nameKey: String? = nil) {
         self.id = id
         self.name = name
         self.prompt = prompt
         self.icon = icon
         self.isBuiltIn = isBuiltIn
+        self.nameKey = nameKey
     }
-    
-    // Static factory to create a built-in command
-    static func createBuiltIn(name: String, prompt: String, icon: String) -> KeyboardCommand {
-        return KeyboardCommand(id: UUID(), name: name, prompt: prompt, icon: icon, isBuiltIn: true)
+
+    /// Returns the localized display name for this command
+    /// For built-in commands, this looks up the current localization
+    /// For custom commands, this returns the stored name
+    var displayName: String {
+        if isBuiltIn, let key = nameKey, !key.isEmpty {
+            return NSLocalizedString(key, comment: "")
+        }
+        return name
+    }
+
+    // Static factory to create a built-in command with a localization key
+    static func createBuiltIn(nameKey: String, prompt: String, icon: String) -> KeyboardCommand {
+        // Store the key as both name (for backwards compat) and nameKey (for localization)
+        return KeyboardCommand(
+            id: UUID(),
+            name: nameKey,  // Fallback if nameKey lookup fails
+            prompt: prompt,
+            icon: icon,
+            isBuiltIn: true,
+            nameKey: nameKey
+        )
     }
 }
 
@@ -52,10 +74,15 @@ class KeyboardCommandsManager: ObservableObject {
     private let suiteName = "group.com.aryamirsepasi.writingtools"
     private let storageKey = "keyboard_commands_list"
     private let builtInCommandsKey = "built_in_commands_shown"
-    
+    /// Version key for built-in commands format - increment when format changes
+    private let builtInCommandsVersionKey = "built_in_commands_version"
+    /// Current version of built-in commands format
+    private let currentBuiltInVersion = 2  // v2: Added nameKey for localization
+
     init() {
         loadCommands()
         ensureBuiltInsExist()
+        migrateBuiltInCommandsIfNeeded()
     }
     
     func loadCommands() {
@@ -142,17 +169,64 @@ class KeyboardCommandsManager: ObservableObject {
     private func ensureBuiltInsExist() {
         let userDefaults = UserDefaults(suiteName: suiteName)
         let builtInsCreated = userDefaults?.bool(forKey: builtInCommandsKey) ?? false
-        
+
         if commands.isEmpty || !builtInsCreated {
             createDefaultBuiltInCommands()
             userDefaults?.set(true, forKey: builtInCommandsKey)
+            userDefaults?.set(currentBuiltInVersion, forKey: builtInCommandsVersionKey)
         }
+    }
+
+    /// Migrates built-in commands to newer format if needed
+    private func migrateBuiltInCommandsIfNeeded() {
+        let userDefaults = UserDefaults(suiteName: suiteName)
+        let savedVersion = userDefaults?.integer(forKey: builtInCommandsVersionKey) ?? 1
+
+        guard savedVersion < currentBuiltInVersion else { return }
+
+        // Get fresh built-in commands with new format
+        let freshBuiltIns = createFreshBuiltInCommands()
+        let freshBuiltInsByName = Dictionary(uniqueKeysWithValues: freshBuiltIns.map { ($0.name, $0) })
+
+        // Update existing built-in commands with new format (preserving any user edits to prompts)
+        var updated = false
+        for i in 0..<commands.count {
+            if commands[i].isBuiltIn {
+                // Match by name (the key) and update nameKey
+                if let freshCommand = freshBuiltInsByName[commands[i].name] {
+                    if commands[i].nameKey == nil || commands[i].nameKey!.isEmpty {
+                        commands[i].nameKey = freshCommand.nameKey
+                        updated = true
+                    }
+                }
+            }
+        }
+
+        if updated {
+            saveCommands()
+        }
+
+        userDefaults?.set(currentBuiltInVersion, forKey: builtInCommandsVersionKey)
+    }
+
+    /// Creates fresh built-in commands without saving (for migration comparison)
+    private func createFreshBuiltInCommands() -> [KeyboardCommand] {
+        return [
+            KeyboardCommand.createBuiltIn(nameKey: "Proofread", prompt: "", icon: "magnifyingglass"),
+            KeyboardCommand.createBuiltIn(nameKey: "Rewrite", prompt: "", icon: "arrow.triangle.2.circlepath"),
+            KeyboardCommand.createBuiltIn(nameKey: "Friendly", prompt: "", icon: "face.smiling"),
+            KeyboardCommand.createBuiltIn(nameKey: "Professional", prompt: "", icon: "briefcase"),
+            KeyboardCommand.createBuiltIn(nameKey: "Concise", prompt: "", icon: "scissors"),
+            KeyboardCommand.createBuiltIn(nameKey: "Summary", prompt: "", icon: "doc.text"),
+            KeyboardCommand.createBuiltIn(nameKey: "Key Points", prompt: "", icon: "list.bullet"),
+            KeyboardCommand.createBuiltIn(nameKey: "Table", prompt: "", icon: "tablecells")
+        ]
     }
     
     private func createDefaultBuiltInCommands() {
         let builtInCommands = [
             KeyboardCommand.createBuiltIn(
-                name: NSLocalizedString("Proofread", comment: "Command name for proofreading"),
+                nameKey: "Proofread",
                 prompt: """
                 {
                   "role": "proofreading assistant",
@@ -186,7 +260,7 @@ class KeyboardCommandsManager: ObservableObject {
                 icon: "magnifyingglass"
             ),
             KeyboardCommand.createBuiltIn(
-                name: NSLocalizedString("Rewrite", comment: "Command name for rewriting"),
+                nameKey: "Rewrite",
                 prompt: """
                 {
                   "role": "rewriting assistant",
@@ -218,7 +292,7 @@ class KeyboardCommandsManager: ObservableObject {
                 icon: "arrow.triangle.2.circlepath"
             ),
             KeyboardCommand.createBuiltIn(
-                name: NSLocalizedString("Friendly", comment: "Command name for friendly tone"),
+                nameKey: "Friendly",
                 prompt: """
                 {
                   "role": "tone adjustment assistant",
@@ -249,7 +323,7 @@ class KeyboardCommandsManager: ObservableObject {
                 icon: "face.smiling"
             ),
             KeyboardCommand.createBuiltIn(
-                name: NSLocalizedString("Professional", comment: "Command name for professional tone"),
+                nameKey: "Professional",
                 prompt: """
                 {
                   "role": "professional tone assistant",
@@ -280,7 +354,7 @@ class KeyboardCommandsManager: ObservableObject {
                 icon: "briefcase"
             ),
             KeyboardCommand.createBuiltIn(
-                name: NSLocalizedString("Concise", comment: "Command name for making text concise"),
+                nameKey: "Concise",
                 prompt: """
                 {
                   "role": "text condensing assistant",
@@ -311,7 +385,7 @@ class KeyboardCommandsManager: ObservableObject {
                 icon: "scissors"
             ),
             KeyboardCommand.createBuiltIn(
-                name: NSLocalizedString("Summary", comment: "Command name for summarizing"),
+                nameKey: "Summary",
                 prompt: """
                 {
                   "role": "summarization assistant",
@@ -341,7 +415,7 @@ class KeyboardCommandsManager: ObservableObject {
                 icon: "doc.text"
             ),
             KeyboardCommand.createBuiltIn(
-                name: NSLocalizedString("Key Points", comment: "Command name for extracting key points"),
+                nameKey: "Key Points",
                 prompt: """
                 {
                   "role": "key points extraction assistant",
@@ -371,7 +445,7 @@ class KeyboardCommandsManager: ObservableObject {
                 icon: "list.bullet"
             ),
             KeyboardCommand.createBuiltIn(
-                name: NSLocalizedString("Table", comment: "Command name for creating tables"),
+                nameKey: "Table",
                 prompt: """
                 {
                   "role": "table conversion assistant",

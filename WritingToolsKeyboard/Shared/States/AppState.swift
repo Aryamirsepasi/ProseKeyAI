@@ -2,221 +2,226 @@ import SwiftUI
 
 @MainActor
 class AppState: ObservableObject {
-  static let shared = AppState()
+    static let shared = AppState()
 
-  // Use new references to providers
-  @Published var geminiProvider: GeminiProvider
-  @Published var openAIProvider: OpenAIProvider
-  @Published var mistralProvider: MistralProvider
-  @Published var anthropicProvider: AnthropicProvider
-  @Published var openRouterProvider: OpenRouterProvider
-  @Published var perplexityProvider: PerplexityProvider
-  @Published var foundationModelsProvider: (any AIProvider)?
-  //@Published var aiProxyProvider: AIProxyProvider
+    // MARK: - Lazy Provider Cache
 
-  // Other app state
-  @Published var selectedText: String = ""
-  @Published var isProcessing: Bool = false
+    /// Cached provider instance - only created when accessed
+    private var _cachedProvider: (any AIProvider)?
 
-  // Current provider with UI binding support
-  @Published private(set) var currentProvider: String
+    /// Key of the currently cached provider
+    private var _cachedProviderKey: String = ""
 
-  var activeProvider: any AIProvider {
-    switch currentProvider {
-    case "openai": return openAIProvider
-    case "gemini": return geminiProvider
-    case "mistral": return mistralProvider
-    case "anthropic": return anthropicProvider
-    case "openrouter": return openRouterProvider
-    case "perplexity": return perplexityProvider
-    case "foundationmodels": 
-      if let provider = foundationModelsProvider {
+    // Other app state
+    @Published var selectedText: String = ""
+    @Published var isProcessing: Bool = false
+
+    // Current provider with UI binding support
+    @Published private(set) var currentProvider: String
+
+    /// Returns the active provider, creating it lazily if needed
+    var activeProvider: any AIProvider {
+        let providerKey = currentProvider
+
+        // Return cached provider if it matches current selection
+        if providerKey == _cachedProviderKey, let cached = _cachedProvider {
+            return cached
+        }
+
+        // Create new provider on demand
+        let provider = createProvider(for: providerKey)
+        _cachedProvider = provider
+        _cachedProviderKey = providerKey
         return provider
-      }
-      return geminiProvider
-    default: return geminiProvider
-    }
-  }
-
-  private init() {
-    // Read from AppSettings
-    let asettings = AppSettings.shared
-    self.currentProvider = asettings.currentProvider
-
-    // Initialize Gemini with custom model support
-    let geminiModelEnum = asettings.geminiModel
-    let geminiModelName = (geminiModelEnum == .custom)
-      ? asettings.geminiCustomModel : geminiModelEnum.rawValue
-    let geminiConfig = GeminiConfig(
-      apiKey: asettings.geminiApiKey,
-      modelName: geminiModelName
-    )
-    self.geminiProvider = GeminiProvider(config: geminiConfig)
-
-    // Initialize OpenAI
-    let openAIConfig = OpenAIConfig(
-      apiKey: asettings.openAIApiKey,
-      baseURL: asettings.openAIBaseURL,
-      model: asettings.openAIModel
-    )
-    self.openAIProvider = OpenAIProvider(config: openAIConfig)
-
-    // Initialize Mistral
-    let mistralConfig = MistralConfig(
-      apiKey: asettings.mistralApiKey,
-      model: asettings.mistralModel
-    )
-    self.mistralProvider = MistralProvider(config: mistralConfig)
-
-    self.anthropicProvider = AnthropicProvider(
-      config: AnthropicConfig(
-        apiKey: asettings.anthropicApiKey,
-        model: asettings.anthropicModel
-      )
-    )
-    self.openRouterProvider = OpenRouterProvider(
-      config: OpenRouterConfig(
-        apiKey: asettings.openRouterApiKey,
-        model: asettings.openRouterModel
-      )
-    )
-    self.perplexityProvider = PerplexityProvider(
-      config: PerplexityConfig(
-        apiKey: asettings.perplexityApiKey,
-        model: asettings.perplexityModel
-      )
-    )
-    
-    // Initialize Foundation Models provider only on iOS 26.0+
-    if #available(iOS 26.0, *) {
-      self.foundationModelsProvider = FoundationModelsProvider()
-    } else {
-      self.foundationModelsProvider = nil
     }
 
-    if asettings.openAIApiKey.isEmpty, asettings.geminiApiKey.isEmpty,
-      asettings.mistralApiKey.isEmpty
-    {
-      print("Warning: No API keys configured.")
-    }
-  }
-
-  func saveGeminiConfig(
-    apiKey: String,
-    model: GeminiModel,
-    customModelName: String? = nil
-  ) {
-    AppSettings.shared.geminiApiKey = apiKey
-    AppSettings.shared.geminiModel = model
-    if model == .custom, let custom = customModelName {
-      AppSettings.shared.geminiCustomModel = custom
+    private init() {
+        // Only read current provider setting - no provider initialization
+        let asettings = AppSettings.shared
+        self.currentProvider = asettings.currentProvider
     }
 
-    let modelName = (model == .custom) ? (customModelName ?? "") : model.rawValue
-    let config = GeminiConfig(apiKey: apiKey, modelName: modelName)
-    geminiProvider = GeminiProvider(config: config)
-  }
+    // MARK: - Lazy Provider Factory
 
-  func saveOpenAIConfig(apiKey: String, baseURL: String, model: String) {
-    let asettings = AppSettings.shared
-    asettings.openAIApiKey = apiKey
-    asettings.openAIBaseURL = baseURL
-    asettings.openAIModel = model
+    private func createProvider(for key: String) -> any AIProvider {
+        let settings = AppSettings.shared
 
-    let config = OpenAIConfig(apiKey: apiKey, baseURL: baseURL, model: model)
-    openAIProvider = OpenAIProvider(config: config)
-  }
+        switch key {
+        case "openai":
+            let config = OpenAIConfig(
+                apiKey: settings.openAIApiKey,
+                baseURL: settings.openAIBaseURL,
+                model: settings.openAIModel
+            )
+            return OpenAIProvider(config: config)
 
-  func saveAnthropicConfig(apiKey: String, model: String) {
-    let asettings = AppSettings.shared
-    asettings.anthropicApiKey = apiKey
-    asettings.anthropicModel = model
-    anthropicProvider = AnthropicProvider(
-      config: AnthropicConfig(apiKey: apiKey, model: model)
-    )
-  }
+        case "gemini":
+            let modelName = (settings.geminiModel == .custom)
+                ? settings.geminiCustomModel : settings.geminiModel.rawValue
+            let config = GeminiConfig(
+                apiKey: settings.geminiApiKey,
+                modelName: modelName
+            )
+            return GeminiProvider(config: config)
 
-  func saveOpenRouterConfig(apiKey: String, model: String) {
-    let asettings = AppSettings.shared
-    asettings.openRouterApiKey = apiKey
-    asettings.openRouterModel = model
-    openRouterProvider = OpenRouterProvider(
-      config: OpenRouterConfig(apiKey: apiKey, model: model)
-    )
-  }
+        case "mistral":
+            let config = MistralConfig(
+                apiKey: settings.mistralApiKey,
+                model: settings.mistralModel
+            )
+            return MistralProvider(config: config)
 
-  func savePerplexityConfig(apiKey: String, model: String) {
-    let asettings = AppSettings.shared
-    asettings.perplexityApiKey = apiKey
-    asettings.perplexityModel = model
-    perplexityProvider = PerplexityProvider(
-      config: PerplexityConfig(apiKey: apiKey, model: model)
-    )
-  }
+        case "anthropic":
+            let config = AnthropicConfig(
+                apiKey: settings.anthropicApiKey,
+                model: settings.anthropicModel
+            )
+            return AnthropicProvider(config: config)
 
-  func setCurrentProvider(_ provider: String) {
-    currentProvider = provider
-    AppSettings.shared.currentProvider = provider
-  }
+        case "openrouter":
+            let config = OpenRouterConfig(
+                apiKey: settings.openRouterApiKey,
+                model: settings.openRouterModel
+            )
+            return OpenRouterProvider(config: config)
 
-  func saveMistralConfig(apiKey: String, model: String) {
-    let asettings = AppSettings.shared
-    asettings.mistralApiKey = apiKey
-    asettings.mistralModel = model
+        case "perplexity":
+            let config = PerplexityConfig(
+                apiKey: settings.perplexityApiKey,
+                model: settings.perplexityModel
+            )
+            return PerplexityProvider(config: config)
 
-    let config = MistralConfig(
-      apiKey: apiKey,
-      model: model
-    )
-    mistralProvider = MistralProvider(config: config)
-  }
+        case "foundationmodels":
+            if #available(iOS 26.0, *) {
+                return FoundationModelsProvider()
+            }
+            // Fallback to default
+            fallthrough
 
-  func reloadProviders() {
-    let asettings = AppSettings.shared
-    // Re-initialize all providers with the latest config
-    let geminiModelEnum = asettings.geminiModel
-    let geminiModelName = (geminiModelEnum == .custom)
-      ? asettings.geminiCustomModel : geminiModelEnum.rawValue
-    self.geminiProvider = GeminiProvider(
-      config: GeminiConfig(apiKey: asettings.geminiApiKey, modelName: geminiModelName)
-    )
-    self.openAIProvider = OpenAIProvider(
-      config: OpenAIConfig(
-        apiKey: asettings.openAIApiKey,
-        baseURL: asettings.openAIBaseURL,
-        model: asettings.openAIModel
-      )
-    )
-    self.mistralProvider = MistralProvider(
-      config: MistralConfig(
-        apiKey: asettings.mistralApiKey,
-        model: asettings.mistralModel
-      )
-    )
-    self.anthropicProvider = AnthropicProvider(
-      config: AnthropicConfig(
-        apiKey: asettings.anthropicApiKey,
-        model: asettings.anthropicModel
-      )
-    )
-    self.openRouterProvider = OpenRouterProvider(
-      config: OpenRouterConfig(
-        apiKey: asettings.openRouterApiKey,
-        model: asettings.openRouterModel
-      )
-    )
-    self.perplexityProvider = PerplexityProvider(
-      config: PerplexityConfig(
-        apiKey: asettings.perplexityApiKey,
-        model: asettings.perplexityModel
-      )
-    )
-    // Re-initialize Foundation Models provider only on iOS 26.0+
-    if #available(iOS 26.0, *) {
-      self.foundationModelsProvider = FoundationModelsProvider()
-    } else {
-      self.foundationModelsProvider = nil
+        default:
+            // Default to Gemini
+            let modelName = (settings.geminiModel == .custom)
+                ? settings.geminiCustomModel : settings.geminiModel.rawValue
+            let config = GeminiConfig(
+                apiKey: settings.geminiApiKey,
+                modelName: modelName
+            )
+            return GeminiProvider(config: config)
+        }
     }
-    self.currentProvider = asettings.currentProvider
-  }
+
+    // MARK: - Cache Invalidation
+
+    /// Invalidates the cached provider, forcing recreation on next access
+    func invalidateProvider() {
+        _cachedProvider = nil
+        _cachedProviderKey = ""
+    }
+
+    // MARK: - Memory Warning Handler
+
+    /// Cleans up provider resources to free memory
+    func handleMemoryWarning() {
+        // Cancel any active provider task
+        _cachedProvider?.cancel()
+
+        // Release the cached provider
+        _cachedProvider = nil
+        _cachedProviderKey = ""
+
+        // Clear processing state
+        isProcessing = false
+        selectedText = ""
+    }
+
+    // MARK: - Provider Reload
+
+    /// Reloads provider configuration - just invalidates cache
+    func reloadProviders() {
+        let settings = AppSettings.shared
+        currentProvider = settings.currentProvider
+        invalidateProvider()
+    }
+
+    // MARK: - Provider Selection
+
+    func setCurrentProvider(_ provider: String) {
+        // Invalidate cache when provider changes
+        if provider != currentProvider {
+            invalidateProvider()
+        }
+        currentProvider = provider
+        AppSettings.shared.currentProvider = provider
+    }
+
+    // MARK: - Save Config Methods (invalidate cache if current provider)
+
+    func saveGeminiConfig(
+        apiKey: String,
+        model: GeminiModel,
+        customModelName: String? = nil
+    ) {
+        AppSettings.shared.geminiApiKey = apiKey
+        AppSettings.shared.geminiModel = model
+        if model == .custom, let custom = customModelName {
+            AppSettings.shared.geminiCustomModel = custom
+        }
+
+        // Invalidate if this is the current provider
+        if currentProvider == "gemini" {
+            invalidateProvider()
+        }
+    }
+
+    func saveOpenAIConfig(apiKey: String, baseURL: String, model: String) {
+        let asettings = AppSettings.shared
+        asettings.openAIApiKey = apiKey
+        asettings.openAIBaseURL = baseURL
+        asettings.openAIModel = model
+
+        if currentProvider == "openai" {
+            invalidateProvider()
+        }
+    }
+
+    func saveAnthropicConfig(apiKey: String, model: String) {
+        let asettings = AppSettings.shared
+        asettings.anthropicApiKey = apiKey
+        asettings.anthropicModel = model
+
+        if currentProvider == "anthropic" {
+            invalidateProvider()
+        }
+    }
+
+    func saveOpenRouterConfig(apiKey: String, model: String) {
+        let asettings = AppSettings.shared
+        asettings.openRouterApiKey = apiKey
+        asettings.openRouterModel = model
+
+        if currentProvider == "openrouter" {
+            invalidateProvider()
+        }
+    }
+
+    func savePerplexityConfig(apiKey: String, model: String) {
+        let asettings = AppSettings.shared
+        asettings.perplexityApiKey = apiKey
+        asettings.perplexityModel = model
+
+        if currentProvider == "perplexity" {
+            invalidateProvider()
+        }
+    }
+
+    func saveMistralConfig(apiKey: String, model: String) {
+        let asettings = AppSettings.shared
+        asettings.mistralApiKey = apiKey
+        asettings.mistralModel = model
+
+        if currentProvider == "mistral" {
+            invalidateProvider()
+        }
+    }
 }

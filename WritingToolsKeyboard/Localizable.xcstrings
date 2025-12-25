@@ -66,13 +66,52 @@
       }
     },
     "1." : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1."
+          }
+        }
+      }
     },
     "2." : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "2."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "2."
+          }
+        }
+      }
     },
     "3." : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "3."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "3."
+          }
+        }
+      }
     },
     "Acknowledge content" : {
       "localizations" : {
@@ -241,11 +280,30 @@
             "state" : "translated",
             "value" : "App Website"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "App Website"
+          }
         }
       }
     },
     "Apple Foundation Models" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apple Foundation Models"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apple Foundation Models"
+          }
+        }
+      }
     },
     "Applying %@..." : {
       "localizations" : {
@@ -291,10 +349,36 @@
       }
     },
     "Availability Status" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verfügbarkeitsstatus"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Availability Status"
+          }
+        }
+      }
     },
     "Available" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verfügbar"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Available"
+          }
+        }
+      }
     },
     "Back" : {
       "localizations" : {
@@ -468,17 +552,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Commands"
-          }
-        }
-      }
-    },
-    "Concise" : {
-      "comment" : "Command name for making text concise",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Prägnant"
           }
         }
       }
@@ -836,7 +909,20 @@
       }
     },
     "Enable Apple Intelligence" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apple Intelligence aktivieren"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enable Apple Intelligence"
+          }
+        }
+      }
     },
     "Enable Full Access" : {
       "localizations" : {
@@ -951,21 +1037,49 @@
       }
     },
     "Features" : {
-
-    },
-    "Foundation Models" : {
-
-    },
-    "Foundation Models requires iOS 26.0 or later." : {
-
-    },
-    "Friendly" : {
-      "comment" : "Command name for friendly tone",
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Freundlich"
+            "value" : "Funktionen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Features"
+          }
+        }
+      }
+    },
+    "Foundation Models" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Foundation Models"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Foundation Models"
+          }
+        }
+      }
+    },
+    "Foundation Models requires iOS 26.0 or later." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Foundation Models benötigt iOS 26.0 oder neuer."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Foundation Models requires iOS 26.0 or later."
           }
         }
       }
@@ -1147,7 +1261,20 @@
       }
     },
     "Go to Apple Intelligence & Siri" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gehen Sie zu Apple Intelligence & Siri"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Go to Apple Intelligence & Siri"
+          }
+        }
+      }
     },
     "Go to platform.openai.com" : {
       "localizations" : {
@@ -1187,6 +1314,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Haben Sie Probleme?"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Having Issues?"
           }
         }
       }
@@ -1241,7 +1374,20 @@
       }
     },
     "How to Enable" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "So aktivieren Sie"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "How to Enable"
+          }
+        }
+      }
     },
     "How to Get Your %@ API Key" : {
       "localizations" : {
@@ -1265,6 +1411,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Wie Ihre Daten behandelt werden"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "How your data is handled"
           }
         }
       }
@@ -1345,17 +1497,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Insert"
-          }
-        }
-      }
-    },
-    "Key Points" : {
-      "comment" : "Command name for extracting key points",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Wichtige Punkte"
           }
         }
       }
@@ -1457,7 +1598,20 @@
       }
     },
     "Multiple languages supported" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mehrere Sprachen unterstützt"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Multiple languages supported"
+          }
+        }
+      }
     },
     "Name" : {
       "localizations" : {
@@ -1620,10 +1774,36 @@
       }
     },
     "Not Available" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nicht verfügbar"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Not Available"
+          }
+        }
+      }
     },
     "On-device AI powered by Apple Intelligence" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "On-device KI powered by Apple Intelligence"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "On-device AI powered by Apple Intelligence"
+          }
+        }
+      }
     },
     "Only transform text" : {
       "localizations" : {
@@ -1658,7 +1838,20 @@
       }
     },
     "Open Settings app" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Einstellungen-App öffnen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open Settings app"
+          }
+        }
+      }
     },
     "Open source repository" : {
       "localizations" : {
@@ -1666,6 +1859,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Open-Source-Repository"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open source repository"
           }
         }
       }
@@ -1933,6 +2132,12 @@
             "state" : "translated",
             "value" : "Impressum"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Privacy Policy"
+          }
         }
       }
     },
@@ -1948,17 +2153,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Processing"
-          }
-        }
-      }
-    },
-    "Professional" : {
-      "comment" : "Command name for professional tone",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Professionell"
           }
         }
       }
@@ -1991,17 +2185,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Prompt Mode"
-          }
-        }
-      }
-    },
-    "Proofread" : {
-      "comment" : "Command name for proofreading",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Korrektur"
           }
         }
       }
@@ -2071,7 +2254,20 @@
       }
     },
     "Requires iOS 26.0 or later" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Erfordert iOS 26.0 oder neuer"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Requires iOS 26.0 or later"
+          }
+        }
+      }
     },
     "Retry" : {
       "localizations" : {
@@ -2085,17 +2281,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Retry"
-          }
-        }
-      }
-    },
-    "Rewrite" : {
-      "comment" : "Command name for rewriting",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Umschreiben"
           }
         }
       }
@@ -2277,7 +2462,20 @@
       }
     },
     "Steps to enable Apple Intelligence:" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schritte zum Aktivieren von Apple Intelligence:"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Steps to enable Apple Intelligence:"
+          }
+        }
+      }
     },
     "Stop Repeated Notifications" : {
       "localizations" : {
@@ -2337,27 +2535,18 @@
         }
       }
     },
-    "Summary" : {
-      "comment" : "Command name for summarizing",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Zusammenfassung"
-          }
-        }
-      }
-    },
     "Supported Languages" : {
-
-    },
-    "Table" : {
-      "comment" : "Command name for creating tables",
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Tabelle"
+            "value" : "Unterstützte Sprachen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Supported Languages"
           }
         }
       }
@@ -2411,7 +2600,20 @@
       }
     },
     "The model is still downloading or initializing. Please wait a few minutes and try again." : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Das Modell wird noch heruntergeladen oder initialisiert. Bitte warten Sie einige Minuten und versuchen Sie es erneut."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The model is still downloading or initializing. Please wait a few minutes and try again."
+          }
+        }
+      }
     },
     "These are the default commands available in the keyboard. You can edit them but not delete them." : {
       "localizations" : {
@@ -2591,7 +2793,20 @@
       }
     },
     "View Details" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Details anzeigen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "View Details"
+          }
+        }
+      }
     },
     "View on GitHub" : {
       "localizations" : {
@@ -2716,7 +2931,20 @@
       }
     },
     "Your device does not support Apple Intelligence. Foundation Models requires an iPhone 15 Pro or later, or a recent iPad." : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ihr Gerät unterstützt Apple Intelligence nicht. Foundation Models erfordert ein iPhone 15 Pro oder neuer, oder ein aktuelles iPad."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your device does not support Apple Intelligence. Foundation Models requires an iPhone 15 Pro or later, or a recent iPad."
+          }
+        }
+      }
     },
     "Your Privacy Matters" : {
       "localizations" : {

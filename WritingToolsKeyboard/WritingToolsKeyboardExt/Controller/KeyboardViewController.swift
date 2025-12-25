@@ -23,22 +23,16 @@ class KeyboardViewController: UIInputViewController {
     // Persist keyboard usage and full access status, then notify app
     updateSharedStatusAndNotify()
 
-    AppSettings.shared.reload()
-    AppState.shared.reloadProviders()
-    
-    // Initialize clipboard history manager
+    // Only reload settings and providers if settings have changed
+    if AppSettings.shared.reloadIfNeeded() {
+      AppState.shared.reloadProviders()
+    }
+
+    // Initialize clipboard history manager lazily
     Task { @MainActor in
       _ = ClipboardHistoryManager.shared
     }
 
-    let settings = AppSettings.shared
-    print("Current provider: \(settings.currentProvider)")
-    print("Gemini API key (exists): \(!settings.geminiApiKey.isEmpty)")
-    print("OpenAI API key (exists): \(!settings.openAIApiKey.isEmpty)")
-    print("Mistral API key (exists): \(!settings.mistralApiKey.isEmpty)")
-    print("Anthropic API key (exists): \(!settings.anthropicApiKey.isEmpty)")
-    print("OpenRouter API key (exists): \(!settings.openRouterApiKey.isEmpty)")
-    
     // Handle memory warnings
     NotificationCenter.default.addObserver(
       self,
@@ -117,7 +111,17 @@ class KeyboardViewController: UIInputViewController {
   
   @objc private func handleMemoryWarning() {
     print("Memory warning received in keyboard extension")
-    viewModel.selectedText = nil
+
+    // 1. ViewModel cleanup
+    viewModel.handleMemoryWarning()
+
+    // 2. Provider cleanup
+    AppState.shared.handleMemoryWarning()
+
+    // 3. Clipboard history cleanup
+    Task { @MainActor in
+      ClipboardHistoryManager.shared.handleMemoryWarning()
+    }
   }
   
   deinit {

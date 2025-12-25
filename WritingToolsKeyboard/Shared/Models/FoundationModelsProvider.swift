@@ -12,7 +12,31 @@ class FoundationModelsProvider: ObservableObject, AIProvider {
     private var currentSession: LanguageModelSession?
     #endif
     private var currentTask: Task<Void, Never>?
-    
+
+    /// Returns the user's preferred language identifier for the Foundation Model
+    /// Uses two-letter ISO 639 code format (e.g., "en", "de", "zh")
+    private var preferredLanguageIdentifier: String {
+        // Get the preferred language from system settings
+        if let preferredLanguage = Locale.preferredLanguages.first {
+            // Extract just the language code (e.g., "en" from "en-US")
+            let languageCode = Locale(identifier: preferredLanguage).language.languageCode?.identifier ?? "en"
+            return languageCode
+        }
+        return "en"
+    }
+
+    /// Returns a human-readable language name for instructions
+    private var preferredLanguageName: String {
+        if let preferredLanguage = Locale.preferredLanguages.first {
+            let locale = Locale(identifier: preferredLanguage)
+            // Get language name in English for the instructions
+            if let languageCode = locale.language.languageCode {
+                return Locale(identifier: "en").localizedString(forLanguageCode: languageCode.identifier) ?? "English"
+            }
+        }
+        return "English"
+    }
+
     var isAvailable: Bool {
         #if canImport(FoundationModels)
         if #available(iOS 26.0, *) {
@@ -21,14 +45,14 @@ class FoundationModelsProvider: ObservableObject, AIProvider {
         #endif
         return false
     }
-    
+
     #if canImport(FoundationModels)
     @available(iOS 26.0, *)
     var availability: SystemLanguageModel.Availability {
         return SystemLanguageModel.default.availability
     }
     #endif
-    
+
     func processText(systemPrompt: String?, userPrompt: String, images: [Data], streaming: Bool) async throws -> String {
         #if canImport(FoundationModels)
         // Check availability
@@ -56,7 +80,7 @@ class FoundationModelsProvider: ObservableObject, AIProvider {
                 userInfo: [NSLocalizedDescriptionKey: reason]
             )
         }
-        
+
         // Images are not supported by Foundation Models
         if !images.isEmpty {
             throw NSError(
@@ -65,23 +89,26 @@ class FoundationModelsProvider: ObservableObject, AIProvider {
                 userInfo: [NSLocalizedDescriptionKey: "Foundation Models does not support image input."]
             )
         }
-        
+
         isProcessing = true
         defer { isProcessing = false }
-        
-        // Create instructions from system prompt if provided
-        let instructions: Instructions? = {
-            if let systemPrompt = systemPrompt, !systemPrompt.isEmpty {
-                return Instructions(systemPrompt)
-            } else {
-                return nil
-            }
-        }()
-        
+
+        // Build instructions with language preference
+        // Apple recommends: "The user's preferred language is XX" in the instructions
+        let languageInstruction = "The user's preferred language is \(preferredLanguageName). Always respond in \(preferredLanguageName)."
+
+        let finalInstructions: Instructions
+        if let systemPrompt = systemPrompt, !systemPrompt.isEmpty {
+            // Combine language instruction with system prompt
+            finalInstructions = Instructions("\(languageInstruction)\n\n\(systemPrompt)")
+        } else {
+            finalInstructions = Instructions(languageInstruction)
+        }
+
         // Create session with instructions
         let session = LanguageModelSession(
             model: model,
-            instructions: instructions
+            instructions: finalInstructions
         )
         currentSession = session
         

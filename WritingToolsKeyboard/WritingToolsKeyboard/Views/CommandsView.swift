@@ -61,7 +61,7 @@ struct CommandsView: View {
             Image(systemName: cmd.icon)
                 .foregroundColor(.blue)
             VStack(alignment: .leading) {
-                Text(cmd.name)
+                Text(cmd.displayName)
                     .font(.headline)
                 Text(cmd.prompt)
                     .font(.caption)

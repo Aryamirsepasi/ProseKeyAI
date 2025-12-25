@@ -200,7 +200,7 @@ struct AIToolsView: View {
     private func generatingView(_ command: KeyboardCommand) -> some View {
         VStack(spacing: 16) {
             Spacer()
-            Text("Applying \(command.name)...")
+            Text("Applying \(command.displayName)...")
                 .font(.headline)
                 .accessibilityAddTraits(.updatesFrequently)
             ProgressView()
@@ -215,7 +215,7 @@ struct AIToolsView: View {
     private func resultView(_ command: KeyboardCommand) -> some View {
         VStack(alignment: .leading, spacing: 0) {
             HStack {
-                Text("\(command.name) Result")
+                Text("\(command.displayName) Result")
                     .font(.headline)
                 Spacer()
                 Button(action: {
