@@ -25,12 +25,12 @@ struct KeyboardCommand: Codable, Identifiable, Equatable {
 
 // Manages loading/saving commands from App Group user defaults
 class KeyboardCommandsManager: ObservableObject {
-  @Published private(set) var commands: [KeyboardCommand] = [] {
-    didSet {
-      _builtInCommands = nil
-      _customCommands = nil
+    @Published private(set) var commands: [KeyboardCommand] = [] {
+        didSet {
+            _builtInCommands = nil
+            _customCommands = nil
+        }
     }
-  }
     
     private var _builtInCommands: [KeyboardCommand]?
     private var _customCommands: [KeyboardCommand]?
@@ -152,7 +152,7 @@ class KeyboardCommandsManager: ObservableObject {
     private func createDefaultBuiltInCommands() {
         let builtInCommands = [
             KeyboardCommand.createBuiltIn(
-                name: "Proofread",
+                name: NSLocalizedString("Proofread", comment: "Command name for proofreading"),
                 prompt: """
                 {
                   "role": "proofreading assistant",
@@ -186,11 +186,11 @@ class KeyboardCommandsManager: ObservableObject {
                 icon: "magnifyingglass"
             ),
             KeyboardCommand.createBuiltIn(
-                name: "Rewrite",
+                name: NSLocalizedString("Rewrite", comment: "Command name for rewriting"),
                 prompt: """
                 {
                   "role": "rewriting assistant",
-                  "task": "rephrase text while maintaining meaning",
+                  "task": "rewrite text while maintaining meaning",
                   "critical_rules": {
                     "never_respond_to_content": true,
                     "never-answer_questions_in_text": true,
@@ -218,7 +218,7 @@ class KeyboardCommandsManager: ObservableObject {
                 icon: "arrow.triangle.2.circlepath"
             ),
             KeyboardCommand.createBuiltIn(
-                name: "Friendly",
+                name: NSLocalizedString("Friendly", comment: "Command name for friendly tone"),
                 prompt: """
                 {
                   "role": "tone adjustment assistant",
@@ -249,7 +249,7 @@ class KeyboardCommandsManager: ObservableObject {
                 icon: "face.smiling"
             ),
             KeyboardCommand.createBuiltIn(
-                name: "Professional",
+                name: NSLocalizedString("Professional", comment: "Command name for professional tone"),
                 prompt: """
                 {
                   "role": "professional tone assistant",
@@ -280,7 +280,7 @@ class KeyboardCommandsManager: ObservableObject {
                 icon: "briefcase"
             ),
             KeyboardCommand.createBuiltIn(
-                name: "Concise",
+                name: NSLocalizedString("Concise", comment: "Command name for making text concise"),
                 prompt: """
                 {
                   "role": "text condensing assistant",
@@ -311,7 +311,7 @@ class KeyboardCommandsManager: ObservableObject {
                 icon: "scissors"
             ),
             KeyboardCommand.createBuiltIn(
-                name: "Summary",
+                name: NSLocalizedString("Summary", comment: "Command name for summarizing"),
                 prompt: """
                 {
                   "role": "summarization assistant",
@@ -341,7 +341,7 @@ class KeyboardCommandsManager: ObservableObject {
                 icon: "doc.text"
             ),
             KeyboardCommand.createBuiltIn(
-                name: "Key Points",
+                name: NSLocalizedString("Key Points", comment: "Command name for extracting key points"),
                 prompt: """
                 {
                   "role": "key points extraction assistant",
@@ -371,7 +371,7 @@ class KeyboardCommandsManager: ObservableObject {
                 icon: "list.bullet"
             ),
             KeyboardCommand.createBuiltIn(
-                name: "Table",
+                name: NSLocalizedString("Table", comment: "Command name for creating tables"),
                 prompt: """
                 {
                   "role": "table conversion assistant",

@@ -82,6 +82,11 @@ class AppSettings: ObservableObject {
     didSet { defaults.set(isNativeAISubscribed, forKey: "is_native_ai_subscribed") }
   }
 
+  // Foundation Models (no API key needed, but track if user wants to use it)
+  @Published var useFoundationModels: Bool {
+    didSet { defaults.set(useFoundationModels, forKey: "use_foundation_models") }
+  }
+
   func reload() {
     // Re-read all values from UserDefaults
     self.geminiApiKey = self.defaults.string(forKey: "gemini_api_key") ?? ""
@@ -107,6 +112,7 @@ class AppSettings: ObservableObject {
     self.perplexityModel = defaults.string(forKey: "perplexity_model")
       ?? PerplexityConfig.defaultModel
     self.isNativeAISubscribed = defaults.bool(forKey: "is_native_ai_subscribed")
+    self.useFoundationModels = defaults.bool(forKey: "use_foundation_models")
     self.currentProvider = self.defaults.string(forKey: "current_provider") ?? "mistral"
     self.hasCompletedOnboarding = self.defaults.bool(forKey: "has_completed_onboarding")
   }
@@ -145,6 +151,7 @@ class AppSettings: ObservableObject {
       ?? PerplexityConfig.defaultModel
 
     self.isNativeAISubscribed = defaults.bool(forKey: "is_native_ai_subscribed")
+    self.useFoundationModels = defaults.bool(forKey: "use_foundation_models")
 
     self.currentProvider = self.defaults.string(forKey: "current_provider") ?? "mistral"
 

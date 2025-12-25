@@ -11,6 +11,7 @@ class AppState: ObservableObject {
   @Published var anthropicProvider: AnthropicProvider
   @Published var openRouterProvider: OpenRouterProvider
   @Published var perplexityProvider: PerplexityProvider
+  @Published var foundationModelsProvider: (any AIProvider)?
   //@Published var aiProxyProvider: AIProxyProvider
 
   // Other app state
@@ -28,6 +29,11 @@ class AppState: ObservableObject {
     case "anthropic": return anthropicProvider
     case "openrouter": return openRouterProvider
     case "perplexity": return perplexityProvider
+    case "foundationmodels": 
+      if let provider = foundationModelsProvider {
+        return provider
+      }
+      return geminiProvider
     default: return geminiProvider
     }
   }
@@ -80,6 +86,13 @@ class AppState: ObservableObject {
         model: asettings.perplexityModel
       )
     )
+    
+    // Initialize Foundation Models provider only on iOS 26.0+
+    if #available(iOS 26.0, *) {
+      self.foundationModelsProvider = FoundationModelsProvider()
+    } else {
+      self.foundationModelsProvider = nil
+    }
 
     if asettings.openAIApiKey.isEmpty, asettings.geminiApiKey.isEmpty,
       asettings.mistralApiKey.isEmpty
@@ -198,6 +211,12 @@ class AppState: ObservableObject {
         model: asettings.perplexityModel
       )
     )
+    // Re-initialize Foundation Models provider only on iOS 26.0+
+    if #available(iOS 26.0, *) {
+      self.foundationModelsProvider = FoundationModelsProvider()
+    } else {
+      self.foundationModelsProvider = nil
+    }
     self.currentProvider = asettings.currentProvider
   }
 }

@@ -358,14 +358,26 @@ struct SetupStepView: View {
 struct ProviderTabView: View {
   @Binding var currentProvider: String
 
-  private let providers: [(id: String, iconType: IconType, name: String, color: Color)] = [
-    ("gemini", .asset("google"), "Google", Color(hex: "4285F4")),
-    ("openai", .asset("openai"), "OpenAI", .white),
-    ("mistral", .asset("mistralai"), "Mistral", Color(hex: "FA520F")),
-    ("anthropic", .asset("anthropic"), "Anthropic", Color(hex: "c15f3c")),
-    ("openrouter", .system("o.circle.fill"), "OpenRouter", Color(hex: "7FADF2")),
-    ("perplexity", .asset("perplexity"), "Perplexity", Color(hex: "1FB8CD")),
-  ]
+  private var providers: [(id: String, iconType: IconType, name: String, color: Color)] {
+    var list: [(id: String, iconType: IconType, name: String, color: Color)] = []
+    
+    // Add Foundation Models first on iOS 26+
+    if #available(iOS 26.0, *) {
+      list.append(("foundationmodels", .system("brain.head.profile"), "Apple", .blue))
+    }
+    
+    // Add other providers
+    list.append(contentsOf: [
+      ("gemini", .asset("google"), "Google", Color(hex: "4285F4")),
+      ("openai", .asset("openai"), "OpenAI", .white),
+      ("mistral", .asset("mistralai"), "Mistral", Color(hex: "FA520F")),
+      ("anthropic", .asset("anthropic"), "Anthropic", Color(hex: "c15f3c")),
+      ("openrouter", .system("o.circle.fill"), "OpenRouter", Color(hex: "7FADF2")),
+      ("perplexity", .asset("perplexity"), "Perplexity", Color(hex: "1FB8CD")),
+    ])
+    
+    return list
+  }
   
   enum IconType {
     case system(String)
@@ -446,16 +458,18 @@ struct ProviderSetupCard: View {
         Text(providerName)
           .font(.headline)
         Spacer()
-        Button(action: { showApiKeyHelp = true }) {
-          Label("Help", systemImage: "questionmark.circle")
-            .font(.subheadline)
-            .foregroundColor(.blue)
+        if provider != "foundationmodels" {
+          Button(action: { showApiKeyHelp = true }) {
+            Label("Help", systemImage: "questionmark.circle")
+              .font(.subheadline)
+              .foregroundColor(.blue)
+          }
         }
       }
       HStack {
-        Image(systemName: hasApiKey ? "checkmark.shield.fill" : "key.fill")
+        Image(systemName: provider == "foundationmodels" ? (hasApiKey ? "checkmark.shield.fill" : "exclamationmark.triangle.fill") : (hasApiKey ? "checkmark.shield.fill" : "key.fill"))
           .foregroundColor(hasApiKey ? .green : .orange)
-        Text(hasApiKey ? "API Key Configured" : "API Key Required")
+        Text(provider == "foundationmodels" ? (hasApiKey ? "Available" : "Not Available") : (hasApiKey ? "API Key Configured" : "API Key Required"))
           .font(.subheadline)
         Spacer()
         switch provider {
@@ -483,6 +497,14 @@ struct ProviderSetupCard: View {
           NavigationLink(
             destination: PerplexitySettingsView(appState: appState)
           ) { Text(hasApiKey ? "Change" : "Configure").foregroundColor(.blue) }
+        case "foundationmodels":
+            if #available(iOS 26.0, *) {
+                NavigationLink(
+                    destination: FoundationModelsSettingsView(appState: appState)
+                ) { Text("View Details").foregroundColor(.blue) }
+            } else {
+                // Fallback on earlier versions
+            }
         default: EmptyView()
         }
       }
@@ -490,16 +512,19 @@ struct ProviderSetupCard: View {
         .font(.subheadline)
         .foregroundColor(.secondary)
         .fixedSize(horizontal: false, vertical: true)
-      Link(destination: URL(string: apiKeyUrl)!) {
-        HStack {
-          Text("Get \(providerName) API Key")
-          Spacer()
-          Image(systemName: "arrow.up.right.square")
+      
+      if provider != "foundationmodels" {
+        Link(destination: URL(string: apiKeyUrl)!) {
+          HStack {
+            Text("Get \(providerName) API Key")
+            Spacer()
+            Image(systemName: "arrow.up.right.square")
+          }
+          .padding(12)
+          .background(Color.blue.opacity(0.1))
+          .foregroundColor(.blue)
+          .cornerRadius(8)
         }
-        .padding(12)
-        .background(Color.blue.opacity(0.1))
-        .foregroundColor(.blue)
-        .cornerRadius(8)
       }
     }
     .padding()
@@ -521,6 +546,7 @@ struct ProviderSetupCard: View {
     case "anthropic": return .asset("anthropic")
     case "openrouter": return .system("o.circle.fill")
     case "perplexity": return .asset("perplexity")
+    case "foundationmodels": return .system("brain.head.profile")
     default: return .system("questionmark")
     }
   }
@@ -533,6 +559,7 @@ struct ProviderSetupCard: View {
     case "anthropic": return "Anthropic"
     case "openrouter": return "OpenRouter"
     case "perplexity": return "Perplexity"
+    case "foundationmodels": return "Apple Foundation Models"
     default: return "Unknown Provider"
     }
   }
@@ -544,6 +571,11 @@ struct ProviderSetupCard: View {
     case "anthropic": return !settings.anthropicApiKey.isEmpty
     case "openrouter": return !settings.openRouterApiKey.isEmpty
     case "perplexity": return !settings.perplexityApiKey.isEmpty
+    case "foundationmodels": 
+      if #available(iOS 26.0, *) {
+        return FoundationModelsProvider().isAvailable
+      }
+      return false
     default: return false
     }
   }
@@ -566,6 +598,8 @@ struct ProviderSetupCard: View {
         "OpenRouter is a gateway to many top AI models, letting you choose from a variety of providers with a single API key."
     case "perplexity":
       return "Perplexity provides fast, high-quality models like Sonar for search-augmented writing assistance."
+    case "foundationmodels":
+      return "Apple's on-device Foundation Models powered by Apple Intelligence. No API key required, works offline, and processes everything privately on your device."
     default: return ""
     }
   }
@@ -577,6 +611,7 @@ struct ProviderSetupCard: View {
     case "anthropic": return "https://console.anthropic.com/settings/keys"
     case "openrouter": return "https://openrouter.ai/keys"
     case "perplexity": return "https://www.perplexity.ai/settings/api"
+    case "foundationmodels": return "https://support.apple.com/en-us/102021"
     default: return "https://example.com"
     }
   }
@@ -586,8 +621,8 @@ struct ProviderSetupCard: View {
 struct AboutLinkRow: View {
   let iconName: String
   let iconColor: Color
-  let title: String
-  let subtitle: String
+  let title: LocalizedStringKey
+  let subtitle: LocalizedStringKey
   let url: URL
 
   var body: some View {

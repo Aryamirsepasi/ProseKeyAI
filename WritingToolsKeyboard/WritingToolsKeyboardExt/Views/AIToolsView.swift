@@ -12,7 +12,7 @@ struct AIToolsView: View {
     private let keyboardHeight: CGFloat = 340
     private let buttonRowHeight: CGFloat = 56   // (40 button + padding)
     private let previewHeight: CGFloat = 48     // (32 text + padding)
-    private var gridHeight: CGFloat { keyboardHeight - buttonRowHeight - previewHeight } 
+    private var gridHeight: CGFloat { keyboardHeight - buttonRowHeight - previewHeight }
     
     @State private var chosenCommand: KeyboardCommand? = nil
     @State private var customPrompt: String = ""
@@ -20,7 +20,7 @@ struct AIToolsView: View {
     
     @StateObject private var commandsManager = KeyboardCommandsManager()
     @StateObject private var clipboardManager = ClipboardHistoryManager.shared
-
+    
     var body: some View {
         ZStack {
             VStack(spacing: 0) {
@@ -52,7 +52,8 @@ struct AIToolsView: View {
                 }) {
                     HStack(spacing: 4) {
                         Image(systemName: "doc.on.clipboard").font(.system(size: 14))
-                        Text("Use Text").font(.system(size: 13, weight: .medium))
+                        Text("Use Text", comment: "Button to use copied text")
+                            .font(.system(size: 13, weight: .medium))
                     }
                     .frame(maxWidth: .infinity)
                     .frame(height: 40)
@@ -68,7 +69,8 @@ struct AIToolsView: View {
                 }) {
                     HStack(spacing: 4) {
                         Image(systemName: "clock.arrow.circlepath").font(.system(size: 14))
-                        Text("History").font(.system(size: 13, weight: .medium))
+                        Text("History", comment: "Button to view clipboard history")
+                            .font(.system(size: 13, weight: .medium))
                     }
                     .frame(maxWidth: .infinity)
                     .frame(height: 40)
@@ -90,7 +92,8 @@ struct AIToolsView: View {
                 }) {
                     HStack(spacing: 4) {
                         Image(systemName: "magnifyingglass").font(.system(size: 14))
-                        Text("Ask AI").font(.system(size: 13, weight: .medium))
+                        Text("Ask AI", comment: "Button to ask AI with custom prompt")
+                            .font(.system(size: 13, weight: .medium))
                     }
                     .frame(maxWidth: .infinity)
                     .frame(height: 40)
@@ -233,9 +236,9 @@ struct AIToolsView: View {
             
             ScrollView {
                 Markdown(aiResult)
-                  .markdownTextStyle(\.text) { FontSize(14) }
-                  .padding(10)
-                  .frame(maxWidth: .infinity, alignment: .leading)
+                    .markdownTextStyle(\.text) { FontSize(14) }
+                    .padding(10)
+                    .frame(maxWidth: .infinity, alignment: .leading)
             }
             .frame(height: 210)
             .background(Color(.systemGray6))
@@ -248,7 +251,7 @@ struct AIToolsView: View {
             
             Spacer()
                 .frame(height: 16)
-
+            
             HStack(spacing: 6) {
                 Button(action: {
                     UIPasteboard.general.string = aiResult
@@ -266,7 +269,7 @@ struct AIToolsView: View {
                 }
                 .buttonStyle(PlainButtonStyle())
                 
-
+                
                 Button(action: {
                     HapticsManager.shared.success()
                     vm.viewController?.textDocumentProxy.insertText(aiResult)
@@ -319,8 +322,8 @@ struct AIToolsView: View {
         activeTask = Task(priority: .userInitiated) {
             do {
                 let truncated = userText.count > 8000
-                    ? String(userText.prefix(8000))
-                    : userText
+                ? String(userText.prefix(8000))
+                : userText
                 let result = try await AppState.shared.activeProvider.processText(
                     systemPrompt: command.prompt,
                     userPrompt: truncated,
