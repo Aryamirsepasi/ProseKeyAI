@@ -8,7 +8,7 @@ struct ClipboardHistoryView: View {
     @State private var copiedItemId: UUID?
     
     // For keyboardHeight = 256, header (44 + 1 divider) = 45 -> content = 211
-    private let contentHeight: CGFloat = 295
+    private let contentHeight: CGFloat = 211
     
     private let columns = [
         GridItem(.flexible(), spacing: 8),
@@ -20,7 +20,7 @@ struct ClipboardHistoryView: View {
             // Header - 45pt (44 frame + 1 divider)
             headerView
             Divider()
-            
+
             // Content
             if manager.nonExpiredItems.isEmpty {
                 emptyStateView
@@ -77,24 +77,23 @@ struct ClipboardHistoryView: View {
     private var emptyStateView: some View {
         VStack(spacing: 12) {
             Spacer()
-            
+
             Image(systemName: "doc.on.clipboard")
                 .font(.system(size: 48))
                 .foregroundColor(.secondary)
-            
+
             Text("No Clipboard History")
                 .font(.system(size: 17, weight: .semibold))
                 .foregroundColor(.primary)
-            
+
             Text("Copy text to see it appear here")
                 .font(.system(size: 15))
                 .foregroundColor(.secondary)
                 .multilineTextAlignment(.center)
-            
+
             Spacer()
         }
-        .frame(maxWidth: .infinity)
-        .frame(height: contentHeight)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
         .padding()
     }
     
@@ -112,7 +111,7 @@ struct ClipboardHistoryView: View {
             }
             .padding(12)
         }
-        .frame(height: contentHeight)
+        .frame(maxHeight: .infinity)
     }
     
     private func handleItemTap(_ item: ClipboardItem) {
