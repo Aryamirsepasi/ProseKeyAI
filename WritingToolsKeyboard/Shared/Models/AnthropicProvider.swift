@@ -1,7 +1,7 @@
 import Foundation
 import AIProxy
 
-struct AnthropicConfig: Codable {
+struct AnthropicConfig: Codable, Sendable {
     var apiKey: String
     var model: String
     
@@ -28,18 +28,11 @@ enum AnthropicModel: String, CaseIterable {
 class AnthropicProvider: ObservableObject, AIProvider {
     @Published var isProcessing = false
     
-    private var config: AnthropicConfig
-    private var aiProxyService: AnthropicService?
-    private var currentTask: Task<Void, Never>?
+    private let config: AnthropicConfig
+    private var currentTask: Task<String, Error>?
     
     init(config: AnthropicConfig) {
         self.config = config
-        setupAIProxyService()
-    }
-    
-    private func setupAIProxyService() {
-        guard !config.apiKey.isEmpty else { return }
-        aiProxyService = AIProxy.anthropicDirectService(unprotectedAPIKey: config.apiKey)
     }
     
     func processText(
@@ -48,8 +41,12 @@ class AnthropicProvider: ObservableObject, AIProvider {
         images: [Data] = [],
         streaming: Bool = false
     ) async throws -> String {
+        currentTask?.cancel()
         isProcessing = true
-        defer { isProcessing = false }
+        defer {
+            isProcessing = false
+            currentTask = nil
+        }
         
         guard !config.apiKey.isEmpty else {
             throw NSError(
@@ -59,65 +56,63 @@ class AnthropicProvider: ObservableObject, AIProvider {
             )
         }
         
-        if aiProxyService == nil {
-            setupAIProxyService()
-        }
-        
-        guard let anthropicService = aiProxyService else {
-            throw NSError(
-                domain: "AnthropicAPI",
-                code: -1,
-                userInfo: [NSLocalizedDescriptionKey: "Failed to initialize AIProxy service."]
-            )
-        }
-        
-        // Compose messages array
-        var messages: [AnthropicInputMessage] = []
-        
-        var userContent: [AnthropicInputContent] = [.text(userPrompt)]
-        for imageData in images {
-            userContent.append(
-                .image(mediaType: AnthropicImageMediaType.jpeg, data: imageData.base64EncodedString())
-            )
-        }
-        messages.append(
-            AnthropicInputMessage(content: userContent, role: .user)
-        )
-        
-        let requestBody = AnthropicMessageRequestBody(
-            maxTokens: 1024,
-            messages: messages,
-            model: config.model.isEmpty ? AnthropicConfig.defaultModel : config.model,
-            system: systemPrompt
-        )
-        
-        do {
-            let response = try await anthropicService.messageRequest(body: requestBody)
+        let config = self.config
+        let task = Task.detached(priority: .userInitiated) { () throws -> String in
+            try Task.checkCancellation()
             
-            for content in response.content {
-                switch content {
-                case .text(let message):
-                    return message
-                case .toolUse(id: _, name: let toolName, input: let toolInput):
-                    print("Anthropic tool use: \(toolName) input: \(toolInput)")
-                }
+            let anthropicService = AIProxy.anthropicDirectService(unprotectedAPIKey: config.apiKey)
+            
+            // Compose messages array
+            var messages: [AnthropicInputMessage] = []
+            
+            var userContent: [AnthropicInputContent] = [.text(userPrompt)]
+            for imageData in images {
+                userContent.append(
+                    .image(mediaType: AnthropicImageMediaType.jpeg, data: imageData.base64EncodedString())
+                )
             }
-            throw NSError(
-                domain: "AnthropicAPI",
-                code: -1,
-                userInfo: [NSLocalizedDescriptionKey: "No text content in response."]
+            messages.append(
+                AnthropicInputMessage(content: userContent, role: .user)
             )
-        } catch AIProxyError.unsuccessfulRequest(let statusCode, let responseBody) {
-            print("Anthropic error (\(statusCode)): \(responseBody)")
-            throw NSError(
-                domain: "AnthropicAPI",
-                code: statusCode,
-                userInfo: [NSLocalizedDescriptionKey: "API error: \(responseBody)"]
+            
+            let requestBody = AnthropicMessageRequestBody(
+                maxTokens: 1024,
+                messages: messages,
+                model: config.model.isEmpty ? AnthropicConfig.defaultModel : config.model,
+                system: systemPrompt
             )
-        } catch {
-            print("Anthropic request failed: \(error.localizedDescription)")
-            throw error
+            
+            do {
+                let response = try await anthropicService.messageRequest(body: requestBody)
+                
+                for content in response.content {
+                    switch content {
+                    case .text(let message):
+                        return message
+                    case .toolUse(id: _, name: let toolName, input: let toolInput):
+                        print("Anthropic tool use: \(toolName) input: \(toolInput)")
+                    }
+                }
+                throw NSError(
+                    domain: "AnthropicAPI",
+                    code: -1,
+                    userInfo: [NSLocalizedDescriptionKey: "No text content in response."]
+                )
+            } catch AIProxyError.unsuccessfulRequest(let statusCode, let responseBody) {
+                print("Anthropic error (\(statusCode)): \(responseBody)")
+                throw NSError(
+                    domain: "AnthropicAPI",
+                    code: statusCode,
+                    userInfo: [NSLocalizedDescriptionKey: "API error: \(responseBody)"]
+                )
+            } catch {
+                print("Anthropic request failed: \(error.localizedDescription)")
+                throw error
+            }
         }
+        
+        currentTask = task
+        return try await task.value
     }
     
     func cancel() {

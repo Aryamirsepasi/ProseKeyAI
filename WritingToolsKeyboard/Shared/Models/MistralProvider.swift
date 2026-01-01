@@ -2,7 +2,7 @@ import Foundation
 import AIProxy
 
 
-struct MistralConfig: Codable {
+struct MistralConfig: Codable, Sendable {
     var apiKey: String
     var model: String
     
@@ -25,95 +25,95 @@ enum MistralModel: String, CaseIterable {
 @MainActor
 class MistralProvider: ObservableObject, AIProvider {
     @Published var isProcessing = false
-    var config: MistralConfig
-    private var aiProxyService: MistralService?
-    private var currentTask: Task<Void, Never>?
+    private let config: MistralConfig
+    private var currentTask: Task<String, Error>?
     
     init(config: MistralConfig) {
         self.config = config
-        setupAIProxyService()
-    }
-    
-    private func setupAIProxyService() {
-        guard !config.apiKey.isEmpty else { return }
-        aiProxyService = AIProxy.mistralDirectService(unprotectedAPIKey: config.apiKey)
     }
     
     func processText(systemPrompt: String? = "You are a helpful writing assistant.", userPrompt: String, images: [Data] = [], streaming: Bool = false) async throws -> String {
+        currentTask?.cancel()
         isProcessing = true
-        defer { isProcessing = false }
+        defer {
+            isProcessing = false
+            currentTask = nil
+        }
         
         guard !config.apiKey.isEmpty else {
             throw NSError(domain: "MistralAPI", code: -1, userInfo: [NSLocalizedDescriptionKey: "API key is missing."])
         }
         
-        if aiProxyService == nil {
-            setupAIProxyService()
-        }
-        
-        guard let mistralService = aiProxyService else {
-            throw NSError(domain: "MistralAPI", code: -1, userInfo: [NSLocalizedDescriptionKey: "Failed to initialize AIProxy service."])
-        }
-        
-        var messages: [MistralChatCompletionRequestBody.Message] = []
-        
-        if let systemPrompt = systemPrompt {
-            messages.append(.system(content: systemPrompt))
-        }
-        
-        messages.append(.user(content: userPrompt))
-        
-        do {
-            if streaming {
-                var compiledResponse = ""
-                let stream = try await mistralService.streamingChatCompletionRequest(body: .init(
-                    messages: messages,
-                    model: config.model
-                ), secondsToWait: 60)
-                
-                for try await chunk in stream {
-                    if Task.isCancelled { break }
-                    if let content = chunk.choices.first?.delta.content {
-                        compiledResponse += content
+        let config = self.config
+        let task = Task.detached(priority: .userInitiated) { () throws -> String in
+            try Task.checkCancellation()
+            
+            let mistralService = AIProxy.mistralDirectService(unprotectedAPIKey: config.apiKey)
+            
+            var messages: [MistralChatCompletionRequestBody.Message] = []
+            
+            if let systemPrompt = systemPrompt {
+                messages.append(.system(content: systemPrompt))
+            }
+            
+            messages.append(.user(content: userPrompt))
+            
+            do {
+                if streaming {
+                    var compiledResponse = ""
+                    let stream = try await mistralService.streamingChatCompletionRequest(body: .init(
+                        messages: messages,
+                        model: config.model
+                    ), secondsToWait: 60)
+                    
+                    for try await chunk in stream {
+                        try Task.checkCancellation()
+                        if let content = chunk.choices.first?.delta.content {
+                            compiledResponse += content
+                        }
+                        if let usage = chunk.usage {
+                            print("""
+                                    Used:
+                                     \(usage.promptTokens ?? 0) prompt tokens
+                                     \(usage.completionTokens ?? 0) completion tokens
+                                     \(usage.totalTokens ?? 0) total tokens
+                                    """)
+                        }
                     }
-                    if let usage = chunk.usage {
+                    return compiledResponse
+                    
+                } else {
+                    let response = try await mistralService.chatCompletionRequest(body: .init(
+                        messages: messages,
+                        model: config.model,
+                    ), secondsToWait: 60)
+                    
+                    /*if let usage = response.usage {
                         print("""
                                 Used:
                                  \(usage.promptTokens ?? 0) prompt tokens
                                  \(usage.completionTokens ?? 0) completion tokens
                                  \(usage.totalTokens ?? 0) total tokens
                                 """)
-                    }
+                    }*/
+                    
+                    try Task.checkCancellation()
+                    return response.choices.first?.message.content ?? ""
                 }
-                return compiledResponse
                 
-            } else {
-                let response = try await mistralService.chatCompletionRequest(body: .init(
-                    messages: messages,
-                    model: config.model,
-                ), secondsToWait: 60)
-                
-                /*if let usage = response.usage {
-                    print("""
-                            Used:
-                             \(usage.promptTokens ?? 0) prompt tokens
-                             \(usage.completionTokens ?? 0) completion tokens
-                             \(usage.totalTokens ?? 0) total tokens
-                            """)
-                }*/
-                
-                return response.choices.first?.message.content ?? ""
+            } catch AIProxyError.unsuccessfulRequest(let statusCode, let responseBody) {
+                print("Received non-200 status code: \(statusCode) with response body: \(responseBody)")
+                throw NSError(domain: "MistralAPI",
+                              code: statusCode,
+                              userInfo: [NSLocalizedDescriptionKey: "API error: \(responseBody)"])
+            } catch {
+                print("Could not create mistral chat completion: \(error.localizedDescription)")
+                throw error
             }
-            
-        } catch AIProxyError.unsuccessfulRequest(let statusCode, let responseBody) {
-            print("Received non-200 status code: \(statusCode) with response body: \(responseBody)")
-            throw NSError(domain: "MistralAPI",
-                          code: statusCode,
-                          userInfo: [NSLocalizedDescriptionKey: "API error: \(responseBody)"])
-        } catch {
-            print("Could not create mistral chat completion: \(error.localizedDescription)")
-            throw error
         }
+        
+        currentTask = task
+        return try await task.value
     }
     
     func cancel() {

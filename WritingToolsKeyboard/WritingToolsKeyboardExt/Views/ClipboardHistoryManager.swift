@@ -111,7 +111,6 @@ class ClipboardHistoryManager: ObservableObject {
             let encoder = JSONEncoder()
             let data = try encoder.encode(items)
             defaults?.set(data, forKey: storageKey)
-            defaults?.synchronize()
         } catch {
             print("Failed to save clipboard history: \(error)")
         }
@@ -132,4 +131,3 @@ class ClipboardHistoryManager: ObservableObject {
         }
     }
 }
-

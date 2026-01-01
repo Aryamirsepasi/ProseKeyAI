@@ -33,8 +33,12 @@ struct ClipboardItem: Identifiable, Codable {
     }
     
     var formattedTimestamp: String {
+        Self.relativeFormatter.localizedString(for: timestamp, relativeTo: Date())
+    }
+
+    private static let relativeFormatter: RelativeDateTimeFormatter = {
         let formatter = RelativeDateTimeFormatter()
         formatter.unitsStyle = .short
-        return formatter.localizedString(for: timestamp, relativeTo: Date())
-    }
+        return formatter
+    }()
 }

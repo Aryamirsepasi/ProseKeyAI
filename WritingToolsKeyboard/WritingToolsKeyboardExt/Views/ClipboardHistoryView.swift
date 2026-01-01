@@ -7,30 +7,28 @@ struct ClipboardHistoryView: View {
     
     @State private var copiedItemId: UUID?
     
-    // For keyboardHeight = 256, header (44 + 1 divider) = 45 -> content = 211
-    private let contentHeight: CGFloat = 211
-    
     private let columns = [
         GridItem(.flexible(), spacing: 8),
         GridItem(.flexible(), spacing: 8)
     ]
     
     var body: some View {
+        let items = manager.nonExpiredItems
         VStack(spacing: 0) {
             // Header - 45pt (44 frame + 1 divider)
-            headerView
+            headerView(hasItems: !items.isEmpty)
             Divider()
 
             // Content
-            if manager.nonExpiredItems.isEmpty {
+            if items.isEmpty {
                 emptyStateView
             } else {
-                clipboardGridView
+                clipboardGridView(items: items)
             }
         }
     }
     
-    private var headerView: some View {
+    private func headerView(hasItems: Bool) -> some View {
         HStack {
             Button(action: {
                 HapticsManager.shared.keyPress()
@@ -53,7 +51,7 @@ struct ClipboardHistoryView: View {
             
             Spacer()
             
-            if !manager.nonExpiredItems.isEmpty {
+            if hasItems {
                 Button(action: {
                     HapticsManager.shared.keyPress()
                     manager.clearAll()
@@ -97,10 +95,10 @@ struct ClipboardHistoryView: View {
         .padding()
     }
     
-    private var clipboardGridView: some View {
+    private func clipboardGridView(items: [ClipboardItem]) -> some View {
         ScrollView(.vertical, showsIndicators: true) {
             LazyVGrid(columns: columns, spacing: 8) {
-                ForEach(manager.nonExpiredItems) { item in
+                ForEach(items) { item in
                     ClipboardItemCard(
                         item: item,
                         isCopied: copiedItemId == item.id,

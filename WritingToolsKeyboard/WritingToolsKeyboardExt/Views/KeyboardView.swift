@@ -11,7 +11,7 @@ struct KeyboardView: View {
   private var enableHaptics = true
   
   // Mirror controller height (2 command rows visible)
-  private let keyboardHeight: CGFloat = 340
+  private let keyboardHeight: CGFloat = KeyboardConstants.keyboardHeight
 
   init(viewController: KeyboardViewController?, vm: AIToolsViewModel? = nil) {
     self.viewController = viewController

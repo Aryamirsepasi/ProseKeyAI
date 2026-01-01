@@ -9,7 +9,7 @@ struct AIToolsView: View {
     @State private var aiResult: String = ""
     
     // Keyboard height sized for 2 visible command rows
-    private let keyboardHeight: CGFloat = 340
+    private let keyboardHeight: CGFloat = KeyboardConstants.keyboardHeight
     private let buttonRowHeight: CGFloat = 56   // (40 button + padding)
     private let previewHeight: CGFloat = 48     // (32 text + padding)
     private var gridHeight: CGFloat { keyboardHeight - buttonRowHeight - previewHeight }

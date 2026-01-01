@@ -15,7 +15,7 @@ class KeyboardViewController: UIInputViewController {
     "com.aryamirsepasi.writingtools.keyboardStatusChanged" as CFString
   
   // Fixed keyboard height — now sized for exactly 2 command rows
-  private let keyboardHeight: CGFloat = 330
+  private let keyboardHeight: CGFloat = KeyboardConstants.keyboardHeight
 
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -132,7 +132,6 @@ class KeyboardViewController: UIInputViewController {
     let shared = UserDefaults(suiteName: appGroupID)
     shared?.set(true, forKey: "keyboard_has_been_used")
     shared?.set(self.hasFullAccess, forKey: "hasFullAccess")
-    shared?.synchronize()
 
     CFNotificationCenterPostNotification(
       CFNotificationCenterGetDarwinNotifyCenter(),

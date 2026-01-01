@@ -8,7 +8,7 @@
 import Foundation
 import AIProxy
 
-struct PerplexityConfig: Codable {
+struct PerplexityConfig: Codable, Sendable {
     var apiKey: String
     var model: String
     
@@ -31,20 +31,11 @@ enum PerplexityModel: String, CaseIterable {
 final class PerplexityProvider: ObservableObject, AIProvider {
     @Published var isProcessing = false
     
-    var config: PerplexityConfig
-    private var aiProxyService: PerplexityService?
-    private var currentTask: Task<Void, Never>?
+    private let config: PerplexityConfig
+    private var currentTask: Task<String, Error>?
     
     init(config: PerplexityConfig) {
         self.config = config
-        setupAIProxyService()
-    }
-    
-    private func setupAIProxyService() {
-        guard !config.apiKey.isEmpty else { return }
-        aiProxyService = AIProxy.perplexityDirectService(
-            unprotectedAPIKey: config.apiKey
-        )
     }
     
     func processText(
@@ -53,8 +44,12 @@ final class PerplexityProvider: ObservableObject, AIProvider {
         images: [Data] = [],
         streaming: Bool = false
     ) async throws -> String {
+        currentTask?.cancel()
         isProcessing = true
-        defer { isProcessing = false }
+        defer {
+            isProcessing = false
+            currentTask = nil
+        }
         
         guard !config.apiKey.isEmpty else {
             throw NSError(
@@ -64,63 +59,68 @@ final class PerplexityProvider: ObservableObject, AIProvider {
             )
         }
         
-        if aiProxyService == nil { setupAIProxyService() }
-        guard let service = aiProxyService else {
-            throw NSError(
-                domain: "PerplexityAPI",
-                code: -1,
-                userInfo: [NSLocalizedDescriptionKey: "Failed to initialize AIProxy service."]
+        let config = self.config
+        let task = Task.detached(priority: .userInitiated) { () throws -> String in
+            try Task.checkCancellation()
+            
+            let service = AIProxy.perplexityDirectService(
+                unprotectedAPIKey: config.apiKey
             )
-        }
-        
-        // Compose a single user prompt (Perplexity's sample shows .user only).
-        var prompt = userPrompt
-        if let sys = systemPrompt, !sys.isEmpty {
-            prompt = "\(sys)\n\nUser: \(userPrompt)"
-        }
-        
-        // Optional: OCR any images and append the extracted text
-        if !images.isEmpty {
-            let ocrText = await OCRManager.shared.extractText(from: images)
-            if !ocrText.isEmpty {
-                prompt += "\n\n[Extracted text from attached images]\n\(ocrText)"
+            
+            // Compose a single user prompt (Perplexity's sample shows .user only).
+            var prompt = userPrompt
+            if let sys = systemPrompt, !sys.isEmpty {
+                prompt = "\(sys)\n\nUser: \(userPrompt)"
             }
-        }
-        
-        let body = PerplexityChatCompletionRequestBody(
-            messages: [.user(content: prompt)],
-            model: config.model
-        )
-        
-        do {
-            if streaming {
-                var compiled = ""
-                let stream = try await service.streamingChatCompletionRequest(
-                    body: body
-                )
-                for try await chunk in stream {
-                    if Task.isCancelled { break }
-                    if let delta = chunk.choices.first?.delta?.content {
-                        compiled += delta
-                    }
+            
+            // Optional: OCR any images and append the extracted text
+            if !images.isEmpty {
+                let ocrText = await OCRManager.shared.extractText(from: images)
+                if !ocrText.isEmpty {
+                    prompt += "\n\n[Extracted text from attached images]\n\(ocrText)"
                 }
-                return compiled
-            } else {
-                let response = try await service.chatCompletionRequest(
-                    body: body                )
-                return response.choices.first?.message?.content ?? ""
             }
-        } catch AIProxyError.unsuccessfulRequest(let status, let responseBody) {
-            print("Perplexity error (\(status)): \(responseBody)")
-            throw NSError(
-                domain: "PerplexityAPI",
-                code: status,
-                userInfo: [NSLocalizedDescriptionKey: "API error: \(responseBody)"]
+            
+            let body = PerplexityChatCompletionRequestBody(
+                messages: [.user(content: prompt)],
+                model: config.model
             )
-        } catch {
-            print("Perplexity request failed: \(error.localizedDescription)")
-            throw error
+            
+            do {
+                if streaming {
+                    var compiled = ""
+                    let stream = try await service.streamingChatCompletionRequest(
+                        body: body
+                    )
+                    for try await chunk in stream {
+                        try Task.checkCancellation()
+                        if let delta = chunk.choices.first?.delta?.content {
+                            compiled += delta
+                        }
+                    }
+                    return compiled
+                } else {
+                    let response = try await service.chatCompletionRequest(
+                        body: body
+                    )
+                    try Task.checkCancellation()
+                    return response.choices.first?.message?.content ?? ""
+                }
+            } catch AIProxyError.unsuccessfulRequest(let status, let responseBody) {
+                print("Perplexity error (\(status)): \(responseBody)")
+                throw NSError(
+                    domain: "PerplexityAPI",
+                    code: status,
+                    userInfo: [NSLocalizedDescriptionKey: "API error: \(responseBody)"]
+                )
+            } catch {
+                print("Perplexity request failed: \(error.localizedDescription)")
+                throw error
+            }
         }
+        
+        currentTask = task
+        return try await task.value
     }
     
     func cancel() {

@@ -2,6 +2,7 @@ import Foundation
 import UIKit
 
 enum KeyboardConstants {
+    static let keyboardHeight: CGFloat = 340
     static let buttonSpacing: CGFloat = 4
     static let buttonCornerRadius: CGFloat = 6
     static let standardButtonWidth: CGFloat = 32

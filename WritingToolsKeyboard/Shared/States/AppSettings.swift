@@ -10,8 +10,10 @@ class AppSettings: ObservableObject {
 
     private static let settingsVersionKey = "settings_version"
     private var lastLoadedVersion: Int = 0
+    private var suppressVersionBump = false
 
     private func bumpVersion() {
+        guard !suppressVersionBump else { return }
         let current = defaults.integer(forKey: Self.settingsVersionKey)
         defaults.set(current + 1, forKey: Self.settingsVersionKey)
     }
@@ -221,6 +223,8 @@ class AppSettings: ObservableObject {
     func reload() {
         // Update version tracking
         lastLoadedVersion = defaults.integer(forKey: Self.settingsVersionKey)
+        suppressVersionBump = true
+        defer { suppressVersionBump = false }
 
         // API keys are computed properties - notify observers
         objectWillChange.send()
