@@ -4,23 +4,23 @@ import MarkdownUI
 struct AIToolsView: View {
     @ObservedObject var vm: AIToolsViewModel
     
-    @State private var state: AIToolsUIState = .toolList
-    @State private var isLoading = false
-    @State private var aiResult: String = ""
-    
     // Keyboard height sized for 2 visible command rows
     private let keyboardHeight: CGFloat = KeyboardConstants.keyboardHeight
     private let buttonRowHeight: CGFloat = 56   // (40 button + padding)
     private let previewHeight: CGFloat = 48     // (32 text + padding)
-    private var gridHeight: CGFloat { keyboardHeight - buttonRowHeight - previewHeight }
     
+    @State private var state: AIToolsUIState = .toolList
+    @State private var isLoading = false
+    @State private var aiResult: String = ""
     @State private var chosenCommand: KeyboardCommand? = nil
     @State private var customPrompt: String = ""
     @State private var activeTask: Task<Void, Never>?
-    
+
     @StateObject private var commandsManager = KeyboardCommandsManager()
-    @StateObject private var clipboardManager = ClipboardHistoryManager.shared
+    @ObservedObject private var clipboardManager = ClipboardHistoryManager.shared
     
+    private var gridHeight: CGFloat { keyboardHeight - buttonRowHeight - previewHeight }
+
     var body: some View {
         ZStack {
             VStack(spacing: 0) {
@@ -160,7 +160,6 @@ struct AIToolsView: View {
     
     private var customPromptView: some View {
         CustomPromptView(
-            prompt: $customPrompt,
             selectedText: vm.selectedText ?? "",
             onSubmit: { prompt in
                 guard let text = vm.selectedText, !text.isEmpty else {
@@ -183,7 +182,8 @@ struct AIToolsView: View {
             onCancel: {
                 state = .toolList
                 customPrompt = ""
-            }
+            },
+            prompt: $customPrompt
         )
     }
     

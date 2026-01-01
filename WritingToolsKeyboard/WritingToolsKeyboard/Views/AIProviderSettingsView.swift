@@ -923,4 +923,3 @@ struct FeatureRow: View {
         }
     }
 }
-

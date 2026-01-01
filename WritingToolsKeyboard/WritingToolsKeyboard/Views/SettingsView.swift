@@ -30,18 +30,17 @@ extension Color {
 }
 
 struct SettingsView: View {
-  @StateObject var appState = AppState.shared
+  @ObservedObject var appState = AppState.shared
   @ObservedObject var settings = AppSettings.shared
   @State private var keyboardEnabled: Bool = false
-  @State private var selectedTab = 0
 
-    @AppStorage(
-      "enable_haptics",
-      store: UserDefaults(
-        suiteName: "group.com.aryamirsepasi.writingtools"
-      )
+  @AppStorage(
+    "enable_haptics",
+    store: UserDefaults(
+      suiteName: "group.com.aryamirsepasi.writingtools"
     )
-    private var enableHaptics = true
+  )
+  private var enableHaptics = true
 
   @AppStorage(
     "has_completed_onboarding",
@@ -61,12 +60,6 @@ struct SettingsView: View {
     startPoint: .topLeading,
     endPoint: .bottomTrailing
   )
-
-  private func checkKeyboardStatus() {
-    let keyboardUsed = UserDefaults(suiteName: "group.com.aryamirsepasi.writingtools")?
-      .bool(forKey: "keyboard_has_been_used") ?? false
-    keyboardEnabled = keyboardUsed
-  }
 
   var body: some View {
     NavigationStack {
@@ -221,6 +214,12 @@ struct SettingsView: View {
     .sheet(isPresented: $showApiKeyHelp) {
       ApiKeyHelpView(provider: settings.currentProvider)
     }
+  }
+
+  private func checkKeyboardStatus() {
+    let keyboardUsed = UserDefaults(suiteName: "group.com.aryamirsepasi.writingtools")?
+      .bool(forKey: "keyboard_has_been_used") ?? false
+    keyboardEnabled = keyboardUsed
   }
 
   private func openKeyboardSettings() {
@@ -695,8 +694,8 @@ final class SettingsDarwinObserver {
 // MARK: - Help Sheets
 
 struct ApiKeyHelpView: View {
-    let provider: String
     @Environment(\.dismiss) private var dismiss
+    let provider: String
     
     var body: some View {
         NavigationStack {
@@ -937,4 +936,3 @@ struct ApiKeyHelpView: View {
         }
     }
 }
-

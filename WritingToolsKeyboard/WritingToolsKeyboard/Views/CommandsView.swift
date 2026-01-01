@@ -97,13 +97,30 @@ struct CommandsView: View {
 struct CommandEditorView: View {
     @ObservedObject var commandsManager: KeyboardCommandsManager
     let onDismiss: () -> Void
-    
+
     var existingCommand: KeyboardCommand? = nil
-    
+
+    let icons: [String] = [
+        "star.fill", "heart.fill", "bolt.fill", "leaf.fill", "globe",
+        "text.bubble.fill", "pencil", "doc.fill", "book.fill", "bookmark.fill",
+        "tag.fill", "checkmark.circle.fill", "bell.fill", "flag.fill", "paperclip",
+        "link", "quote.bubble.fill", "list.bullet", "chart.bar.fill", "arrow.right.circle.fill",
+        "arrow.triangle.2.circlepath", "magnifyingglass", "lightbulb.fill", "wand.and.stars",
+        "brain.head.profile", "character.bubble", "globe.europe.africa.fill",
+        "globe.americas.fill", "globe.asia.australia.fill", "character", "textformat",
+        "folder.fill", "pencil.tip.crop.circle", "paintbrush", "text.justify", "scissors",
+        "doc.on.clipboard", "arrow.up.doc", "arrow.down.doc", "doc.badge.plus",
+        "bookmark.circle.fill", "bubble.left.and.bubble.right", "doc.text.magnifyingglass",
+        "checkmark.rectangle", "trash", "quote.bubble", "abc", "globe.badge.chevron.backward",
+        "character.book.closed", "book", "rectangle.and.text.magnifyingglass",
+        "keyboard", "text.redaction", "a.magnify", "character.textbox",
+        "character.cursor.ibeam", "cursorarrow.and.square.on.square.dashed", "rectangle.and.pencil.and.ellipsis",
+        "bubble.middle.bottom", "bubble.left", "text.badge.star", "text.insert", "arrow.uturn.backward.circle.fill"
+    ]
+
     @State private var name: String = ""
     @State private var prompt: String = ""
     @State private var icon: String = "wand.and.stars"
-    @State private var isBuiltIn: Bool = false
     
     // Editor mode
     enum EditorMode: String, CaseIterable {
@@ -131,24 +148,6 @@ struct CommandEditorView: View {
     @State private var preserveCoreMeaning: Bool = false
     @State private var additionalPreservations: String = ""
     @State private var inputIsContent: Bool = true
-    
-    let icons: [String] = [
-        "star.fill", "heart.fill", "bolt.fill", "leaf.fill", "globe",
-        "text.bubble.fill", "pencil", "doc.fill", "book.fill", "bookmark.fill",
-        "tag.fill", "checkmark.circle.fill", "bell.fill", "flag.fill", "paperclip",
-        "link", "quote.bubble.fill", "list.bullet", "chart.bar.fill", "arrow.right.circle.fill",
-        "arrow.triangle.2.circlepath", "magnifyingglass", "lightbulb.fill", "wand.and.stars",
-        "brain.head.profile", "character.bubble", "globe.europe.africa.fill",
-        "globe.americas.fill", "globe.asia.australia.fill", "character", "textformat",
-        "folder.fill", "pencil.tip.crop.circle", "paintbrush", "text.justify", "scissors",
-        "doc.on.clipboard", "arrow.up.doc", "arrow.down.doc", "doc.badge.plus",
-        "bookmark.circle.fill", "bubble.left.and.bubble.right", "doc.text.magnifyingglass",
-        "checkmark.rectangle", "trash", "quote.bubble", "abc", "globe.badge.chevron.backward",
-        "character.book.closed", "book", "rectangle.and.text.magnifyingglass",
-        "keyboard", "text.redaction", "a.magnify", "character.textbox",
-        "character.cursor.ibeam", "cursorarrow.and.square.on.square.dashed", "rectangle.and.pencil.and.ellipsis",
-        "bubble.middle.bottom", "bubble.left", "text.badge.star", "text.insert", "arrow.uturn.backward.circle.fill"
-    ]
     
     var body: some View {
         NavigationView {
@@ -231,7 +230,6 @@ struct CommandEditorView: View {
                 name = existing.name
                 prompt = existing.prompt
                 icon = existing.icon
-                isBuiltIn = existing.isBuiltIn
                 
                 // Try to parse structured data from existing prompt
                 parseExistingPrompt(existing.prompt)

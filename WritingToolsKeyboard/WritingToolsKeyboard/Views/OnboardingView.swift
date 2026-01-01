@@ -13,7 +13,6 @@ struct OnboardingView: View {
   // Setup status
   @State private var isKeyboardEnabled: Bool = false
   @State private var isFullAccessEnabled: Bool = false
-  @State private var hasCheckedSetup: Bool = false
 
   // Focus and inline keyboard tester
   @FocusState private var keyboardTesterFocused: Bool
@@ -565,7 +564,6 @@ struct OnboardingView: View {
 
     isKeyboardEnabled = keyboardUsed
     isFullAccessEnabled = keyboardUsed ? fullAccess : false
-    hasCheckedSetup = true
   }
 
   private func startShortPolling() {

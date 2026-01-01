@@ -3,12 +3,6 @@ import SwiftUI
 struct KeyboardView: View {
   weak var viewController: KeyboardViewController?
   @ObservedObject var vm: AIToolsViewModel
-
-  @AppStorage(
-    "enable_haptics",
-    store: UserDefaults(suiteName: "group.com.aryamirsepasi.writingtools")
-  )
-  private var enableHaptics = true
   
   // Mirror controller height (2 command rows visible)
   private let keyboardHeight: CGFloat = KeyboardConstants.keyboardHeight

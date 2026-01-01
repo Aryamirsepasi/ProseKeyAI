@@ -4,13 +4,13 @@ struct ClipboardHistoryView: View {
     @ObservedObject var manager: ClipboardHistoryManager
     weak var viewController: KeyboardViewController?
     let onDismiss: () -> Void
-    
-    @State private var copiedItemId: UUID?
-    
+
     private let columns = [
         GridItem(.flexible(), spacing: 8),
         GridItem(.flexible(), spacing: 8)
     ]
+
+    @State private var copiedItemId: UUID?
     
     var body: some View {
         let items = manager.nonExpiredItems

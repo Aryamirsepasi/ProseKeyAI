@@ -1,7 +1,6 @@
 import SwiftUI
 
 private struct AICommandCardStyle: ButtonStyle {
-    @Environment(\.colorScheme) private var colorScheme
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
             .padding(.vertical, 8)

@@ -1,11 +1,11 @@
 import SwiftUI
 
 struct CustomPromptView: View {
-    @Binding var prompt: String
     let selectedText: String
     let onSubmit: (String) -> Void
     let onCancel: () -> Void
-    
+
+    @Binding var prompt: String
     @State private var cursorPosition = 0
     @FocusState private var isTextFieldFocused: Bool
     
