@@ -3,36 +3,15 @@ import Foundation
 #if canImport(FoundationModels)
 import FoundationModels
 #endif
+#if canImport(NaturalLanguage)
+import NaturalLanguage
+#endif
 
 @available(iOS 26.0, *)
 @MainActor
 class FoundationModelsProvider: ObservableObject, AIProvider {
     @Published var isProcessing = false
     private var currentTask: Task<String, Error>?
-
-    /// Returns the user's preferred language identifier for the Foundation Model
-    /// Uses two-letter ISO 639 code format (e.g., "en", "de", "zh")
-    private var preferredLanguageIdentifier: String {
-        // Get the preferred language from system settings
-        if let preferredLanguage = Locale.preferredLanguages.first {
-            // Extract just the language code (e.g., "en" from "en-US")
-            let languageCode = Locale(identifier: preferredLanguage).language.languageCode?.identifier ?? "en"
-            return languageCode
-        }
-        return "en"
-    }
-
-    /// Returns a human-readable language name for instructions
-    private var preferredLanguageName: String {
-        if let preferredLanguage = Locale.preferredLanguages.first {
-            let locale = Locale(identifier: preferredLanguage)
-            // Get language name in English for the instructions
-            if let languageCode = locale.language.languageCode {
-                return Locale(identifier: "en").localizedString(forLanguageCode: languageCode.identifier) ?? "English"
-            }
-        }
-        return "English"
-    }
 
     var isAvailable: Bool {
         #if canImport(FoundationModels)
@@ -47,6 +26,87 @@ class FoundationModelsProvider: ObservableObject, AIProvider {
     @available(iOS 26.0, *)
     var availability: SystemLanguageModel.Availability {
         return SystemLanguageModel.default.availability
+    }
+
+    private enum LanguageSource {
+        case input
+        case system
+    }
+
+    nonisolated private func makeLanguageInstruction(
+        for userText: String,
+        model: SystemLanguageModel
+    ) -> String {
+        if let preference = languagePreference(for: userText, model: model) {
+            let languageTag = languageTag(for: preference.locale)
+            switch preference.source {
+            case .input:
+                return "The user's input is in \(preference.name) (\(languageTag)). Respond in \(preference.name)."
+            case .system:
+                return "The user's preferred language is \(preference.name) (\(languageTag)). Respond in \(preference.name)."
+            }
+        }
+
+        return "Respond in the same language as the user's input."
+    }
+
+    nonisolated private func languagePreference(
+        for userText: String,
+        model: SystemLanguageModel
+    ) -> (name: String, locale: Locale, source: LanguageSource)? {
+        if let detectedIdentifier = detectedLanguageIdentifier(for: userText),
+           let detectedLocale = supportedLocale(for: detectedIdentifier, model: model) {
+            return (languageName(for: detectedLocale), detectedLocale, .input)
+        }
+
+        if let systemIdentifier = Locale.preferredLanguages.first,
+           let systemLocale = supportedLocale(for: systemIdentifier, model: model) {
+            return (languageName(for: systemLocale), systemLocale, .system)
+        }
+
+        return nil
+    }
+
+    nonisolated private func supportedLocale(for identifier: String, model: SystemLanguageModel) -> Locale? {
+        let locale = Locale(identifier: identifier)
+        if model.supportsLocale(locale) {
+            return locale
+        }
+
+        if let languageCode = locale.language.languageCode?.identifier {
+            let languageLocale = Locale(identifier: languageCode)
+            if model.supportsLocale(languageLocale) {
+                return languageLocale
+            }
+        }
+
+        return nil
+    }
+
+    nonisolated private func languageName(for locale: Locale) -> String {
+        let languageCode = locale.language.languageCode?.identifier ?? locale.identifier
+        return Locale(identifier: "en").localizedString(forLanguageCode: languageCode) ?? languageCode
+    }
+
+    nonisolated private func languageTag(for locale: Locale) -> String {
+        locale.identifier.replacingOccurrences(of: "_", with: "-")
+    }
+
+    nonisolated private func detectedLanguageIdentifier(for text: String) -> String? {
+        let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmed.isEmpty else { return nil }
+
+        #if canImport(NaturalLanguage)
+        let recognizer = NLLanguageRecognizer()
+        recognizer.processString(trimmed)
+        guard let language = recognizer.dominantLanguage,
+              language != .undetermined else {
+            return nil
+        }
+        return language.rawValue
+        #else
+        return nil
+        #endif
     }
     #endif
 
@@ -68,7 +128,6 @@ class FoundationModelsProvider: ObservableObject, AIProvider {
             currentTask = nil
         }
 
-        let languageName = preferredLanguageName
         let task = Task.detached(priority: .userInitiated) { () throws -> String in
             try Task.checkCancellation()
 
@@ -100,7 +159,7 @@ class FoundationModelsProvider: ObservableObject, AIProvider {
 
             // Build instructions with language preference
             // Apple recommends: "The user's preferred language is XX" in the instructions
-            let languageInstruction = "The user's preferred language is \(languageName). Always respond in \(languageName)."
+            let languageInstruction = self.makeLanguageInstruction(for: userPrompt, model: model)
 
             let finalInstructions: Instructions
             if let systemPrompt = systemPrompt, !systemPrompt.isEmpty {
