@@ -308,13 +308,11 @@ class AppSettings: ObservableObject {
         // Clear UserDefaults
         let domain = Bundle.main.bundleIdentifier!
         UserDefaults.standard.removePersistentDomain(forName: domain)
-        UserDefaults.standard.synchronize()
 
         if (defaults.persistentDomain(forName: "group.com.aryamirsepasi.writingtools")?.keys.first)
             != nil
         {
             defaults.removePersistentDomain(forName: "group.com.aryamirsepasi.writingtools")
-            defaults.synchronize()
         }
 
         // Reset migration flag so it can run again

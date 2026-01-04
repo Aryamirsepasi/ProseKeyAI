@@ -22,7 +22,7 @@ struct OnboardingView: View {
   // Darwin observer to react instantly when keyboard posts its status
   @State private var darwinObserver: OnboardingDarwinObserver?
 
-  private let totalPages = 6
+  private let totalPages = 7
 
   // Color theme
   private let accentColor = Color.blue
@@ -37,29 +37,25 @@ struct OnboardingView: View {
       backgroundGradient
         .ignoresSafeArea()
 
-      VStack {
-        // Progress indicator
-        HStack {
-          ForEach(0..<totalPages, id: \.self) { index in
-            Capsule()
-              .fill(currentPage >= index ? accentColor : Color.gray.opacity(0.3))
-              .frame(height: 4)
-          }
-        }
-        .padding(.horizontal, 24)
-        .padding(.top, 16)
-
+      VStack(spacing: 0) {
         // Skip button (except on last page)
         if currentPage < totalPages - 1 {
           HStack {
             Spacer()
             Button("Skip") {
+              dismissKeyboard()
               hasCompletedOnboarding = true
               dismiss()
             }
-            .padding()
+            .font(.system(size: 16))
             .foregroundColor(.secondary)
+            .accessibilityLabel("Skip onboarding")
+            .accessibilityHint("Completes setup and closes onboarding")
           }
+          .padding(.horizontal, 20)
+          .padding(.top, 12)
+        } else {
+          Spacer().frame(height: 44)
         }
 
         // Page content - using TabView for smooth swiping
@@ -72,37 +68,38 @@ struct OnboardingView: View {
 
           fullAccessPage
             .tag(2)
-          
-          pastePermissionPage
+
+          testKeyboardPage
             .tag(3)
 
-          featuresPage
+          pastePermissionPage
             .tag(4)
 
-          finishPage
+          featuresPage
             .tag(5)
+
+          finishPage
+            .tag(6)
         }
-        .tabViewStyle(.page(indexDisplayMode: .never))
-        .animation(.easeInOut, value: currentPage)
+        .tabViewStyle(.page(indexDisplayMode: .always))
 
         // Navigation buttons
-        HStack(spacing: 20) {
+        HStack {
           if currentPage > 0 {
-            Button(action: {
+            Button("Back") {
+              dismissKeyboard()
               withAnimation { currentPage -= 1 }
-            }) {
-              HStack {
-                Image(systemName: "chevron.left")
-                Text("Back")
-              }
-              .frame(maxWidth: .infinity)
-              .padding()
-              .background(Color.gray.opacity(0.15))
-              .cornerRadius(12)
             }
+            .font(.body)
+            .foregroundColor(.primary)
+            .accessibilityLabel("Go back")
+            .accessibilityHint("Returns to the previous onboarding step")
           }
 
+          Spacer()
+
           Button(action: {
+            dismissKeyboard()
             withAnimation {
               if currentPage == totalPages - 1 {
                 hasCompletedOnboarding = true
@@ -112,19 +109,19 @@ struct OnboardingView: View {
               }
             }
           }) {
-            HStack {
-              Text(currentPage == totalPages - 1 ? "Get Started" : "Next")
-              Image(systemName: "chevron.right")
-            }
-            .frame(maxWidth: .infinity)
-            .padding()
-            .background(accentColor)
-            .foregroundColor(.white)
-            .cornerRadius(12)
+            Text(currentPage == totalPages - 1 ? "Get Started" : "Continue")
+              .fontWeight(.semibold)
           }
+          .buttonStyle(.borderedProminent)
+          .buttonBorderShape(.capsule)
+          .controlSize(.large)
+          .accessibilityLabel(currentPage == totalPages - 1 ? "Get started" : "Continue")
+          .accessibilityHint(currentPage == totalPages - 1 ? "Completes onboarding and opens the app" : "Continues to the next onboarding step")
         }
+        .padding(.top, 8)
         .padding(.horizontal, 24)
-        .padding(.bottom, 40)
+        .padding(.bottom, 16)
+
       }
     }
     .onAppear {
@@ -156,10 +153,12 @@ struct OnboardingView: View {
 
   private var welcomePage: some View {
     VStack(spacing: 24) {
+        Spacer()
+        
       Image(systemName: "keyboard")
-        .font(.system(size: 80))
+        .font(.system(size: 50))
         .foregroundColor(accentColor)
-        .padding(.bottom, 20)
+        .padding(.bottom, 10)
 
       Text("Welcome to ProseKey AI")
         .font(.largeTitle)
@@ -174,16 +173,17 @@ struct OnboardingView: View {
 
       Spacer()
     }
-    .padding(.top, 60)
     .padding(.horizontal, 24)
   }
 
   private var keyboardSetupPage: some View {
     VStack(spacing: 24) {
+      Spacer()
+
       Image(systemName: "keyboard.fill")
-        .font(.system(size: 60))
+        .font(.system(size: 50))
         .foregroundColor(accentColor)
-        .padding(.bottom, 20)
+        .padding(.bottom, 10)
 
       Text("Enable the Keyboard")
         .font(.title)
@@ -193,7 +193,7 @@ struct OnboardingView: View {
       Text(
         "Let's set up your AI writing keyboard to start enhancing your text"
       )
-      .font(.title3)
+      .font(.body)
       .multilineTextAlignment(.center)
       .foregroundColor(.secondary)
       .padding(.horizontal, 32)
@@ -214,10 +214,6 @@ struct OnboardingView: View {
         if let url = URL(string: UIApplication.openSettingsURLString) {
           UIApplication.shared.open(url)
         }
-        // When the user returns, we'll poll; also bring up our inline text field
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-          keyboardTesterFocused = true
-        }
       }) {
         HStack {
           Image(systemName: "gear")
@@ -229,38 +225,19 @@ struct OnboardingView: View {
         .cornerRadius(12)
       }
 
-      // Inline keyboard tester to force the extension to run once the user switches to it.
-      VStack(alignment: .leading, spacing: 8) {
-        Text(
-          "Tip: Tap below to show the keyboard, then switch to “ProseKey AI” using the globe key. We’ll update your status automatically."
-        )
-        .font(.footnote)
-        .foregroundColor(.secondary)
-
-        TextField("Tap here to show the keyboard…", text: $keyboardTesterText)
-          .textFieldStyle(.roundedBorder)
-          .focused($keyboardTesterFocused)
-          .onAppear {
-            // Try to focus automatically to bring up keyboard
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
-              keyboardTesterFocused = true
-            }
-          }
-      }
-      .padding(.horizontal, 24)
-
       Spacer()
     }
-    .padding(.top, 40)
     .padding(.horizontal, 24)
   }
 
   private var fullAccessPage: some View {
     VStack(spacing: 24) {
+      Spacer()
+
       Image(systemName: "lock.open.fill")
-        .font(.system(size: 60))
+        .font(.system(size: 50))
         .foregroundColor(accentColor)
-        .padding(.bottom, 20)
+        .padding(.bottom, 10)
 
       Text("Enable Full Access")
         .font(.title)
@@ -270,7 +247,7 @@ struct OnboardingView: View {
       Text(
         "Full access is required for the keyboard to access AI tools and use copy/paste features"
       )
-      .font(.title3)
+      .font(.body)
       .multilineTextAlignment(.center)
       .foregroundColor(.secondary)
       .padding(.horizontal, 32)
@@ -291,9 +268,6 @@ struct OnboardingView: View {
         if let url = URL(string: UIApplication.openSettingsURLString) {
           UIApplication.shared.open(url)
         }
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-          keyboardTesterFocused = true
-        }
       }) {
         HStack {
           Image(systemName: "gear")
@@ -305,189 +279,219 @@ struct OnboardingView: View {
         .cornerRadius(12)
       }
 
-      VStack(alignment: .leading, spacing: 8) {
-        Text(
-          "Tip: Tap below to show the keyboard, then switch to “ProseKey AI” using the globe key. We’ll detect Full Access automatically."
-        )
-        .font(.footnote)
-        .foregroundColor(.secondary)
+      Spacer()
+    }
+    .padding(.horizontal, 24)
+  }
 
-        TextField("Tap here to show the keyboard…", text: $keyboardTesterText)
+  private var testKeyboardPage: some View {
+    VStack(spacing: 24) {
+      Spacer()
+
+      Image(systemName: "checkmark.keyboard")
+        .font(.system(size: 50))
+        .foregroundColor(accentColor)
+        .padding(.bottom, 10)
+
+      Text("Test Your Keyboard")
+        .font(.title)
+        .bold()
+        .multilineTextAlignment(.center)
+
+      Text(
+        "Tap the text field below and switch to ProseKey AI using the globe key"
+      )
+      .font(.body)
+      .multilineTextAlignment(.center)
+      .foregroundColor(.secondary)
+      .padding(.horizontal, 32)
+
+      VStack(alignment: .leading, spacing: 12) {
+        TextField("Type something here…", text: $keyboardTesterText)
           .textFieldStyle(.roundedBorder)
           .focused($keyboardTesterFocused)
+          .padding(.horizontal)
+
+        if isKeyboardEnabled && isFullAccessEnabled {
+          HStack {
+            Image(systemName: "checkmark.circle.fill")
+              .foregroundColor(.green)
+            Text("Keyboard is ready to use!")
+              .foregroundColor(.green)
+              .font(.subheadline)
+          }
+          .padding(.horizontal)
+        } else {
+          HStack {
+            Image(systemName: "info.circle.fill")
+              .foregroundColor(.orange)
+            Text("Switch to ProseKey AI to verify setup")
+              .foregroundColor(.secondary)
+              .font(.subheadline)
+          }
+          .padding(.horizontal)
+        }
       }
-      .padding(.horizontal, 24)
+      .padding()
+      .background(Color.gray.opacity(0.15))
+      .cornerRadius(16)
 
       Spacer()
     }
-    .padding(.top, 40)
     .padding(.horizontal, 24)
   }
 
   private var pastePermissionPage: some View {
-    ScrollView {
-      VStack(spacing: 20) {
-        Image(systemName: "doc.on.clipboard.fill")
-          .font(.system(size: 60))
-          .foregroundColor(.orange)
-          .padding(.bottom, 10)
+    VStack(spacing: 24) {
+      Spacer()
 
-        Text("Allow Paste Permission")
-          .font(.title)
-          .bold()
-          .multilineTextAlignment(.center)
+      Image(systemName: "doc.on.clipboard.fill")
+        .font(.system(size: 50))
+        .foregroundColor(.orange)
+        .padding(.bottom, 10)
 
-        Text(
-          "ProseKey AI needs paste permission to access copied text for use in writing features."
-        )
+      Text("Allow Paste Permission")
+        .font(.title)
+        .bold()
+        .multilineTextAlignment(.center)
+
+      Text("iOS will ask for permission when you first use clipboard features")
         .font(.body)
         .multilineTextAlignment(.center)
         .foregroundColor(.secondary)
         .padding(.horizontal, 32)
 
-        // Important notice about paste notifications
-        VStack(alignment: .leading, spacing: 12) {
-          HStack(alignment: .top, spacing: 12) {
-            Image(systemName: "info.circle.fill")
-              .font(.title2)
-              .foregroundColor(.blue)
-            
-            VStack(alignment: .leading, spacing: 8) {
-              Text("Important")
-                .font(.headline)
-              
-              Text("The first time you use paste features, iOS will ask permission. Tap \"Allow Paste\" or \"Paste from [app]\" to enable the feature.")
-                .font(.subheadline)
-                .foregroundColor(.secondary)
-                .fixedSize(horizontal: false, vertical: true)
-            }
-          }
-          
-          Divider()
-            .padding(.vertical, 4)
-          
-          HStack(alignment: .top, spacing: 12) {
-            Image(systemName: "bell.slash.fill")
-              .font(.title2)
-              .foregroundColor(.green)
-            
-            VStack(alignment: .leading, spacing: 8) {
-              Text("Stop Repeated Notifications")
-                .font(.headline)
-              
-              Text("Choose \"Allow Paste\" instead of \"Paste\" to avoid seeing this notification every time you use paste features.")
-                .font(.subheadline)
-                .foregroundColor(.secondary)
-                .fixedSize(horizontal: false, vertical: true)
-            }
-          }
-        }
-        .padding()
-        .background(Color.gray.opacity(0.15))
-        .cornerRadius(16)
-        .padding(.horizontal, 24)
-
-        // What paste permission enables
-        VStack(alignment: .leading, spacing: 12) {
-          Text("What This Enables:")
-            .font(.headline)
-            .padding(.bottom, 4)
-
-          FeatureBullet(text: "Quick access to copied text")
-          FeatureBullet(text: "\"Use Copied Text\" button")
-          FeatureBullet(text: "Seamless text operations")
-        }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .padding()
-        .background(Color.gray.opacity(0.15))
-        .cornerRadius(16)
-        .padding(.horizontal, 24)
-
-        Spacer(minLength: 20)
-      }
-      .padding(.top, 30)
-      .padding(.bottom, 20)
-    }
-  }
-  
-  private var featuresPage: some View {
-    ScrollView {
-      VStack(spacing: 20) {
-        Image(systemName: "sparkles")
-          .font(.system(size: 60))
-          .foregroundColor(accentColor)
-          .padding(.bottom, 10)
-
-        Text("Powerful Features")
-          .font(.title)
-          .bold()
-          .multilineTextAlignment(.center)
-
-        Text("Discover what makes ProseKey AI special")
-          .font(.body)
-          .multilineTextAlignment(.center)
-          .foregroundColor(.secondary)
-          .padding(.horizontal, 32)
-
-        VStack(spacing: 16) {
-          FeatureCard(
-            icon: "wand.and.stars",
-            title: "AI Writing Tools",
-            description: "Transform your text with one tap: proofread, rewrite, summarize, translate, and more powered by your choice of AI provider."
-          )
-          
-          FeatureCard(
-            icon: "text.cursor",
-            title: "Smart Text Selection",
-            description: "Select text automatically (up to 200 characters) or use the \"Use Copied Text\" button for longer passages."
-          )
-          
-          FeatureCard(
-            icon: "magnifyingglass",
-            title: "Custom Prompts",
-            description: "Create your own AI instructions for specialized writing tasks tailored to your needs."
-          )
-        }
-        .padding(.horizontal, 24)
-
-        Spacer(minLength: 20)
-      }
-      .padding(.top, 30)
-      .padding(.bottom, 20)
-    }
-  }
-
-  private var textSelectionPage: some View {
-    VStack(spacing: 24) {
-      Image(systemName: "text.cursor")
-        .font(.system(size: 60))
-        .foregroundColor(accentColor)
-        .padding(.bottom, 20)
-
-      Text("Using Text Selection")
-        .font(.title)
-        .bold()
-        .multilineTextAlignment(.center)
-
       VStack(alignment: .leading, spacing: 16) {
-        FeatureCard(
-          icon: "arrow.up.and.down.text.horizontal",
-          title: "Automatic Text Selection",
-          description:
-            "Works with text up to 200 characters. Place cursor before or after the text you want to enhance."
-        )
-        FeatureCard(
-          icon: "doc.on.clipboard",
-          title: "Use Copied Text",
-          description:
-            "For longer text, copy it first, then tap \"Use Copied Text\" in the keyboard."
-        )
+        HStack(alignment: .top, spacing: 12) {
+          Image(systemName: "hand.tap.fill")
+            .font(.title2)
+            .foregroundColor(.blue)
+            .frame(width: 28)
+          VStack(alignment: .leading, spacing: 4) {
+            Text("Tap \"Allow Paste\"")
+              .font(.subheadline)
+              .fontWeight(.medium)
+            Text("When the iOS permission dialog appears")
+              .font(.caption)
+              .foregroundColor(.secondary)
+          }
+        }
+
+        HStack(alignment: .top, spacing: 12) {
+          Image(systemName: "bell.slash.fill")
+            .font(.title2)
+            .foregroundColor(.green)
+            .frame(width: 28)
+          VStack(alignment: .leading, spacing: 4) {
+            Text("Avoid Repeated Prompts")
+              .font(.subheadline)
+              .fontWeight(.medium)
+            Text("Choosing \"Allow Paste\" grants permanent access")
+              .font(.caption)
+              .foregroundColor(.secondary)
+          }
+        }
+
+        HStack(alignment: .top, spacing: 12) {
+          Image(systemName: "doc.on.doc.fill")
+            .font(.title2)
+            .foregroundColor(.purple)
+            .frame(width: 28)
+          VStack(alignment: .leading, spacing: 4) {
+            Text("Use Copied Text")
+              .font(.subheadline)
+              .fontWeight(.medium)
+            Text("Process longer text by copying it first")
+              .font(.caption)
+              .foregroundColor(.secondary)
+          }
+        }
       }
-      .padding(.horizontal, 24)
+      .frame(maxWidth: .infinity, alignment: .leading)
+      .padding()
+      .background(Color.gray.opacity(0.15))
+      .cornerRadius(16)
 
       Spacer()
     }
-    .padding(.top, 40)
+    .padding(.horizontal, 24)
+  }
+  
+  private var featuresPage: some View {
+    VStack(spacing: 24) {
+      Spacer()
+
+      Image(systemName: "sparkles")
+        .font(.system(size: 50))
+        .foregroundColor(accentColor)
+        .padding(.bottom, 10)
+
+      Text("Powerful Features")
+        .font(.title)
+        .bold()
+        .multilineTextAlignment(.center)
+        
+
+      Text("Everything you need to enhance your writing")
+        .font(.body)
+        .multilineTextAlignment(.center)
+        .foregroundColor(.secondary)
+        .padding(.horizontal, 32)
+        
+
+      VStack(alignment: .leading, spacing: 16) {
+        HStack(alignment: .top, spacing: 12) {
+          Image(systemName: "wand.and.stars")
+            .font(.title2)
+            .foregroundColor(.blue)
+            .frame(width: 28)
+          VStack(alignment: .leading, spacing: 4) {
+            Text("AI Writing Tools")
+              .font(.subheadline)
+              .fontWeight(.medium)
+            Text("Proofread, rewrite, summarize, and translate your text")
+              .font(.caption)
+              .foregroundColor(.secondary)
+          }
+        }
+
+        HStack(alignment: .top, spacing: 12) {
+          Image(systemName: "text.cursor")
+            .font(.title2)
+            .foregroundColor(.green)
+            .frame(width: 28)
+          VStack(alignment: .leading, spacing: 4) {
+            Text("Smart Text Selection")
+              .font(.subheadline)
+              .fontWeight(.medium)
+            Text("Automatically detect text or use copied content")
+              .font(.caption)
+              .foregroundColor(.secondary)
+          }
+        }
+
+        HStack(alignment: .top, spacing: 12) {
+          Image(systemName: "square.and.pencil")
+            .font(.title2)
+            .foregroundColor(.purple)
+            .frame(width: 28)
+          VStack(alignment: .leading, spacing: 4) {
+            Text("Custom Prompts")
+              .font(.subheadline)
+              .fontWeight(.medium)
+            Text("Create personalized AI instructions for any task")
+              .font(.caption)
+              .foregroundColor(.secondary)
+          }
+        }
+      }
+      .frame(maxWidth: .infinity, alignment: .leading)
+      .padding()
+      .background(Color.gray.opacity(0.15))
+      .cornerRadius(16)
+
+      Spacer()
+    }
     .padding(.horizontal, 24)
   }
 
@@ -495,7 +499,7 @@ struct OnboardingView: View {
     ScrollView {
       VStack(spacing: 20) {
         Image(systemName: "checkmark.circle.fill")
-          .font(.system(size: 80))
+          .font(.system(size: 50))
           .foregroundColor(.green)
           .padding(.bottom, 10)
 
@@ -538,8 +542,8 @@ struct OnboardingView: View {
           Text("We never send your copied content to our servers.")
             .font(.caption)
             .foregroundColor(.secondary)
-            .fixedSize(horizontal: false, vertical: true)
         }
+        .frame(maxWidth: .infinity, alignment: .leading)
         .padding()
         .background(Color.blue.opacity(0.1))
         .cornerRadius(12)
@@ -553,6 +557,10 @@ struct OnboardingView: View {
   }
 
   // MARK: - Helper Methods
+
+  private func dismissKeyboard() {
+    UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+  }
 
   private func checkKeyboardStatus() {
     // Read status written by the keyboard extension
@@ -573,7 +581,7 @@ struct OnboardingView: View {
     var ticks = 0
     pollingCancellable = ticker.sink { _ in
       ticks += 1
-      checkKeyboardStatus()
+      self.checkKeyboardStatus()
       if self.isKeyboardEnabled && self.isFullAccessEnabled {
         self.pollingCancellable?.cancel()
         self.pollingCancellable = nil
@@ -619,7 +627,7 @@ struct SetupStepsView: View {
     }
     .frame(maxWidth: .infinity, alignment: .leading)
     .padding()
-    .background(Color.gray.opacity(0.4))
+    .background(Color.gray.opacity(0.15))
     .cornerRadius(16)
   }
 }
@@ -647,9 +655,9 @@ struct FeatureCard: View {
         .fixedSize(horizontal: false, vertical: true)
         .lineLimit(nil)
     }
-    .frame(maxWidth: .infinity, minHeight: 140, alignment: .topLeading)
+    .frame(maxWidth: .infinity, alignment: .topLeading)
     .padding()
-    .background(Color.gray.opacity(0.4))
+    .background(Color.gray.opacity(0.15))
     .cornerRadius(16)
   }
 }
@@ -713,13 +721,6 @@ final class OnboardingDarwinObserver {
 
 #Preview("Onboarding Flow") {
   OnboardingView()
-}
-
-#Preview("Welcome Page") {
-  OnboardingView()
-    .onAppear {
-      // Preview shows first page by default
-    }
 }
 
 #Preview("Feature Cards") {

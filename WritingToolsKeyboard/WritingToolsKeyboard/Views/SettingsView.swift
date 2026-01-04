@@ -117,9 +117,26 @@ struct SettingsView: View {
               .font(.headline)
               .padding(.horizontal)
 
-            VStack {
+            VStack(spacing: 0) {
               Toggle("Enable Haptic Feedback", isOn: $enableHaptics)
                 .padding()
+
+              Divider()
+                .padding(.horizontal)
+
+              Button(action: {
+                showOnboarding = true
+              }) {
+                HStack {
+                  Label("Restart Onboarding", systemImage: "arrow.counterclockwise")
+                  Spacer()
+                  Image(systemName: "chevron.right")
+                    .foregroundColor(.secondary)
+                    .font(.system(size: 14))
+                }
+                .padding()
+              }
+              .foregroundColor(.primary)
             }
             .background(Color(.systemGray6))
             .cornerRadius(12)

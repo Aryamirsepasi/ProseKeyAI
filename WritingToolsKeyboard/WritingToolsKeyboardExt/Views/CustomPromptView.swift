@@ -279,9 +279,10 @@ struct CustomKeyboardView: View {
     }
     
     private func insertText(_ newText: String) {
-        let insertionIndex = text.index(text.startIndex, offsetBy: min(cursorPosition, text.count))
+        let safeCursor = max(0, min(cursorPosition, text.count))
+        let insertionIndex = text.index(text.startIndex, offsetBy: safeCursor)
         text.insert(contentsOf: newText, at: insertionIndex)
-        cursorPosition += newText.count
+        cursorPosition = safeCursor + newText.count
         
         // Reset shift after typing (except for caps lock)
         if isShifted && !capsLockEnabled {

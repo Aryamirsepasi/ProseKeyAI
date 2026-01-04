@@ -110,7 +110,9 @@ class KeyboardViewController: UIInputViewController {
   }
   
   @objc private func handleMemoryWarning() {
+    #if DEBUG
     print("Memory warning received in keyboard extension")
+    #endif
 
     // 1. ViewModel cleanup
     viewModel.handleMemoryWarning()
@@ -157,7 +159,7 @@ class KeyboardViewController: UIInputViewController {
     let after = textDocumentProxy.documentContextAfterInput ?? ""
     
     let combined = (before + after).trimmingCharacters(in: .whitespacesAndNewlines)
-    if !combined.isEmpty && combined.count <= 1000 {
+    if !combined.isEmpty && combined.count <= 200 {
       return combined
     }
 
@@ -173,7 +175,7 @@ class KeyboardViewController: UIInputViewController {
 
     let label = UILabel()
     label.translatesAutoresizingMaskIntoConstraints = false
-    label.text = "Please enable Full Access in Settings to use AI features."
+    label.text = String(localized: "Please enable Full Access in Settings to use AI features.")
     label.textColor = .white
     label.font = .systemFont(ofSize: 12)
     label.textAlignment = .center

@@ -107,12 +107,16 @@ class OpenAIProvider: ObservableObject, AIProvider {
                     }
                     
                 } catch AIProxyError.unsuccessfulRequest(let statusCode, let responseBody) {
+                    #if DEBUG
                     print("Received non-200 status code: \(statusCode) with response body: \(responseBody)")
+                    #endif
                     throw NSError(domain: "OpenAIAPI",
                                   code: statusCode,
                                   userInfo: [NSLocalizedDescriptionKey: "API error: \(responseBody)"])
                 } catch {
+                    #if DEBUG
                     print("Could not create OpenAI chat completion: \(error.localizedDescription)")
+                    #endif
                     throw error
                 }
             }

@@ -13,11 +13,6 @@
 		2A96CFE12D862308002D819E /* OnboardingKit in Frameworks */ = {isa = PBXBuildFile; productRef = 2A96CFE02D862308002D819E /* OnboardingKit */; };
 		2A9BFDB62D1F3CEC00A8F121 /* ProseKey AIExt.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 2A9BFDAF2D1F3CEC00A8F121 /* ProseKey AIExt.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		2AEB8FCD2DC6D7C7007869EF /* MarkdownUI in Frameworks */ = {isa = PBXBuildFile; productRef = 2AEB8FCC2DC6D7C7007869EF /* MarkdownUI */; };
-		428B07D22E53A726004D9A94 /* MLXEmbedders in Frameworks */ = {isa = PBXBuildFile; productRef = 428B07D12E53A726004D9A94 /* MLXEmbedders */; };
-		428B07D42E53A726004D9A94 /* MLXLLM in Frameworks */ = {isa = PBXBuildFile; productRef = 428B07D32E53A726004D9A94 /* MLXLLM */; };
-		428B07D62E53A726004D9A94 /* MLXLMCommon in Frameworks */ = {isa = PBXBuildFile; productRef = 428B07D52E53A726004D9A94 /* MLXLMCommon */; };
-		428B07D82E53A726004D9A94 /* MLXMNIST in Frameworks */ = {isa = PBXBuildFile; productRef = 428B07D72E53A726004D9A94 /* MLXMNIST */; };
-		428B07DA2E53A726004D9A94 /* MLXVLM in Frameworks */ = {isa = PBXBuildFile; productRef = 428B07D92E53A726004D9A94 /* MLXVLM */; };
 		42C858A22ED5073F0014C80D /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 42C858A12ED5073F0014C80D /* Localizable.xcstrings */; };
 		42C858A32ED5073F0014C80D /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 42C858A12ED5073F0014C80D /* Localizable.xcstrings */; };
 /* End PBXBuildFile section */
@@ -108,13 +103,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				428B07D82E53A726004D9A94 /* MLXMNIST in Frameworks */,
-				428B07D62E53A726004D9A94 /* MLXLMCommon in Frameworks */,
-				428B07D42E53A726004D9A94 /* MLXLLM in Frameworks */,
-				428B07DA2E53A726004D9A94 /* MLXVLM in Frameworks */,
 				2A17363B2DC6C08100846B7B /* AIProxy in Frameworks */,
 				2AEB8FCD2DC6D7C7007869EF /* MarkdownUI in Frameworks */,
-				428B07D22E53A726004D9A94 /* MLXEmbedders in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -200,11 +190,6 @@
 			packageProductDependencies = (
 				2A17363A2DC6C08100846B7B /* AIProxy */,
 				2AEB8FCC2DC6D7C7007869EF /* MarkdownUI */,
-				428B07D12E53A726004D9A94 /* MLXEmbedders */,
-				428B07D32E53A726004D9A94 /* MLXLLM */,
-				428B07D52E53A726004D9A94 /* MLXLMCommon */,
-				428B07D72E53A726004D9A94 /* MLXMNIST */,
-				428B07D92E53A726004D9A94 /* MLXVLM */,
 			);
 			productName = WritingToolsKeyboardExt;
 			productReference = 2A9BFDAF2D1F3CEC00A8F121 /* ProseKey AIExt.appex */;
@@ -243,7 +228,6 @@
 				2A5B324D2D49A1F3006A5F4D /* XCRemoteSwiftPackageReference "swift-markdown-ui" */,
 				2A96CFDF2D862308002D819E /* XCRemoteSwiftPackageReference "OnboardingKit" */,
 				2A1CC6242DC6B96700D0A451 /* XCRemoteSwiftPackageReference "AIProxySwift" */,
-				428B06E42E53991F004D9A94 /* XCRemoteSwiftPackageReference "mlx-swift-examples" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 2A9BFD7F2D1F3CCF00A8F121 /* Products */;
@@ -437,7 +421,7 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = WritingToolsKeyboard/WritingToolsKeyboard.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 23;
+				CURRENT_PROJECT_VERSION = 25;
 				DEVELOPMENT_ASSET_PATHS = "\"WritingToolsKeyboard/Preview Content\"";
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
@@ -477,7 +461,7 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = WritingToolsKeyboard/WritingToolsKeyboard.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 23;
+				CURRENT_PROJECT_VERSION = 25;
 				DEVELOPMENT_ASSET_PATHS = "\"WritingToolsKeyboard/Preview Content\"";
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
@@ -515,7 +499,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = WritingToolsKeyboardExt/WritingToolsKeyboardExt.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 23;
+				CURRENT_PROJECT_VERSION = 25;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = "$(SRCROOT)/WritingToolsKeyboardExt/Resources/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "ProseKey AI Keyboard Extension";
@@ -548,7 +532,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = WritingToolsKeyboardExt/WritingToolsKeyboardExt.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 23;
+				CURRENT_PROJECT_VERSION = 25;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = "$(SRCROOT)/WritingToolsKeyboardExt/Resources/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "ProseKey AI Keyboard Extension";
@@ -631,14 +615,6 @@
 				minimumVersion = 8.1.0;
 			};
 		};
-		428B06E42E53991F004D9A94 /* XCRemoteSwiftPackageReference "mlx-swift-examples" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/ml-explore/mlx-swift-examples/";
-			requirement = {
-				branch = main;
-				kind = branch;
-			};
-		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -666,31 +642,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 2A5B324D2D49A1F3006A5F4D /* XCRemoteSwiftPackageReference "swift-markdown-ui" */;
 			productName = MarkdownUI;
-		};
-		428B07D12E53A726004D9A94 /* MLXEmbedders */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 428B06E42E53991F004D9A94 /* XCRemoteSwiftPackageReference "mlx-swift-examples" */;
-			productName = MLXEmbedders;
-		};
-		428B07D32E53A726004D9A94 /* MLXLLM */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 428B06E42E53991F004D9A94 /* XCRemoteSwiftPackageReference "mlx-swift-examples" */;
-			productName = MLXLLM;
-		};
-		428B07D52E53A726004D9A94 /* MLXLMCommon */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 428B06E42E53991F004D9A94 /* XCRemoteSwiftPackageReference "mlx-swift-examples" */;
-			productName = MLXLMCommon;
-		};
-		428B07D72E53A726004D9A94 /* MLXMNIST */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 428B06E42E53991F004D9A94 /* XCRemoteSwiftPackageReference "mlx-swift-examples" */;
-			productName = MLXMNIST;
-		};
-		428B07D92E53A726004D9A94 /* MLXVLM */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 428B06E42E53991F004D9A94 /* XCRemoteSwiftPackageReference "mlx-swift-examples" */;
-			productName = MLXVLM;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

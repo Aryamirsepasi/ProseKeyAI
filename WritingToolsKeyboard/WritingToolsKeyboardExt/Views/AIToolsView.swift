@@ -52,7 +52,7 @@ struct AIToolsView: View {
                 }) {
                     HStack(spacing: 4) {
                         Image(systemName: "doc.on.clipboard").font(.system(size: 14))
-                        Text("Use Text", comment: "Button to use copied text")
+                        Text("Use Copied", comment: "Button: use the text currently on the clipboard")
                             .font(.system(size: 13, weight: .medium))
                     }
                     .frame(maxWidth: .infinity)

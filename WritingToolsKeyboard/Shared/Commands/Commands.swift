@@ -77,7 +77,7 @@ class KeyboardCommandsManager: ObservableObject {
     /// Version key for built-in commands format - increment when format changes
     private let builtInCommandsVersionKey = "built_in_commands_version"
     /// Current version of built-in commands format
-    private let currentBuiltInVersion = 2  // v2: Added nameKey for localization
+    private let currentBuiltInVersion = 3  // v3: Added German translations for command names
 
     init() {
         loadCommands()
@@ -94,8 +94,10 @@ class KeyboardCommandsManager: ObservableObject {
             let decoded = try JSONDecoder().decode([KeyboardCommand].self, from: data)
             commands = decoded
         } catch {
+            #if DEBUG
             print("Failed to decode keyboard commands: \(error)")
-            
+            #endif
+
             // Try loading legacy commands if available
             migrateFromLegacyCommands(userDefaults: userDefaults)
         }
@@ -123,7 +125,9 @@ class KeyboardCommandsManager: ObservableObject {
                 // Optionally, clean up legacy data
                 userDefaults.removeObject(forKey: "custom_commands_list")
             } catch {
+                #if DEBUG
                 print("Failed to migrate legacy commands: \(error)")
+                #endif
             }
         }
     }
@@ -134,7 +138,9 @@ class KeyboardCommandsManager: ObservableObject {
             let data = try JSONEncoder().encode(commands)
             userDefaults.set(data, forKey: storageKey)
         } catch {
+            #if DEBUG
             print("Failed to encode/save keyboard commands: \(error)")
+            #endif
         }
     }
     

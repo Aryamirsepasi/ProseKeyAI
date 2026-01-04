@@ -63,34 +63,51 @@ class AnthropicProvider: ObservableObject, AIProvider {
             let anthropicService = AIProxy.anthropicDirectService(unprotectedAPIKey: config.apiKey)
             
             // Compose messages array
-            var messages: [AnthropicInputMessage] = []
-            
-            var userContent: [AnthropicInputContent] = [.text(userPrompt)]
+            var userBlocks: [AnthropicContentBlockParam] = [
+                .textBlock(AnthropicTextBlockParam(text: userPrompt))
+            ]
             for imageData in images {
-                userContent.append(
-                    .image(mediaType: AnthropicImageMediaType.jpeg, data: imageData.base64EncodedString())
+                let imageBlock = AnthropicImageBlockParam(
+                    source: .base64(
+                        data: imageData.base64EncodedString(),
+                        mediaType: .jpeg
+                    )
                 )
+                userBlocks.append(.imageBlock(imageBlock))
             }
-            messages.append(
-                AnthropicInputMessage(content: userContent, role: .user)
-            )
+            let messages: [AnthropicMessageParam] = [
+                AnthropicMessageParam(content: .blocks(userBlocks), role: .user)
+            ]
             
+            let systemPromptParam = systemPrompt.map { AnthropicSystemPrompt.text($0) }
             let requestBody = AnthropicMessageRequestBody(
                 maxTokens: 1024,
                 messages: messages,
                 model: config.model.isEmpty ? AnthropicConfig.defaultModel : config.model,
-                system: systemPrompt
+                system: systemPromptParam
             )
             
             do {
-                let response = try await anthropicService.messageRequest(body: requestBody)
+                let response = try await anthropicService.messageRequest(
+                    body: requestBody,
+                    secondsToWait: 60
+                )
                 
                 for content in response.content {
                     switch content {
-                    case .text(let message):
-                        return message
-                    case .toolUse(id: _, name: let toolName, input: let toolInput):
-                        print("Anthropic tool use: \(toolName) input: \(toolInput)")
+                    case .textBlock(let textBlock):
+                        return textBlock.text
+                    case .toolUseBlock(let toolUseBlock):
+                        #if DEBUG
+                        print("Anthropic tool use: \(toolUseBlock.name) input: \(toolUseBlock.input)")
+                        #endif
+                    case .futureProof:
+                        continue
+                    case .thinkingBlock,
+                         .redactedThinkingBlock,
+                         .serverToolUseBlock,
+                         .webSearchToolResultBlock:
+                        continue
                     }
                 }
                 throw NSError(
@@ -99,14 +116,18 @@ class AnthropicProvider: ObservableObject, AIProvider {
                     userInfo: [NSLocalizedDescriptionKey: "No text content in response."]
                 )
             } catch AIProxyError.unsuccessfulRequest(let statusCode, let responseBody) {
+                #if DEBUG
                 print("Anthropic error (\(statusCode)): \(responseBody)")
+                #endif
                 throw NSError(
                     domain: "AnthropicAPI",
                     code: statusCode,
                     userInfo: [NSLocalizedDescriptionKey: "API error: \(responseBody)"]
                 )
             } catch {
+                #if DEBUG
                 print("Anthropic request failed: \(error.localizedDescription)")
+                #endif
                 throw error
             }
         }

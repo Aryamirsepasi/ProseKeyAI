@@ -556,6 +556,29 @@
         }
       }
     },
+    "Completes onboarding and opens the app" : {
+
+    },
+    "Completes setup and closes onboarding" : {
+
+    },
+    "Concise" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prägnant"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Concise"
+          }
+        }
+      }
+    },
     "Configure" : {
       "localizations" : {
         "de" : {
@@ -667,6 +690,9 @@
           }
         }
       }
+    },
+    "Continues to the next onboarding step" : {
+
     },
     "Copy" : {
       "localizations" : {
@@ -1084,6 +1110,23 @@
         }
       }
     },
+    "Friendly" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Freundlich"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Friendly"
+          }
+        }
+      }
+    },
     "Full access is required for the keyboard to access AI tools and use copy/paste features" : {
       "localizations" : {
         "de" : {
@@ -1147,6 +1190,9 @@
           }
         }
       }
+    },
+    "Get started" : {
+
     },
     "Get Started" : {
       "localizations" : {
@@ -1227,6 +1273,9 @@
           }
         }
       }
+    },
+    "Go back" : {
+
     },
     "Go to %@ API Key Page" : {
       "localizations" : {
@@ -1501,6 +1550,23 @@
         }
       }
     },
+    "Key Points" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kernpunkte"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Key Points"
+          }
+        }
+      }
+    },
     "Keyboard Commands" : {
       "localizations" : {
         "de" : {
@@ -1740,6 +1806,9 @@
           }
         }
       }
+    },
+    "Next step" : {
+
     },
     "No Clipboard History" : {
       "localizations" : {
@@ -1997,6 +2066,22 @@
         }
       }
     },
+    "Please enable Full Access in Settings to use AI features." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bitte aktivieren Sie den Vollzugriff in den Einstellungen, um KI-Funktionen zu nutzen."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Please enable Full Access in Settings to use AI features."
+          }
+        }
+      }
+    },
     "Powerful Features" : {
       "localizations" : {
         "de" : {
@@ -2157,6 +2242,23 @@
         }
       }
     },
+    "Professional" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Professionell"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Professional"
+          }
+        }
+      }
+    },
     "Prompt" : {
       "localizations" : {
         "de" : {
@@ -2185,6 +2287,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Prompt Mode"
+          }
+        }
+      }
+    },
+    "Proofread" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Korrekturlesen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Proofread"
           }
         }
       }
@@ -2269,6 +2388,9 @@
         }
       }
     },
+    "Restart Onboarding" : {
+
+    },
     "Retry" : {
       "localizations" : {
         "de" : {
@@ -2281,6 +2403,26 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Retry"
+          }
+        }
+      }
+    },
+    "Returns to the previous onboarding step" : {
+
+    },
+    "Rewrite" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Umschreiben"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rewrite"
           }
         }
       }
@@ -2429,6 +2571,9 @@
         }
       }
     },
+    "Skip onboarding" : {
+
+    },
     "Specify what aspects of the input text should be preserved." : {
       "localizations" : {
         "de" : {
@@ -2535,6 +2680,23 @@
         }
       }
     },
+    "Summary" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zusammenfassung"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Summary"
+          }
+        }
+      }
+    },
     "Supported Languages" : {
       "localizations" : {
         "de" : {
@@ -2547,6 +2709,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Supported Languages"
+          }
+        }
+      }
+    },
+    "Table" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tabelle"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Table"
           }
         }
       }
@@ -2572,7 +2751,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Aufgabe (z. B. ‚Grammatik und Rechtschreibung korrigieren‘)"
+            "value" : "Aufgabe (z. B. ‚Grammatik und Rechtschreibung korrigieren')"
           }
         },
         "en" : {
@@ -2759,8 +2938,12 @@
         }
       }
     },
+    "Use Copied" : {
+      "comment" : "Button: use the text currently on the clipboard"
+    },
     "Use Text" : {
       "comment" : "Button to use copied text",
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -2777,6 +2960,7 @@
       }
     },
     "Using Text Selection" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
