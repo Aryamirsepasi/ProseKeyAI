@@ -33,6 +33,9 @@
         }
       }
     },
+    "%lld languages supported" : {
+
+    },
     "%lld." : {
       "localizations" : {
         "de" : {
@@ -176,6 +179,9 @@
           }
         }
       }
+    },
+    "AI Writing Tools" : {
+
     },
     "Allow Paste Permission" : {
       "localizations" : {
@@ -348,6 +354,9 @@
         }
       }
     },
+    "Automatically detect text or use copied content" : {
+
+    },
     "Availability Status" : {
       "localizations" : {
         "de" : {
@@ -379,6 +388,9 @@
           }
         }
       }
+    },
+    "Avoid Repeated Prompts" : {
+
     },
     "Back" : {
       "localizations" : {
@@ -477,6 +489,7 @@
       }
     },
     "Choose \"Allow Paste\" instead of \"Paste\" to avoid seeing this notification every time you use paste features." : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -491,6 +504,9 @@
           }
         }
       }
+    },
+    "Choosing \"Allow Paste\" grants permanent access" : {
+
     },
     "Clear" : {
       "localizations" : {
@@ -691,6 +707,9 @@
         }
       }
     },
+    "Continue" : {
+
+    },
     "Continues to the next onboarding step" : {
 
     },
@@ -758,6 +777,9 @@
         }
       }
     },
+    "Create personalized AI instructions for any task" : {
+
+    },
     "Critical Rules" : {
       "localizations" : {
         "de" : {
@@ -822,6 +844,9 @@
         }
       }
     },
+    "Custom Prompts" : {
+
+    },
     "Define the role and main task for this command." : {
       "localizations" : {
         "de" : {
@@ -855,6 +880,7 @@
       }
     },
     "Discover what makes ProseKey AI special" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -966,6 +992,9 @@
         }
       }
     },
+    "Enable Full Access in Settings to use clipboard history." : {
+
+    },
     "Enable Haptic Feedback" : {
       "localizations" : {
         "de" : {
@@ -1062,6 +1091,9 @@
         }
       }
     },
+    "Everything you need to enhance your writing" : {
+
+    },
     "Features" : {
       "localizations" : {
         "de" : {
@@ -1142,6 +1174,9 @@
           }
         }
       }
+    },
+    "Full Access Required" : {
+
     },
     "Gemini Settings" : {
       "localizations" : {
@@ -1258,6 +1293,9 @@
         }
       }
     },
+    "Getting an Anthropic API Key:" : {
+
+    },
     "Getting an OpenAI API Key:" : {
       "localizations" : {
         "de" : {
@@ -1273,6 +1311,9 @@
           }
         }
       }
+    },
+    "Getting an OpenRouter API Key:" : {
+
     },
     "Go back" : {
 
@@ -1487,6 +1528,7 @@
       }
     },
     "Important" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -1550,6 +1592,9 @@
         }
       }
     },
+    "iOS will ask for permission when you first use clipboard features" : {
+
+    },
     "Key Points" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -1582,6 +1627,9 @@
           }
         }
       }
+    },
+    "Keyboard is ready to use!" : {
+
     },
     "Keyboard Status" : {
       "localizations" : {
@@ -1711,6 +1759,9 @@
         }
       }
     },
+    "Navigate to Keys and create a new key" : {
+
+    },
     "Navigate to your account/API keys page" : {
       "localizations" : {
         "de" : {
@@ -1792,6 +1843,7 @@
       }
     },
     "Next" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -1806,9 +1858,6 @@
           }
         }
       }
-    },
-    "Next step" : {
-
     },
     "No Clipboard History" : {
       "localizations" : {
@@ -1857,6 +1906,9 @@
           }
         }
       }
+    },
+    "OK" : {
+
     },
     "On-device AI powered by Apple Intelligence" : {
       "localizations" : {
@@ -2226,6 +2278,9 @@
         }
       }
     },
+    "Process longer text by copying it first" : {
+
+    },
     "Processing" : {
       "localizations" : {
         "de" : {
@@ -2308,6 +2363,9 @@
         }
       }
     },
+    "Proofread, rewrite, summarize, and translate your text" : {
+
+    },
     "ProseKey AI" : {
       "localizations" : {
         "de" : {
@@ -2325,6 +2383,7 @@
       }
     },
     "ProseKey AI needs paste permission to access copied text for use in writing features." : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -2475,6 +2534,9 @@
         }
       }
     },
+    "Saved" : {
+
+    },
     "Select AI Provider" : {
       "localizations" : {
         "de" : {
@@ -2574,6 +2636,9 @@
     "Skip onboarding" : {
 
     },
+    "Smart Text Selection" : {
+
+    },
     "Specify what aspects of the input text should be preserved." : {
       "localizations" : {
         "de" : {
@@ -2623,6 +2688,7 @@
       }
     },
     "Stop Repeated Notifications" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -2713,6 +2779,9 @@
         }
       }
     },
+    "Switch to ProseKey AI to verify setup" : {
+
+    },
     "Table" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -2730,7 +2799,11 @@
         }
       }
     },
+    "Tap \"Allow Paste\"" : {
+
+    },
     "Tap here to show the keyboard…" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -2745,6 +2818,9 @@
           }
         }
       }
+    },
+    "Tap the text field below and switch to ProseKey AI using the globe key" : {
+
     },
     "Task (e.g., 'correct grammar and spelling')" : {
       "localizations" : {
@@ -2762,7 +2838,11 @@
         }
       }
     },
+    "Test Your Keyboard" : {
+
+    },
     "The first time you use paste features, iOS will ask permission. Tap \"Allow Paste\" or \"Paste from [app]\" to enable the feature." : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -2875,6 +2955,7 @@
       }
     },
     "Tip: Tap below to show the keyboard, then switch to “ProseKey AI” using the globe key. We’ll detect Full Access automatically." : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -2891,6 +2972,7 @@
       }
     },
     "Tip: Tap below to show the keyboard, then switch to “ProseKey AI” using the globe key. We’ll update your status automatically." : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -2922,6 +3004,9 @@
         }
       }
     },
+    "Type something here…" : {
+
+    },
     "Type your custom instructions for the AI…" : {
       "localizations" : {
         "de" : {
@@ -2940,6 +3025,9 @@
     },
     "Use Copied" : {
       "comment" : "Button: use the text currently on the clipboard"
+    },
+    "Use Copied Text" : {
+
     },
     "Use Text" : {
       "comment" : "Button to use copied text",
@@ -3002,6 +3090,9 @@
         }
       }
     },
+    "Visit console.anthropic.com" : {
+
+    },
     "Visit console.mistral.ai" : {
       "localizations" : {
         "de" : {
@@ -3033,6 +3124,9 @@
           }
         }
       }
+    },
+    "Visit openrouter.ai" : {
+
     },
     "Visit perplexity.ai and create an account" : {
       "localizations" : {
@@ -3083,6 +3177,7 @@
       }
     },
     "What This Enables:" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -3097,6 +3192,9 @@
           }
         }
       }
+    },
+    "When the iOS permission dialog appears" : {
+
     },
     "You're All Set!" : {
       "localizations" : {
@@ -3114,6 +3212,9 @@
         }
       }
     },
+    "Your Anthropic settings have been updated." : {
+
+    },
     "Your device does not support Apple Intelligence. Foundation Models requires an iPhone 15 Pro or later, or a recent iPad." : {
       "localizations" : {
         "de" : {
@@ -3129,6 +3230,21 @@
           }
         }
       }
+    },
+    "Your Gemini settings have been updated." : {
+
+    },
+    "Your Mistral settings have been updated." : {
+
+    },
+    "Your OpenAI settings have been updated." : {
+
+    },
+    "Your OpenRouter settings have been updated." : {
+
+    },
+    "Your Perplexity settings have been updated." : {
+
     },
     "Your Privacy Matters" : {
       "localizations" : {

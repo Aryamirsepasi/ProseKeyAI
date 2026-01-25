@@ -33,7 +33,10 @@ class AppSettings: ObservableObject {
 
     private static func getSharedDefaults() -> UserDefaults {
         guard let defaults = UserDefaults(suiteName: "group.com.aryamirsepasi.writingtools") else {
-            fatalError("Failed to create UserDefaults with app group. Ensure 'group.com.aryamirsepasi.writingtools' is configured in your entitlements.")
+            #if DEBUG
+            assertionFailure("Failed to create UserDefaults with app group. Falling back to standard defaults.")
+            #endif
+            return UserDefaults.standard
         }
         return defaults
     }
@@ -44,10 +47,11 @@ class AppSettings: ObservableObject {
     @Published private var _geminiApiKeyCache: String = ""
     var geminiApiKey: String {
         get {
-            // Try Keychain first, fallback to UserDefaults for backward compat
+            // Try Keychain first, fallback to UserDefaults only before migration completes
             if let keychainValue = KeychainManager.shared.getApiKey(.geminiApiKey) {
                 return keychainValue
             }
+            guard !ApiKeyMigrator.shared.hasMigrated else { return "" }
             return defaults.string(forKey: "gemini_api_key") ?? ""
         }
         set {
@@ -63,6 +67,7 @@ class AppSettings: ObservableObject {
             if let keychainValue = KeychainManager.shared.getApiKey(.openAIApiKey) {
                 return keychainValue
             }
+            guard !ApiKeyMigrator.shared.hasMigrated else { return "" }
             return defaults.string(forKey: "openai_api_key") ?? ""
         }
         set {
@@ -78,6 +83,7 @@ class AppSettings: ObservableObject {
             if let keychainValue = KeychainManager.shared.getApiKey(.anthropicApiKey) {
                 return keychainValue
             }
+            guard !ApiKeyMigrator.shared.hasMigrated else { return "" }
             return defaults.string(forKey: "anthropic_api_key") ?? ""
         }
         set {
@@ -93,6 +99,7 @@ class AppSettings: ObservableObject {
             if let keychainValue = KeychainManager.shared.getApiKey(.openRouterApiKey) {
                 return keychainValue
             }
+            guard !ApiKeyMigrator.shared.hasMigrated else { return "" }
             return defaults.string(forKey: "openrouter_api_key") ?? ""
         }
         set {
@@ -108,6 +115,7 @@ class AppSettings: ObservableObject {
             if let keychainValue = KeychainManager.shared.getApiKey(.perplexityApiKey) {
                 return keychainValue
             }
+            guard !ApiKeyMigrator.shared.hasMigrated else { return "" }
             return defaults.string(forKey: "perplexity_api_key") ?? ""
         }
         set {
@@ -123,6 +131,7 @@ class AppSettings: ObservableObject {
             if let keychainValue = KeychainManager.shared.getApiKey(.mistralApiKey) {
                 return keychainValue
             }
+            guard !ApiKeyMigrator.shared.hasMigrated else { return "" }
             return defaults.string(forKey: "mistral_api_key") ?? ""
         }
         set {

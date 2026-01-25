@@ -11,6 +11,7 @@ struct ClipboardHistoryView: View {
     ]
 
     @State private var copiedItemId: UUID?
+    @State private var showFullAccessAlert = false
     
     var body: some View {
         let items = manager.nonExpiredItems
@@ -25,6 +26,11 @@ struct ClipboardHistoryView: View {
             } else {
                 clipboardGridView(items: items)
             }
+        }
+        .alert("Full Access Required", isPresented: $showFullAccessAlert) {
+            Button("OK", role: .cancel) {}
+        } message: {
+            Text("Enable Full Access in Settings to use clipboard history.")
         }
     }
     
@@ -113,6 +119,11 @@ struct ClipboardHistoryView: View {
     }
     
     private func handleItemTap(_ item: ClipboardItem) {
+        guard viewController?.hasFullAccess == true else {
+            HapticsManager.shared.error()
+            showFullAccessAlert = true
+            return
+        }
         manager.copyItem(item)
         withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
             copiedItemId = item.id

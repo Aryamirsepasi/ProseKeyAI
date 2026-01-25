@@ -12,6 +12,7 @@ class AIToolsViewModel: ObservableObject {
     
     // Debouncing to avoid excessive checks
     private var checkTextTask: Task<Void, Never>?
+    private var checkTextTaskId = UUID()
     
     init(viewController: KeyboardViewController?) {
         self.viewController = viewController
@@ -22,12 +23,16 @@ class AIToolsViewModel: ObservableObject {
     func checkSelectedText() {
         // Cancel any pending check
         checkTextTask?.cancel()
-        
+
+        let taskId = UUID()
+        checkTextTaskId = taskId
+
         checkTextTask = Task { @MainActor in
             // Small delay to debounce rapid calls
             try? await Task.sleep(nanoseconds: 100_000_000) // 0.1 seconds
             
             guard !Task.isCancelled else { return }
+            guard taskId == checkTextTaskId else { return }
             
             let docText = viewController?.getSelectedText() ?? ""
             selectedText = docText.isEmpty ? nil : docText

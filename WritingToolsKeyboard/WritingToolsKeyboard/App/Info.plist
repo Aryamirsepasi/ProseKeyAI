@@ -43,10 +43,5 @@
 	<array>
     	<string>group.com.aryamirsepasi.writingtools</string>
 	</array>
-	<!--<key>NSMicrophoneUsageDescription</key>
-<string>This app uses the microphone for voice input in the keyboard.</string>
-<key>NSSpeechRecognitionUsageDescription</key>
-<string>This app uses speech recognition to let you talk to the AI in the keyboard.</string>-->
-
 </dict>
 </plist>

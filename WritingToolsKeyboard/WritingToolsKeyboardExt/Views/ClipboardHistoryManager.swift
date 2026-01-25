@@ -17,6 +17,7 @@ class ClipboardHistoryManager: ObservableObject {
     private let defaults: UserDefaults?
     private let storageKey = "clipboard_history"
     private let maxItems = 50 // Maximum number of items to store
+    private let maxItemCharacters = 10_000 // Limit per item to avoid large storage
     
     private init() {
         self.defaults = UserDefaults(suiteName: "group.com.aryamirsepasi.writingtools")
@@ -31,8 +32,11 @@ class ClipboardHistoryManager: ObservableObject {
     // MARK: - Public Methods
     
     func addItem(content: String) {
-        let trimmed = content.trimmingCharacters(in: .whitespacesAndNewlines)
+        var trimmed = content.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmed.isEmpty else { return }
+        if trimmed.count > maxItemCharacters {
+            trimmed = String(trimmed.prefix(maxItemCharacters))
+        }
         
         // Remove duplicate if exists (keep most recent)
         items.removeAll { $0.content == trimmed }

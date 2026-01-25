@@ -99,6 +99,7 @@ struct SettingsView: View {
               currentProvider: $settings.currentProvider
             )
             .onChange(of: settings.currentProvider) { newProvider in
+              guard newProvider != appState.currentProvider else { return }
               appState.setCurrentProvider(newProvider)
             }
 

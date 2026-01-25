@@ -20,6 +20,7 @@ struct AIToolsView: View {
     @ObservedObject private var clipboardManager = ClipboardHistoryManager.shared
     
     private var gridHeight: CGFloat { keyboardHeight - buttonRowHeight - previewHeight }
+    private var hasSelection: Bool { !(vm.selectedText?.isEmpty ?? true) }
 
     var body: some View {
         ZStack {
@@ -81,7 +82,7 @@ struct AIToolsView: View {
                 .buttonStyle(PlainButtonStyle())
                 
                 Button(action: {
-                    guard vm.selectedText != nil && !vm.selectedText!.isEmpty else {
+                    guard hasSelection else {
                         HapticsManager.shared.error()
                         vm.currentError = .invalidSelection
                         return
@@ -98,11 +99,11 @@ struct AIToolsView: View {
                     .frame(maxWidth: .infinity)
                     .frame(height: 40)
                 }
-                .background(vm.selectedText?.isEmpty != false ? Color.gray : Color.purple)
+                .background(hasSelection ? Color.purple : Color.gray)
                 .foregroundColor(.white)
                 .cornerRadius(8)
                 .buttonStyle(PlainButtonStyle())
-                .disabled(vm.selectedText?.isEmpty != false)
+                .disabled(!hasSelection)
             }
             .padding(.horizontal, 8)
             .padding(.top, 8)
@@ -150,7 +151,7 @@ struct AIToolsView: View {
                         state = .generating(cmd)
                         processAICommand(cmd, userText: text)
                     },
-                    isDisabled: vm.selectedText == nil || vm.selectedText!.isEmpty
+                    isDisabled: !hasSelection
                 )
                 .padding(.horizontal, 8)
             }
@@ -321,6 +322,7 @@ struct AIToolsView: View {
         
         activeTask = Task(priority: .userInitiated) {
             do {
+                try Task.checkCancellation()
                 let truncated = userText.count > 8000
                 ? String(userText.prefix(8000))
                 : userText
@@ -331,10 +333,7 @@ struct AIToolsView: View {
                     streaming: false
                 )
                 
-                guard !Task.isCancelled else {
-                    await MainActor.run { isLoading = false }
-                    return
-                }
+                try Task.checkCancellation()
                 
                 await MainActor.run {
                     aiResult = result

@@ -23,6 +23,14 @@ final class KeychainManager {
 
     // MARK: - Public Interface
 
+    private func logStatus(_ status: OSStatus, operation: String, key: KeychainKey) {
+        #if DEBUG
+        if status != errSecSuccess {
+            print("KeychainManager: \(operation) failed for \(key.rawValue) (status: \(status))")
+        }
+        #endif
+    }
+
     /// Retrieves an API key from Keychain
     func getApiKey(_ key: KeychainKey) -> String? {
         let query: [String: Any] = [
@@ -40,6 +48,7 @@ final class KeychainManager {
         guard status == errSecSuccess,
               let data = result as? Data,
               let string = String(data: data, encoding: .utf8) else {
+            logStatus(status, operation: "get", key: key)
             return nil
         }
 
@@ -63,10 +72,11 @@ final class KeychainManager {
             kSecAttrAccount as String: key.rawValue,
             kSecAttrAccessGroup as String: accessGroup,
             kSecValueData as String: data,
-            kSecAttrAccessible as String: kSecAttrAccessibleAfterFirstUnlock
+            kSecAttrAccessible as String: kSecAttrAccessibleWhenUnlockedThisDeviceOnly
         ]
 
         let status = SecItemAdd(query as CFDictionary, nil)
+        logStatus(status, operation: "set", key: key)
         return status == errSecSuccess
     }
 
@@ -81,6 +91,9 @@ final class KeychainManager {
         ]
 
         let status = SecItemDelete(query as CFDictionary)
+        if status != errSecSuccess && status != errSecItemNotFound {
+            logStatus(status, operation: "delete", key: key)
+        }
         return status == errSecSuccess || status == errSecItemNotFound
     }
 

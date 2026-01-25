@@ -10,6 +10,7 @@ import UIKit
 protocol CustomInstructionKeyboardDelegate: AnyObject {
   func keyboardInsert(_ text: String)
   func keyboardDeleteBackward()
+  func keyboardDeleteWord()
   func keyboardReturn()
   func keyboardToggleSymbols()
   func keyboardToggleShift(mode: CustomInstructionKeyboardView.ShiftMode)
@@ -28,6 +29,17 @@ final class CustomInstructionKeyboardView: UIView {
 
   private let stack = UIStackView()
   private let feedback = UIImpactFeedbackGenerator(style: .light)
+
+  // Key repeat timers
+  private var deleteTimer: Timer?
+  private var spaceTimer: Timer?
+  private var deleteCount = 0
+
+  // Timing constants (Apple-like behavior)
+  private let initialRepeatDelay: TimeInterval = 0.4
+  private let normalRepeatInterval: TimeInterval = 0.1
+  private let fastRepeatInterval: TimeInterval = 0.05
+  private let wordDeleteThreshold = 20  // Switch to word deletion after this many chars
 
   // Data
   private let qwertyRows: [[String]] = [
@@ -58,6 +70,11 @@ final class CustomInstructionKeyboardView: UIView {
   required init?(coder: NSCoder) {
     super.init(coder: coder)
     setup()
+  }
+
+  deinit {
+    deleteTimer?.invalidate()
+    spaceTimer?.invalidate()
   }
 
   private func setup() {
@@ -176,9 +193,7 @@ final class CustomInstructionKeyboardView: UIView {
       makeKey(title: displayText(key)) { [weak self] in self?.insert(display: key) }
     })
 
-      let deleteKey = makeKey(title: "⌫", buttonBackground: .systemGray4, width: 40) { [weak self] in
-        self?.delegate?.keyboardDeleteBackward()
-      }
+    let deleteKey = makeRepeatableDeleteKey(width: 40)
     third.append(deleteKey)
 
       addRow(third, horizontalInset: 6, rowHeight: 30)
@@ -207,9 +222,7 @@ final class CustomInstructionKeyboardView: UIView {
       makeKey(title: s) { [weak self] in self?.delegate?.keyboardInsert(s) }
     })
 
-    let deleteKey = makeKey(title: "⌫", buttonBackground: UIColor.systemGray4, width: 44) { [weak self] in
-      self?.delegate?.keyboardDeleteBackward()
-    }
+    let deleteKey = makeRepeatableDeleteKey(width: 44)
     third.append(deleteKey)
 
       addRow(third, horizontalInset: 6, rowHeight: 30)
@@ -237,8 +250,7 @@ final class CustomInstructionKeyboardView: UIView {
         self.reloadLayout()
       }
 
-      let space = makeKey(title: "space") { [weak self] in self?.delegate?.keyboardInsert(" ") }
-      space.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: .medium)
+      let space = makeRepeatableSpaceKey()
 
       let ret = makeKey(title: "return", buttonBackground: .systemGray4, width: 66) { [weak self] in
         self?.delegate?.keyboardReturn()
@@ -270,5 +282,133 @@ final class CustomInstructionKeyboardView: UIView {
     }
     delegate?.keyboardToggleShift(mode: shiftMode)
     reloadLayout()
+  }
+
+  // MARK: - Repeatable Key Creation
+
+  private func makeRepeatableDeleteKey(width: CGFloat) -> UIButton {
+    let button = UIButton(type: .system)
+    button.setTitle("⌫", for: .normal)
+    button.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: .medium)
+    button.setTitleColor(.label, for: .normal)
+    button.backgroundColor = .systemGray4
+    button.layer.cornerRadius = 6
+    button.layer.borderWidth = 0.5
+    button.layer.borderColor = UIColor.systemGray4.cgColor
+    button.widthAnchor.constraint(equalToConstant: width).isActive = true
+
+    // Touch down: start repeat + haptic
+    button.addTarget(self, action: #selector(deleteKeyTouchDown), for: .touchDown)
+    // Touch up: stop repeat
+    button.addTarget(self, action: #selector(deleteKeyTouchUp), for: [.touchUpInside, .touchUpOutside, .touchCancel])
+
+    return button
+  }
+
+  private func makeRepeatableSpaceKey() -> UIButton {
+    let button = UIButton(type: .system)
+    button.setTitle("space", for: .normal)
+    button.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: .medium)
+    button.setTitleColor(.label, for: .normal)
+    button.backgroundColor = .systemGray5
+    button.layer.cornerRadius = 6
+    button.layer.borderWidth = 0.5
+    button.layer.borderColor = UIColor.systemGray4.cgColor
+
+    // Touch down: start repeat + haptic
+    button.addTarget(self, action: #selector(spaceKeyTouchDown), for: .touchDown)
+    // Touch up: stop repeat
+    button.addTarget(self, action: #selector(spaceKeyTouchUp), for: [.touchUpInside, .touchUpOutside, .touchCancel])
+
+    return button
+  }
+
+  // MARK: - Delete Key Repeat
+
+  @objc private func deleteKeyTouchDown() {
+    // Haptic on touch down for responsiveness
+    if UserDefaults(suiteName: "group.com.aryamirsepasi.writingtools")?.bool(forKey: "enable_haptics") ?? true {
+      feedback.impactOccurred()
+    }
+
+    // Perform initial delete immediately
+    delegate?.keyboardDeleteBackward()
+    deleteCount = 1
+
+    // Start timer for repeat after initial delay
+    deleteTimer?.invalidate()
+    deleteTimer = Timer.scheduledTimer(withTimeInterval: initialRepeatDelay, repeats: false) { [weak self] _ in
+      self?.startDeleteRepeat()
+    }
+  }
+
+  @objc private func deleteKeyTouchUp() {
+    stopDeleteRepeat()
+  }
+
+  private func startDeleteRepeat() {
+    deleteTimer?.invalidate()
+    deleteTimer = Timer.scheduledTimer(withTimeInterval: normalRepeatInterval, repeats: true) { [weak self] _ in
+      self?.deleteTimerFired()
+    }
+  }
+
+  private func deleteTimerFired() {
+    deleteCount += 1
+
+    // After threshold, switch to word deletion
+    if deleteCount >= wordDeleteThreshold {
+      delegate?.keyboardDeleteWord()
+    } else {
+      delegate?.keyboardDeleteBackward()
+    }
+
+    // Accelerate after 10 deletions
+    if deleteCount == 10 {
+      deleteTimer?.invalidate()
+      deleteTimer = Timer.scheduledTimer(withTimeInterval: fastRepeatInterval, repeats: true) { [weak self] _ in
+        self?.deleteTimerFired()
+      }
+    }
+  }
+
+  private func stopDeleteRepeat() {
+    deleteTimer?.invalidate()
+    deleteTimer = nil
+    deleteCount = 0
+  }
+
+  // MARK: - Space Key Repeat
+
+  @objc private func spaceKeyTouchDown() {
+    // Haptic on touch down
+    if UserDefaults(suiteName: "group.com.aryamirsepasi.writingtools")?.bool(forKey: "enable_haptics") ?? true {
+      feedback.impactOccurred()
+    }
+
+    // Insert initial space immediately
+    delegate?.keyboardInsert(" ")
+
+    // Start timer for repeat after initial delay
+    spaceTimer?.invalidate()
+    spaceTimer = Timer.scheduledTimer(withTimeInterval: initialRepeatDelay, repeats: false) { [weak self] _ in
+      self?.startSpaceRepeat()
+    }
+  }
+
+  @objc private func spaceKeyTouchUp() {
+    stopSpaceRepeat()
+  }
+
+  private func startSpaceRepeat() {
+    spaceTimer?.invalidate()
+    spaceTimer = Timer.scheduledTimer(withTimeInterval: normalRepeatInterval, repeats: true) { [weak self] _ in
+      self?.delegate?.keyboardInsert(" ")
+    }
+  }
+
+  private func stopSpaceRepeat() {
+    spaceTimer?.invalidate()
+    spaceTimer = nil
   }
 }
