@@ -134,4 +134,17 @@ class ClipboardHistoryManager: ObservableObject {
             saveItems()
         }
     }
+
+#if DEBUG
+    /// Test-only helper to inject items and force reload/cleanup.
+    func reloadItemsForTesting(_ newItems: [ClipboardItem]) {
+        do {
+            let data = try JSONEncoder().encode(newItems)
+            defaults?.set(data, forKey: storageKey)
+        } catch {
+            return
+        }
+        loadItems()
+    }
+#endif
 }

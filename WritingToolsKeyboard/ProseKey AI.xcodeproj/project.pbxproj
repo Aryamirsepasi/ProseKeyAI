@@ -25,6 +25,20 @@
 			remoteGlobalIDString = 2A9BFDAE2D1F3CEC00A8F121;
 			remoteInfo = WritingToolsKeyboardExt;
 		};
+		C681E5B5B6EB44F9A359D0A2 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2A9BFD762D1F3CCF00A8F121 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 2A9BFD7D2D1F3CCF00A8F121;
+			remoteInfo = "ProseKey AI";
+		};
+		D5147E75E3794B38850488BB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2A9BFD762D1F3CCF00A8F121 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 2A9BFDAE2D1F3CEC00A8F121;
+			remoteInfo = "ProseKey AIExt";
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -42,6 +56,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		25CBE2DA21614B849C47FEDB /* ProseKey AITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "ProseKey AITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2A9BFD7E2D1F3CCF00A8F121 /* ProseKey AI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "ProseKey AI.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2A9BFDAF2D1F3CEC00A8F121 /* ProseKey AIExt.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "ProseKey AIExt.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
 		42C858A12ED5073F0014C80D /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
@@ -86,9 +101,21 @@
 			path = Shared;
 			sourceTree = "<group>";
 		};
+		58693C3692DE4D8180E94E06 /* WritingToolsKeyboardTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = WritingToolsKeyboardTests;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		1FA14DD82F704FDA82EDD23E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		2A9BFD7B2D1F3CCF00A8F121 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -118,6 +145,7 @@
 				2A9BFF382D1F455400A8F121 /* Shared */,
 				2A9BFD802D1F3CCF00A8F121 /* WritingToolsKeyboard */,
 				2A9BFDB02D1F3CEC00A8F121 /* WritingToolsKeyboardExt */,
+				58693C3692DE4D8180E94E06 /* WritingToolsKeyboardTests */,
 				2AEB8FCB2DC6D7C7007869EF /* Frameworks */,
 				2A9BFD7F2D1F3CCF00A8F121 /* Products */,
 			);
@@ -128,6 +156,7 @@
 			children = (
 				2A9BFD7E2D1F3CCF00A8F121 /* ProseKey AI.app */,
 				2A9BFDAF2D1F3CEC00A8F121 /* ProseKey AIExt.appex */,
+				25CBE2DA21614B849C47FEDB /* ProseKey AITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -195,6 +224,28 @@
 			productReference = 2A9BFDAF2D1F3CEC00A8F121 /* ProseKey AIExt.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
+		4B7F56BC58D94113BD3AEF85 /* ProseKey AITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 11490FCE91A1438EA6C0793B /* Build configuration list for PBXNativeTarget "ProseKey AITests" */;
+			buildPhases = (
+				F7177DE7BB35482F806842F4 /* Sources */,
+				1FA14DD82F704FDA82EDD23E /* Frameworks */,
+				D7C90E00D4704D2098CD19CB /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				4A164DFE42004108B8E53866 /* PBXTargetDependency */,
+				7026DEE6C8B14EA1836862CD /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				58693C3692DE4D8180E94E06 /* WritingToolsKeyboardTests */,
+			);
+			name = "ProseKey AITests";
+			productName = "ProseKey AITests";
+			productReference = 25CBE2DA21614B849C47FEDB /* ProseKey AITests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -211,6 +262,9 @@
 					2A9BFDAE2D1F3CEC00A8F121 = {
 						CreatedOnToolsVersion = 16.2;
 						LastSwiftMigration = 1620;
+					};
+					4B7F56BC58D94113BD3AEF85 = {
+						CreatedOnToolsVersion = 16.2;
 					};
 				};
 			};
@@ -236,6 +290,7 @@
 			targets = (
 				2A9BFD7D2D1F3CCF00A8F121 /* ProseKey AI */,
 				2A9BFDAE2D1F3CEC00A8F121 /* ProseKey AIExt */,
+				4B7F56BC58D94113BD3AEF85 /* ProseKey AITests */,
 			);
 		};
 /* End PBXProject section */
@@ -257,6 +312,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		D7C90E00D4704D2098CD19CB /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -274,6 +336,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		F7177DE7BB35482F806842F4 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -281,6 +350,16 @@
 			isa = PBXTargetDependency;
 			target = 2A9BFDAE2D1F3CEC00A8F121 /* ProseKey AIExt */;
 			targetProxy = 2A9BFDB42D1F3CEC00A8F121 /* PBXContainerItemProxy */;
+		};
+		4A164DFE42004108B8E53866 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 2A9BFD7D2D1F3CCF00A8F121 /* ProseKey AI */;
+			targetProxy = C681E5B5B6EB44F9A359D0A2 /* PBXContainerItemProxy */;
+		};
+		7026DEE6C8B14EA1836862CD /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 2A9BFDAE2D1F3CEC00A8F121 /* ProseKey AIExt */;
+			targetProxy = D5147E75E3794B38850488BB /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -421,7 +500,7 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = WritingToolsKeyboard/WritingToolsKeyboard.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 28;
+				CURRENT_PROJECT_VERSION = 30;
 				DEVELOPMENT_ASSET_PATHS = "\"WritingToolsKeyboard/Preview Content\"";
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
@@ -461,7 +540,7 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = WritingToolsKeyboard/WritingToolsKeyboard.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 28;
+				CURRENT_PROJECT_VERSION = 30;
 				DEVELOPMENT_ASSET_PATHS = "\"WritingToolsKeyboard/Preview Content\"";
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
@@ -499,7 +578,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = WritingToolsKeyboardExt/WritingToolsKeyboardExt.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 28;
+				CURRENT_PROJECT_VERSION = 30;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = "$(SRCROOT)/WritingToolsKeyboardExt/Resources/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "ProseKey AI Keyboard Extension";
@@ -532,7 +611,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = WritingToolsKeyboardExt/WritingToolsKeyboardExt.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 28;
+				CURRENT_PROJECT_VERSION = 30;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = "$(SRCROOT)/WritingToolsKeyboardExt/Resources/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "ProseKey AI Keyboard Extension";
@@ -558,9 +637,73 @@
 			};
 			name = Release;
 		};
+		3A263B2527C449E795CB38D2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = MK2V998W66;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				OTHER_LDFLAGS = (
+					"-framework",
+					XCTest,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.aryamirsepasi.ProseKeyAITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ProseKey AI.app/ProseKey AI";
+			};
+			name = Release;
+		};
+		95A2057DF5294C3686F3936A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = MK2V998W66;
+				ENABLE_TESTABILITY = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				OTHER_LDFLAGS = (
+					"-framework",
+					XCTest,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.aryamirsepasi.ProseKeyAITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ProseKey AI.app/ProseKey AI";
+			};
+			name = Debug;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		11490FCE91A1438EA6C0793B /* Build configuration list for PBXNativeTarget "ProseKey AITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				95A2057DF5294C3686F3936A /* Debug */,
+				3A263B2527C449E795CB38D2 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		2A9BFD792D1F3CCF00A8F121 /* Build configuration list for PBXProject "ProseKey AI" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

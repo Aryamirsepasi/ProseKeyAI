@@ -3,137 +3,114 @@ import SwiftUI
 struct MistralSettingsView: View {
     @ObservedObject var appState: AppState
     @ObservedObject private var settings = AppSettings.shared
+    @Environment(\.dismiss) private var dismiss
     @State private var apiKey: String = ""
     @State private var modelName: String = ""
     @State private var showSaveConfirmation = false
+    @State private var showHelp = false
+
     private enum SuggestedMistral: Hashable {
         case custom
         case model(MistralModel)
     }
     @State private var suggested: SuggestedMistral = .custom
 
-
     var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 20) {
-                // Header
+        Form {
+            Section {
                 HStack {
                     Image("mistralai")
                         .renderingMode(.template)
                         .resizable()
                         .aspectRatio(contentMode: .fit)
-                        .frame(width: 36, height: 36)
-                        .foregroundColor(Color(hex: "FA520F"))
+                        .frame(width: 28, height: 28)
+                        .foregroundStyle(Color(hex: "FA520F"))
 
-                    VStack(alignment: .leading) {
+                    VStack(alignment: .leading, spacing: 2) {
                         Text("Mistral AI")
-                            .font(.title2)
-                            .fontWeight(.bold)
-
+                            .font(.headline)
                         Text("Configure your Mistral API access")
                             .font(.subheadline)
-                            .foregroundColor(.secondary)
+                            .foregroundStyle(.secondary)
                     }
                 }
-                .padding(.bottom, 20)
+                .padding(.vertical, 4)
+            }
 
-                // API Key field
-                LabeledTextField(
-                    label: "API Key",
-                    placeholder: "Enter your Mistral API key",
-                    text: $apiKey,
-                    isSecure: true
-                )
+            Section("Credentials") {
+                SecureField("API Key", text: $apiKey)
+                    .textInputAutocapitalization(.never)
+                    .autocorrectionDisabled()
+                    .textContentType(.password)
+            }
 
-                // Free-form model name input
-                LabeledTextField(
-                    label: "Model",
-                    placeholder: MistralConfig.defaultModel,
-                    text: $modelName
-                )
-                .onChange(of: modelName) { newValue in
-                    if let matched = MistralModel(rawValue: newValue) {
-                        suggested = .model(matched)
-                    } else {
-                        suggested = .custom
-                    }
-                }
-
-                // Suggested models (picker)
-                VStack(alignment: .leading, spacing: 8) {
-                    Text("Suggested Models")
-                        .font(.headline)
-                    Picker("Suggested Models", selection: $suggested) {
-                        Text("Custom").tag(SuggestedMistral.custom)
-                        ForEach(MistralModel.allCases, id: \.self) { option in
-                            Text(option.displayName).tag(SuggestedMistral.model(option))
+            Section("Model") {
+                TextField("Model", text: $modelName, prompt: Text(MistralConfig.defaultModel))
+                    .textInputAutocapitalization(.never)
+                    .autocorrectionDisabled()
+                    .onChangeCompat(of: modelName) { newValue in
+                        if let matched = MistralModel(rawValue: newValue) {
+                            suggested = .model(matched)
+                        } else {
+                            suggested = .custom
                         }
                     }
-                    .pickerStyle(MenuPickerStyle())
-                    .onChange(of: suggested) { newValue in
-                        if case let .model(m) = newValue {
-                            modelName = m.rawValue
-                        }
-                    }
-                    .padding(8)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .background(Color(.systemGray6))
-                    .cornerRadius(10)
-                }
 
-                Button(action: {
+                Picker("Suggested Models", selection: $suggested) {
+                    Text("Custom").tag(SuggestedMistral.custom)
+                    ForEach(MistralModel.allCases, id: \.self) { option in
+                        Text(option.displayName).tag(SuggestedMistral.model(option))
+                    }
+                }
+                .pickerStyle(.menu)
+                .onChangeCompat(of: suggested) { newValue in
+                    if case let .model(m) = newValue {
+                        modelName = m.rawValue
+                    }
+                }
+            }
+
+            Section {
+                Button("Save Changes") {
                     appState.saveMistralConfig(
                         apiKey: apiKey,
                         model: modelName
                     )
                     HapticsManager.shared.success()
                     showSaveConfirmation = true
-                }) {
-                    Text("Save Changes")
-                        .fontWeight(.bold)
-                        .padding(10)
-                        .frame(maxWidth: .infinity)
                 }
-                .buttonStyle(.borderedProminent)
+                .frame(maxWidth: .infinity, alignment: .center)
                 .tint(isFormValid ? Color(hex: "FA520F") : Color.gray)
                 .disabled(!isFormValid)
-
-                // Help info
-                VStack(alignment: .leading, spacing: 8) {
-                    Text("Getting a Mistral API Key:")
-                        .font(.headline)
-                        .padding(.top, 8)
-
-                    HStack(alignment: .top) {
-                        Image(systemName: "1.circle.fill")
-                            .foregroundColor(Color(hex: "FA520F"))
-                        Text("Visit console.mistral.ai")
-                    }
-
-                    HStack(alignment: .top) {
-                        Image(systemName: "2.circle.fill")
-                            .foregroundColor(Color(hex: "FA520F"))
-                        Text("Sign up or log in to your account")
-                    }
-
-                    HStack(alignment: .top) {
-                        Image(systemName: "3.circle.fill")
-                            .foregroundColor(Color(hex: "FA520F"))
-                        Text("Navigate to API Keys and create a new key")
-                    }
-                }
-                .padding()
-                .frame(maxWidth: .infinity)
-                .background(Color(.systemGray6))
-                .cornerRadius(20)
             }
-            .padding()
+
+            Section {
+                Button("Set as Current Provider") {
+                    settings.currentProvider = "mistral"
+                    appState.setCurrentProvider("mistral")
+                    dismiss()
+                }
+                .frame(maxWidth: .infinity, alignment: .center)
+                .disabled(settings.currentProvider == "mistral")
+            }
         }
         .navigationTitle("Mistral Settings")
         .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button {
+                    showHelp = true
+                } label: {
+                    Label("Help", systemImage: "questionmark.circle")
+                }
+            }
+        }
+        .sheet(isPresented: $showHelp) {
+            ApiKeyHelpView(provider: "mistral")
+        }
         .onAppear(perform: syncFromSettings)
-        .onChange(of: settings.mistralApiKey) { _ in syncFromSettings() }
-        .onChange(of: settings.mistralModel) { _ in syncFromSettings() }
+        .onChangeCompat(of: settings.mistralApiKey) { _ in syncFromSettings() }
+        .onChangeCompat(of: settings.mistralModel) { _ in syncFromSettings() }
         .alert("Saved", isPresented: $showSaveConfirmation) {
             Button("OK", role: .cancel) {}
         } message: {

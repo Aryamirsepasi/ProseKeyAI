@@ -10,13 +10,12 @@ struct LabeledTextField: View {
         VStack(alignment: .leading, spacing: 8) {
             Text(label)
                 .font(.headline)
-                .foregroundColor(.primary)
+                .foregroundStyle(.primary)
 
             if isSecure {
                 SecureField(placeholder, text: $text)
                     .padding()
-                    .background(Color(.systemGray6))
-                    .cornerRadius(10)
+                    .background(Color(.systemGray6), in: .rect(cornerRadius: 10))
                     .textInputAutocapitalization(.never)
                     .textContentType(.password)
                     .autocorrectionDisabled()
@@ -25,8 +24,7 @@ struct LabeledTextField: View {
             } else {
                 TextField(placeholder, text: $text)
                     .padding()
-                    .background(Color(.systemGray6))
-                    .cornerRadius(10)
+                    .background(Color(.systemGray6), in: .rect(cornerRadius: 10))
                     .textInputAutocapitalization(.never)
                     .textContentType(.none)
                     .autocorrectionDisabled()
@@ -45,7 +43,7 @@ struct FeatureRow: View {
     var body: some View {
         HStack(spacing: 8) {
             Image(systemName: icon)
-                .foregroundColor(icon.contains("xmark") ? .red : (icon.contains("info") ? .blue : .green))
+                .foregroundStyle(icon.contains("xmark") ? .red : (icon.contains("info") ? .blue : .green))
                 .font(.system(size: 14))
             Text(text)
                 .font(.subheadline)

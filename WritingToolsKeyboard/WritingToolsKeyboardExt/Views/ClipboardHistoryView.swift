@@ -42,18 +42,18 @@ struct ClipboardHistoryView: View {
             }) {
                 HStack(spacing: 4) {
                     Image(systemName: "chevron.left")
-                        .font(.system(size: 16, weight: .semibold))
+                        .font(.body.weight(.semibold))
                     Text("Back")
-                        .font(.system(size: 17))
+                        .font(.body)
                 }
-                .foregroundColor(.blue)
+                .foregroundStyle(.blue)
             }
-            .buttonStyle(PlainButtonStyle())
+            .buttonStyle(.plain)
             
             Spacer()
             
             Text("Clipboard History")
-                .font(.system(size: 17, weight: .semibold))
+                .font(.headline)
             
             Spacer()
             
@@ -63,14 +63,14 @@ struct ClipboardHistoryView: View {
                     manager.clearAll()
                 }) {
                     Text("Clear")
-                        .font(.system(size: 17))
-                        .foregroundColor(.red)
+                        .font(.body)
+                        .foregroundStyle(.red)
                 }
-                .buttonStyle(PlainButtonStyle())
+                .buttonStyle(.plain)
             } else {
                 Text("Clear")
-                    .font(.system(size: 17))
-                    .foregroundColor(.clear)
+                    .font(.body)
+                    .foregroundStyle(.clear)
             }
         }
         .padding(.horizontal, 16)
@@ -83,16 +83,16 @@ struct ClipboardHistoryView: View {
             Spacer()
 
             Image(systemName: "doc.on.clipboard")
-                .font(.system(size: 48))
-                .foregroundColor(.secondary)
+                .font(.largeTitle)
+                .foregroundStyle(.secondary)
 
             Text("No Clipboard History")
-                .font(.system(size: 17, weight: .semibold))
-                .foregroundColor(.primary)
+                .font(.headline)
+                .foregroundStyle(.primary)
 
             Text("Copy text to see it appear here")
-                .font(.system(size: 15))
-                .foregroundColor(.secondary)
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)
 
             Spacer()
@@ -102,7 +102,7 @@ struct ClipboardHistoryView: View {
     }
     
     private func clipboardGridView(items: [ClipboardItem]) -> some View {
-        ScrollView(.vertical, showsIndicators: true) {
+        ScrollView(.vertical) {
             LazyVGrid(columns: columns, spacing: 8) {
                 ForEach(items) { item in
                     ClipboardItemCard(
@@ -115,6 +115,7 @@ struct ClipboardHistoryView: View {
             }
             .padding(12)
         }
+        .scrollIndicators(.visible)
         .frame(maxHeight: .infinity)
     }
     
@@ -167,8 +168,8 @@ struct ClipboardItemCard: View {
             Button(action: onTap) {
                 VStack(alignment: .leading, spacing: 8) {
                     Text(item.displayText)
-                        .font(.system(size: 14))
-                        .foregroundColor(.primary)
+                        .font(.footnote)
+                        .foregroundStyle(.primary)
                         .lineLimit(4)
                         .multilineTextAlignment(.leading)
                         .frame(maxWidth: .infinity, alignment: .leading)
@@ -177,12 +178,12 @@ struct ClipboardItemCard: View {
                     
                     HStack {
                         Image(systemName: isCopied ? "checkmark.circle.fill" : "doc.on.doc")
-                            .font(.system(size: 12))
-                            .foregroundColor(isCopied ? .green : .secondary)
+                            .font(.caption)
+                            .foregroundStyle(isCopied ? .green : .secondary)
                         
                         Text(isCopied ? "Copied!" : item.formattedTimestamp)
-                            .font(.system(size: 11))
-                            .foregroundColor(isCopied ? .green : .secondary)
+                            .font(.caption2)
+                            .foregroundStyle(isCopied ? .green : .secondary)
                         
                         Spacer()
                     }
@@ -193,15 +194,16 @@ struct ClipboardItemCard: View {
             if !isCopied {
                 Button(action: onDelete) {
                     Image(systemName: "xmark.circle.fill")
-                        .font(.system(size: 18))
-                        .foregroundColor(.secondary)
+                        .font(.title3)
+                        .foregroundStyle(.secondary)
                         .background(
                             Circle()
                                 .fill(Color(.systemBackground))
                                 .frame(width: 16, height: 16)
                         )
                 }
-                .buttonStyle(PlainButtonStyle())
+                .buttonStyle(.plain)
+                .accessibilityLabel("Delete clipboard item")
                 .padding(8)
             }
         }

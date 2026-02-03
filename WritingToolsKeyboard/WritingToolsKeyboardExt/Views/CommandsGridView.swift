@@ -33,15 +33,14 @@ struct AICommandButton: View {
         }) {
             VStack(spacing: 6) {
                 Image(systemName: command.icon)
-                    .font(.system(size: 22))
-                    .foregroundColor(.primary)
+                    .font(.title3)
+                    .foregroundStyle(.primary)
                     .frame(height: 24)
                     .accessibility(hidden: false)
                 
                 Text(command.displayName)
-                    .font(.system(size: 14))
-                    .fontWeight(.medium)
-                    .foregroundColor(.primary)
+                    .font(.footnote.weight(.semibold))
+                    .foregroundStyle(.primary)
                     .lineLimit(1)
                     .minimumScaleFactor(0.8)
             }

@@ -2,23 +2,21 @@ import SwiftUI
 
 struct KeyboardView: View {
   weak var viewController: KeyboardViewController?
-  @ObservedObject var vm: AIToolsViewModel
+  @StateObject private var vm: AIToolsViewModel
   
-  // Mirror controller height (2 command rows visible)
-  private let keyboardHeight: CGFloat = KeyboardConstants.keyboardHeight
-
-  init(viewController: KeyboardViewController?, vm: AIToolsViewModel? = nil) {
+  init(viewController: KeyboardViewController?) {
     self.viewController = viewController
-    if let existingVM = vm {
-      self.vm = existingVM
-    } else {
-      self.vm = AIToolsViewModel(viewController: viewController)
-    }
+    _vm = StateObject(wrappedValue: AIToolsViewModel(viewController: viewController))
+  }
+
+  init(viewController: KeyboardViewController?, vm: AIToolsViewModel) {
+    self.viewController = viewController
+    _vm = StateObject(wrappedValue: vm)
   }
 
   var body: some View {
     AIToolsView(vm: vm)
-      .frame(width: UIScreen.main.bounds.width, height: keyboardHeight)
+      .frame(maxWidth: .infinity, maxHeight: .infinity)
       .ignoresSafeArea(.all, edges: .all)
       .onAppear {
         vm.checkSelectedText()

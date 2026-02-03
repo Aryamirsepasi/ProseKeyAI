@@ -1,4 +1,5 @@
 import SwiftUI
+import UIKit
 
 /// A compact error banner designed for keyboard extensions
 /// Following Apple HIG: clear, concise, non-blocking
@@ -10,18 +11,22 @@ struct ErrorBannerView: View {
     @State private var offset: CGFloat = -50
     
     var body: some View {
+        bannerContent
+    }
+
+    private var bannerContent: some View {
         HStack(spacing: 8) {
             Image(systemName: error.icon)
                 .font(.system(size: 14, weight: .medium))
-                .foregroundColor(.white)
-            
+                .foregroundStyle(.white)
+
             Text(error.shortMessage)
                 .font(.system(size: 13, weight: .medium))
-                .foregroundColor(.white)
+                .foregroundStyle(.white)
                 .lineLimit(1)
-            
+
             Spacer(minLength: 4)
-            
+
             Button(action: {
                 withAnimation(.easeOut(duration: 0.2)) {
                     offset = -50
@@ -33,9 +38,9 @@ struct ErrorBannerView: View {
             }) {
                 Image(systemName: "xmark.circle.fill")
                     .font(.system(size: 16))
-                    .foregroundColor(.white.opacity(0.8))
+                    .foregroundStyle(.white.opacity(0.8))
             }
-            .buttonStyle(PlainButtonStyle())
+            .buttonStyle(.plain)
         }
         .padding(.horizontal, 12)
         .padding(.vertical, 8)
@@ -49,10 +54,11 @@ struct ErrorBannerView: View {
         .opacity(isVisible ? 1 : 0)
         .onAppear {
             HapticsManager.shared.error()
+            UIAccessibility.post(notification: .announcement, argument: "Error: \(error.shortMessage)")
             withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
                 offset = 0
             }
-            
+
             // Auto-dismiss after 4 seconds
             DispatchQueue.main.asyncAfter(deadline: .now() + 4) {
                 guard isVisible else { return }

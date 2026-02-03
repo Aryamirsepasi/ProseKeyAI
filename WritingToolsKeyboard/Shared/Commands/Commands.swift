@@ -1,5 +1,6 @@
 import Foundation
 import SwiftUI
+import CoreFoundation
 
 // A command for the keyboard - can be either built-in or custom
 struct KeyboardCommand: Codable, Identifiable, Equatable {
@@ -46,6 +47,7 @@ struct KeyboardCommand: Codable, Identifiable, Equatable {
 }
 
 // Manages loading/saving commands from App Group user defaults
+@MainActor
 class KeyboardCommandsManager: ObservableObject {
     @Published private(set) var commands: [KeyboardCommand] = [] {
         didSet {
@@ -79,10 +81,13 @@ class KeyboardCommandsManager: ObservableObject {
     /// Current version of built-in commands format
     private let currentBuiltInVersion = 3  // v3: Added German translations for command names
 
+    private var darwinObserver: KeyboardCommandsDarwinObserver?
+
     init() {
         loadCommands()
         ensureBuiltInsExist()
         migrateBuiltInCommandsIfNeeded()
+        startDarwinObserver()
     }
     
     func loadCommands() {
@@ -101,6 +106,12 @@ class KeyboardCommandsManager: ObservableObject {
             // Try loading legacy commands if available
             migrateFromLegacyCommands(userDefaults: userDefaults)
         }
+    }
+
+    func reloadCommands() {
+        loadCommands()
+        ensureBuiltInsExist()
+        migrateBuiltInCommandsIfNeeded()
     }
     
     private func migrateFromLegacyCommands(userDefaults: UserDefaults) {
@@ -141,6 +152,14 @@ class KeyboardCommandsManager: ObservableObject {
             #if DEBUG
             print("Failed to encode/save keyboard commands: \(error)")
             #endif
+        }
+    }
+
+    private func startDarwinObserver() {
+        darwinObserver = KeyboardCommandsDarwinObserver { [weak self] in
+            Task { @MainActor in
+                self?.reloadCommands()
+            }
         }
     }
     
@@ -492,5 +511,39 @@ class KeyboardCommandsManager: ObservableObject {
         }
         
         saveCommands()
+    }
+}
+
+// MARK: - Darwin Notification Observer (Commands)
+
+private final class KeyboardCommandsDarwinObserver {
+    private let name = AppNotifications.keyboardCommandsDidChange as CFString
+    private var callback: () -> Void
+
+    init(callback: @escaping () -> Void) {
+        self.callback = callback
+        let center = CFNotificationCenterGetDarwinNotifyCenter()
+        let observer = UnsafeMutableRawPointer(Unmanaged.passUnretained(self).toOpaque())
+
+        CFNotificationCenterAddObserver(
+            center,
+            observer,
+            { _, observer, _, _, _ in
+                guard let observer = observer else { return }
+                let instance = Unmanaged<KeyboardCommandsDarwinObserver>
+                    .fromOpaque(observer)
+                    .takeUnretainedValue()
+                instance.callback()
+            },
+            name,
+            nil,
+            .deliverImmediately
+        )
+    }
+
+    deinit {
+        let center = CFNotificationCenterGetDarwinNotifyCenter()
+        let observer = UnsafeMutableRawPointer(Unmanaged.passUnretained(self).toOpaque())
+        CFNotificationCenterRemoveObserver(center, observer, CFNotificationName(name), nil)
     }
 }

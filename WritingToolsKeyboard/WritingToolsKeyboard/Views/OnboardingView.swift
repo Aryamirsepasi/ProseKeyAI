@@ -47,8 +47,8 @@ struct OnboardingView: View {
               hasCompletedOnboarding = true
               dismiss()
             }
-            .font(.system(size: 16))
-            .foregroundColor(.secondary)
+            .font(.body)
+            .foregroundStyle(.secondary)
             .accessibilityLabel("Skip onboarding")
             .accessibilityHint("Completes setup and closes onboarding")
           }
@@ -91,7 +91,7 @@ struct OnboardingView: View {
               withAnimation { currentPage -= 1 }
             }
             .font(.body)
-            .foregroundColor(.primary)
+            .foregroundStyle(.primary)
             .accessibilityLabel("Go back")
             .accessibilityHint("Returns to the previous onboarding step")
           }
@@ -156,8 +156,8 @@ struct OnboardingView: View {
         Spacer()
         
       Image(systemName: "keyboard")
-        .font(.system(size: 50))
-        .foregroundColor(accentColor)
+        .font(.largeTitle)
+        .foregroundStyle(accentColor)
         .padding(.bottom, 10)
 
       Text("Welcome to ProseKey AI")
@@ -168,7 +168,7 @@ struct OnboardingView: View {
       Text("Transform your writing with AI-powered tools")
         .font(.title3)
         .multilineTextAlignment(.center)
-        .foregroundColor(.secondary)
+        .foregroundStyle(.secondary)
         .padding(.horizontal, 32)
 
       Spacer()
@@ -181,8 +181,8 @@ struct OnboardingView: View {
       Spacer()
 
       Image(systemName: "keyboard.fill")
-        .font(.system(size: 50))
-        .foregroundColor(accentColor)
+        .font(.largeTitle)
+        .foregroundStyle(accentColor)
         .padding(.bottom, 10)
 
       Text("Enable the Keyboard")
@@ -195,7 +195,7 @@ struct OnboardingView: View {
       )
       .font(.body)
       .multilineTextAlignment(.center)
-      .foregroundColor(.secondary)
+      .foregroundStyle(.secondary)
       .padding(.horizontal, 32)
 
       SetupStepsView(
@@ -222,7 +222,7 @@ struct OnboardingView: View {
         .frame(maxWidth: .infinity)
         .padding()
         .background(Color.gray.opacity(0.2))
-        .cornerRadius(12)
+        .clipShape(.rect(cornerRadius: 12))
       }
 
       Spacer()
@@ -235,8 +235,8 @@ struct OnboardingView: View {
       Spacer()
 
       Image(systemName: "lock.open.fill")
-        .font(.system(size: 50))
-        .foregroundColor(accentColor)
+        .font(.largeTitle)
+        .foregroundStyle(accentColor)
         .padding(.bottom, 10)
 
       Text("Enable Full Access")
@@ -249,7 +249,7 @@ struct OnboardingView: View {
       )
       .font(.body)
       .multilineTextAlignment(.center)
-      .foregroundColor(.secondary)
+      .foregroundStyle(.secondary)
       .padding(.horizontal, 32)
 
       SetupStepsView(
@@ -276,7 +276,7 @@ struct OnboardingView: View {
         .frame(maxWidth: .infinity)
         .padding()
         .background(Color.gray.opacity(0.2))
-        .cornerRadius(12)
+        .clipShape(.rect(cornerRadius: 12))
       }
 
       Spacer()
@@ -289,8 +289,8 @@ struct OnboardingView: View {
       Spacer()
 
       Image(systemName: "checkmark.keyboard")
-        .font(.system(size: 50))
-        .foregroundColor(accentColor)
+        .font(.largeTitle)
+        .foregroundStyle(accentColor)
         .padding(.bottom, 10)
 
       Text("Test Your Keyboard")
@@ -303,7 +303,7 @@ struct OnboardingView: View {
       )
       .font(.body)
       .multilineTextAlignment(.center)
-      .foregroundColor(.secondary)
+      .foregroundStyle(.secondary)
       .padding(.horizontal, 32)
 
       VStack(alignment: .leading, spacing: 12) {
@@ -315,18 +315,18 @@ struct OnboardingView: View {
         if isKeyboardEnabled && isFullAccessEnabled {
           HStack {
             Image(systemName: "checkmark.circle.fill")
-              .foregroundColor(.green)
+              .foregroundStyle(.green)
             Text("Keyboard is ready to use!")
-              .foregroundColor(.green)
+              .foregroundStyle(.green)
               .font(.subheadline)
           }
           .padding(.horizontal)
         } else {
           HStack {
             Image(systemName: "info.circle.fill")
-              .foregroundColor(.orange)
+              .foregroundStyle(.orange)
             Text("Switch to ProseKey AI to verify setup")
-              .foregroundColor(.secondary)
+              .foregroundStyle(.secondary)
               .font(.subheadline)
           }
           .padding(.horizontal)
@@ -334,7 +334,7 @@ struct OnboardingView: View {
       }
       .padding()
       .background(Color.gray.opacity(0.15))
-      .cornerRadius(16)
+      .clipShape(.rect(cornerRadius: 16))
 
       Spacer()
     }
@@ -346,8 +346,8 @@ struct OnboardingView: View {
       Spacer()
 
       Image(systemName: "doc.on.clipboard.fill")
-        .font(.system(size: 50))
-        .foregroundColor(.orange)
+        .font(.largeTitle)
+        .foregroundStyle(.orange)
         .padding(.bottom, 10)
 
       Text("Allow Paste Permission")
@@ -358,14 +358,14 @@ struct OnboardingView: View {
       Text("iOS will ask for permission when you first use clipboard features")
         .font(.body)
         .multilineTextAlignment(.center)
-        .foregroundColor(.secondary)
+        .foregroundStyle(.secondary)
         .padding(.horizontal, 32)
 
       VStack(alignment: .leading, spacing: 16) {
         HStack(alignment: .top, spacing: 12) {
           Image(systemName: "hand.tap.fill")
             .font(.title2)
-            .foregroundColor(.blue)
+            .foregroundStyle(.blue)
             .frame(width: 28)
           VStack(alignment: .leading, spacing: 4) {
             Text("Tap \"Allow Paste\"")
@@ -373,14 +373,14 @@ struct OnboardingView: View {
               .fontWeight(.medium)
             Text("When the iOS permission dialog appears")
               .font(.caption)
-              .foregroundColor(.secondary)
+              .foregroundStyle(.secondary)
           }
         }
 
         HStack(alignment: .top, spacing: 12) {
           Image(systemName: "bell.slash.fill")
             .font(.title2)
-            .foregroundColor(.green)
+            .foregroundStyle(.green)
             .frame(width: 28)
           VStack(alignment: .leading, spacing: 4) {
             Text("Avoid Repeated Prompts")
@@ -388,14 +388,14 @@ struct OnboardingView: View {
               .fontWeight(.medium)
             Text("Choosing \"Allow Paste\" grants permanent access")
               .font(.caption)
-              .foregroundColor(.secondary)
+              .foregroundStyle(.secondary)
           }
         }
 
         HStack(alignment: .top, spacing: 12) {
           Image(systemName: "doc.on.doc.fill")
             .font(.title2)
-            .foregroundColor(.purple)
+            .foregroundStyle(.purple)
             .frame(width: 28)
           VStack(alignment: .leading, spacing: 4) {
             Text("Use Copied Text")
@@ -403,14 +403,14 @@ struct OnboardingView: View {
               .fontWeight(.medium)
             Text("Process longer text by copying it first")
               .font(.caption)
-              .foregroundColor(.secondary)
+              .foregroundStyle(.secondary)
           }
         }
       }
       .frame(maxWidth: .infinity, alignment: .leading)
       .padding()
       .background(Color.gray.opacity(0.15))
-      .cornerRadius(16)
+      .clipShape(.rect(cornerRadius: 16))
 
       Spacer()
     }
@@ -422,8 +422,8 @@ struct OnboardingView: View {
       Spacer()
 
       Image(systemName: "sparkles")
-        .font(.system(size: 50))
-        .foregroundColor(accentColor)
+        .font(.largeTitle)
+        .foregroundStyle(accentColor)
         .padding(.bottom, 10)
 
       Text("Powerful Features")
@@ -435,7 +435,7 @@ struct OnboardingView: View {
       Text("Everything you need to enhance your writing")
         .font(.body)
         .multilineTextAlignment(.center)
-        .foregroundColor(.secondary)
+        .foregroundStyle(.secondary)
         .padding(.horizontal, 32)
         
 
@@ -443,7 +443,7 @@ struct OnboardingView: View {
         HStack(alignment: .top, spacing: 12) {
           Image(systemName: "wand.and.stars")
             .font(.title2)
-            .foregroundColor(.blue)
+            .foregroundStyle(.blue)
             .frame(width: 28)
           VStack(alignment: .leading, spacing: 4) {
             Text("AI Writing Tools")
@@ -451,14 +451,14 @@ struct OnboardingView: View {
               .fontWeight(.medium)
             Text("Proofread, rewrite, summarize, and translate your text")
               .font(.caption)
-              .foregroundColor(.secondary)
+              .foregroundStyle(.secondary)
           }
         }
 
         HStack(alignment: .top, spacing: 12) {
           Image(systemName: "text.cursor")
             .font(.title2)
-            .foregroundColor(.green)
+            .foregroundStyle(.green)
             .frame(width: 28)
           VStack(alignment: .leading, spacing: 4) {
             Text("Smart Text Selection")
@@ -466,14 +466,14 @@ struct OnboardingView: View {
               .fontWeight(.medium)
             Text("Automatically detect text or use copied content")
               .font(.caption)
-              .foregroundColor(.secondary)
+              .foregroundStyle(.secondary)
           }
         }
 
         HStack(alignment: .top, spacing: 12) {
           Image(systemName: "square.and.pencil")
             .font(.title2)
-            .foregroundColor(.purple)
+            .foregroundStyle(.purple)
             .frame(width: 28)
           VStack(alignment: .leading, spacing: 4) {
             Text("Custom Prompts")
@@ -481,14 +481,14 @@ struct OnboardingView: View {
               .fontWeight(.medium)
             Text("Create personalized AI instructions for any task")
               .font(.caption)
-              .foregroundColor(.secondary)
+              .foregroundStyle(.secondary)
           }
         }
       }
       .frame(maxWidth: .infinity, alignment: .leading)
       .padding()
       .background(Color.gray.opacity(0.15))
-      .cornerRadius(16)
+      .clipShape(.rect(cornerRadius: 16))
 
       Spacer()
     }
@@ -499,8 +499,8 @@ struct OnboardingView: View {
     ScrollView {
       VStack(spacing: 20) {
         Image(systemName: "checkmark.circle.fill")
-          .font(.system(size: 50))
-          .foregroundColor(.green)
+          .font(.largeTitle)
+          .foregroundStyle(.green)
           .padding(.bottom, 10)
 
         Text("You're All Set!")
@@ -511,7 +511,7 @@ struct OnboardingView: View {
         Text("Start transforming your writing with AI")
           .font(.body)
           .multilineTextAlignment(.center)
-          .foregroundColor(.secondary)
+          .foregroundStyle(.secondary)
           .padding(.horizontal, 32)
 
         VStack(alignment: .leading, spacing: 14) {
@@ -527,26 +527,26 @@ struct OnboardingView: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding()
         .background(Color.gray.opacity(0.15))
-        .cornerRadius(16)
+        .clipShape(.rect(cornerRadius: 16))
         .padding(.horizontal, 24)
         
         // Privacy notice
         VStack(alignment: .leading, spacing: 8) {
           HStack {
             Image(systemName: "lock.shield.fill")
-              .foregroundColor(.blue)
+              .foregroundStyle(.blue)
             Text("Your Privacy Matters")
               .font(.headline)
           }
           
           Text("We never send your copied content to our servers.")
             .font(.caption)
-            .foregroundColor(.secondary)
+            .foregroundStyle(.secondary)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding()
         .background(Color.blue.opacity(0.1))
-        .cornerRadius(12)
+        .clipShape(.rect(cornerRadius: 12))
         .padding(.horizontal, 24)
 
         Spacer(minLength: 20)
@@ -609,7 +609,7 @@ struct SetupStepsView: View {
       ForEach(steps.indices, id: \.self) { index in
         HStack(alignment: .top) {
           Text("\(index + 1).")
-            .foregroundColor(.secondary)
+            .foregroundStyle(.secondary)
           Text(steps[index])
         }
         .padding(.leading, 4)
@@ -618,9 +618,9 @@ struct SetupStepsView: View {
       if isComplete {
         HStack {
           Image(systemName: "checkmark.circle.fill")
-            .foregroundColor(.green)
+            .foregroundStyle(.green)
           Text(completeText)
-            .foregroundColor(.green)
+            .foregroundStyle(.green)
         }
         .padding(.top, 8)
       }
@@ -628,7 +628,7 @@ struct SetupStepsView: View {
     .frame(maxWidth: .infinity, alignment: .leading)
     .padding()
     .background(Color.gray.opacity(0.15))
-    .cornerRadius(16)
+    .clipShape(.rect(cornerRadius: 16))
   }
 }
 
@@ -641,8 +641,8 @@ struct FeatureCard: View {
     VStack(alignment: .leading, spacing: 16) {
       HStack(alignment: .center, spacing: 12) {
         Image(systemName: icon)
-          .font(.system(size: 28))
-          .foregroundColor(.blue)
+          .font(.title2)
+          .foregroundStyle(.blue)
           .frame(width: 36, height: 36)
 
         Text(title)
@@ -651,14 +651,14 @@ struct FeatureCard: View {
 
       Text(description)
         .font(.subheadline)
-        .foregroundColor(.secondary)
+        .foregroundStyle(.secondary)
         .fixedSize(horizontal: false, vertical: true)
         .lineLimit(nil)
     }
     .frame(maxWidth: .infinity, alignment: .topLeading)
     .padding()
     .background(Color.gray.opacity(0.15))
-    .cornerRadius(16)
+    .clipShape(.rect(cornerRadius: 16))
   }
 }
 
@@ -668,7 +668,7 @@ struct FeatureBullet: View {
   var body: some View {
     HStack(alignment: .top) {
       Image(systemName: "checkmark")
-        .foregroundColor(.green)
+        .foregroundStyle(.green)
       Text(text)
         .font(.subheadline)
     }

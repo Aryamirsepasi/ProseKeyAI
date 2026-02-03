@@ -17,7 +17,7 @@ struct CommandsView: View {
             } footer: {
                 Text("These are the default commands available in the keyboard. You can edit them but not delete them.")
                     .font(.footnote)
-                    .foregroundColor(.secondary)
+                    .foregroundStyle(.secondary)
             }
             
             Section {
@@ -29,7 +29,7 @@ struct CommandsView: View {
             } footer: {
                 Text("These are your custom commands available in the keyboard.")
                     .font(.footnote)
-                    .foregroundColor(.secondary)
+                    .foregroundStyle(.secondary)
             }
         }
         .listStyle(.insetGrouped)
@@ -59,13 +59,13 @@ struct CommandsView: View {
     private func commandRow(_ cmd: KeyboardCommand) -> some View {
         HStack {
             Image(systemName: cmd.icon)
-                .foregroundColor(.blue)
+                .foregroundStyle(.blue)
             VStack(alignment: .leading) {
                 Text(cmd.displayName)
                     .font(.headline)
                 Text(cmd.prompt)
                     .font(.caption)
-                    .foregroundColor(.secondary)
+                    .foregroundStyle(.secondary)
                     .lineLimit(2)
             }
             Spacer()
@@ -83,6 +83,7 @@ struct CommandsView: View {
             if !cmd.isBuiltIn {
                 Button(role: .destructive) {
                     commandsManager.deleteCommand(cmd)
+                    postKeyboardCommandsDidChange()
                 } label: {
                     Image(systemName: "trash")
                 }
@@ -97,7 +98,6 @@ struct CommandsView: View {
 struct CommandEditorView: View {
     @ObservedObject var commandsManager: KeyboardCommandsManager
     let onDismiss: () -> Void
-
     var existingCommand: KeyboardCommand? = nil
 
     let icons: [String] = [
@@ -150,7 +150,7 @@ struct CommandEditorView: View {
     @State private var inputIsContent: Bool = true
     
     var body: some View {
-        NavigationView {
+        NavigationStack {
             Form {
                 Section("Command Info") {
                     TextField("Name", text: $name)
@@ -172,7 +172,7 @@ struct CommandEditorView: View {
                 }
                 
                 Section("Icon") {
-                    ScrollView(.horizontal, showsIndicators: false) {
+                    ScrollView(.horizontal) {
                         HStack {
                             ForEach(icons, id: \.self) { icn in
                                 Button {
@@ -181,20 +181,20 @@ struct CommandEditorView: View {
                                     Image(systemName: icn)
                                         .font(.title2)
                                         .frame(width: 40, height: 40)
-                                        .background(icon == icn ? Color.blue.opacity(0.2) : Color.clear)
-                                        .cornerRadius(8)
+                                        .background(icon == icn ? Color.blue.opacity(0.2) : Color.clear, in: .rect(cornerRadius: 8))
                                 }
                                 .buttonStyle(.plain)
                             }
                         }
                     }
+                    .scrollIndicators(.hidden)
                 }
                 
                 if existingCommand?.isBuiltIn == true {
                     Section {
                         Text("This is a built-in command. While you can modify it, you cannot delete it.")
                             .font(.footnote)
-                            .foregroundColor(.secondary)
+                            .foregroundStyle(.secondary)
                     }
                 }
             }
@@ -219,6 +219,7 @@ struct CommandEditorView: View {
                         } else {
                             commandsManager.addCommand(cmd)
                         }
+                        postKeyboardCommandsDidChange()
                         onDismiss()
                     }
                     .disabled(isSaveDisabled)
@@ -246,7 +247,7 @@ struct CommandEditorView: View {
         } footer: {
             Text("Enter a custom prompt for your command. You can also use the Structured mode for guided prompt creation.")
                 .font(.footnote)
-                .foregroundColor(.secondary)
+                .foregroundStyle(.secondary)
         }
     }
     
@@ -261,7 +262,7 @@ struct CommandEditorView: View {
             } footer: {
                 Text("Define the role and main task for this command.")
                     .font(.footnote)
-                    .foregroundColor(.secondary)
+                    .foregroundStyle(.secondary)
             }
             
             Section {
@@ -274,7 +275,7 @@ struct CommandEditorView: View {
             } footer: {
                 Text("These ensure the AI only transforms text and doesn't engage with content.")
                     .font(.footnote)
-                    .foregroundColor(.secondary)
+                    .foregroundStyle(.secondary)
             }
             
             Section {
@@ -295,7 +296,7 @@ struct CommandEditorView: View {
             } footer: {
                 Text("Describe what the output should contain (e.g., 'only corrected text - no responses')")
                     .font(.footnote)
-                    .foregroundColor(.secondary)
+                    .foregroundStyle(.secondary)
             }
             
             Section {
@@ -310,20 +311,20 @@ struct CommandEditorView: View {
             } footer: {
                 Text("Specify what aspects of the input text should be preserved.")
                     .font(.footnote)
-                    .foregroundColor(.secondary)
+                    .foregroundStyle(.secondary)
             }
             
             Section {
                 Text(generateStructuredPrompt())
                     .font(.caption)
-                    .foregroundColor(.secondary)
+                    .foregroundStyle(.secondary)
                     .textSelection(.enabled)
             } header: {
                 Text("Generated Prompt Preview")
             } footer: {
                 Text("This is the JSON prompt that will be saved with your command.")
                     .font(.footnote)
-                    .foregroundColor(.secondary)
+                    .foregroundStyle(.secondary)
             }
         }
     }

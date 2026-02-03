@@ -199,7 +199,7 @@ class FoundationModelsProvider: ObservableObject, AIProvider {
                     errorMessage = "Text is too long. Please shorten your input: \(context.debugDescription)"
                 case .unsupportedLanguageOrLocale(let context):
                     errorMessage = "Language not supported: \(context.debugDescription)"
-                case .refusal(let refusal, let context):
+                case .refusal(_, let context):
                     errorMessage = "Request was refused: \(context.debugDescription)"
                 case .decodingFailure(let context):
                     errorMessage = "Failed to decode response: \(context.debugDescription)"

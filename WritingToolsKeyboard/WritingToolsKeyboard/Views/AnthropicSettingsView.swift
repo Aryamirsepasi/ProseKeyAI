@@ -3,95 +3,87 @@ import SwiftUI
 struct AnthropicSettingsView: View {
     @ObservedObject var appState: AppState
     @ObservedObject private var settings = AppSettings.shared
+    @Environment(\.dismiss) private var dismiss
     @State private var apiKey: String = ""
     @State private var model: String = ""
     @State private var showSaveConfirmation = false
+    @State private var showHelp = false
 
     var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 20) {
+        Form {
+            Section {
                 HStack {
                     Image("anthropic")
                         .renderingMode(.template)
                         .resizable()
                         .aspectRatio(contentMode: .fit)
-                        .frame(width: 36, height: 36)
-                        .foregroundColor(Color(hex: "c15f3c"))
-                    VStack(alignment: .leading) {
+                        .frame(width: 28, height: 28)
+                        .foregroundStyle(Color(hex: "c15f3c"))
+                    VStack(alignment: .leading, spacing: 2) {
                         Text("Anthropic Claude")
-                            .font(.title2)
-                            .fontWeight(.bold)
+                            .font(.headline)
                         Text("Configure your Anthropic API access")
                             .font(.subheadline)
-                            .foregroundColor(.secondary)
+                            .foregroundStyle(.secondary)
                     }
                 }
-                .padding(.bottom, 20)
-                
-                LabeledTextField(
-                    label: "API Key",
-                    placeholder: "Enter your Anthropic API key",
-                    text: $apiKey,
-                    isSecure: true
-                )
-                LabeledTextField(
-                    label: "Model",
-                    placeholder: AnthropicConfig.defaultModel,
-                    text: $model
-                )
-                Button(action: {
+                .padding(.vertical, 4)
+            }
+
+            Section("Credentials") {
+                SecureField("API Key", text: $apiKey)
+                    .textInputAutocapitalization(.never)
+                    .autocorrectionDisabled()
+                    .textContentType(.password)
+            }
+
+            Section("Model") {
+                TextField("Model", text: $model, prompt: Text(AnthropicConfig.defaultModel))
+                    .textInputAutocapitalization(.never)
+                    .autocorrectionDisabled()
+            }
+
+            Section {
+                Button("Save Changes") {
                     appState.saveAnthropicConfig(
                         apiKey: apiKey,
                         model: model
                     )
                     HapticsManager.shared.success()
                     showSaveConfirmation = true
-                }) {
-                    Text("Save Changes")
-                        .fontWeight(.bold)
-                        .padding(10)
-                        .frame(maxWidth: .infinity)
                 }
-                .buttonStyle(.borderedProminent)
+                .frame(maxWidth: .infinity, alignment: .center)
                 .tint(isFormValid ? Color(hex: "c15f3c") : Color.gray)
                 .disabled(!isFormValid)
-
-                // Help text
-                VStack(alignment: .leading, spacing: 8) {
-                    Text("Getting an Anthropic API Key:")
-                        .font(.headline)
-                        .padding(.top, 8)
-
-                    HStack(alignment: .top) {
-                        Image(systemName: "1.circle.fill")
-                            .foregroundColor(Color(hex: "c15f3c"))
-                        Text("Visit console.anthropic.com")
-                    }
-
-                    HStack(alignment: .top) {
-                        Image(systemName: "2.circle.fill")
-                            .foregroundColor(Color(hex: "c15f3c"))
-                        Text("Sign up or log in to your account")
-                    }
-
-                    HStack(alignment: .top) {
-                        Image(systemName: "3.circle.fill")
-                            .foregroundColor(Color(hex: "c15f3c"))
-                        Text("Navigate to API Keys and create a new key")
-                    }
-                }
-                .padding()
-                .frame(maxWidth: .infinity)
-                .background(Color(.systemGray6))
-                .cornerRadius(20)
             }
-            .padding()
+
+            Section {
+                Button("Set as Current Provider") {
+                    settings.currentProvider = "anthropic"
+                    appState.setCurrentProvider("anthropic")
+                    dismiss()
+                }
+                .frame(maxWidth: .infinity, alignment: .center)
+                .disabled(settings.currentProvider == "anthropic")
+            }
         }
         .navigationTitle("Anthropic Settings")
         .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button {
+                    showHelp = true
+                } label: {
+                    Label("Help", systemImage: "questionmark.circle")
+                }
+            }
+        }
+        .sheet(isPresented: $showHelp) {
+            ApiKeyHelpView(provider: "anthropic")
+        }
         .onAppear(perform: syncFromSettings)
-        .onChange(of: settings.anthropicApiKey) { _ in syncFromSettings() }
-        .onChange(of: settings.anthropicModel) { _ in syncFromSettings() }
+        .onChangeCompat(of: settings.anthropicApiKey) { _ in syncFromSettings() }
+        .onChangeCompat(of: settings.anthropicModel) { _ in syncFromSettings() }
         .alert("Saved", isPresented: $showSaveConfirmation) {
             Button("OK", role: .cancel) {}
         } message: {

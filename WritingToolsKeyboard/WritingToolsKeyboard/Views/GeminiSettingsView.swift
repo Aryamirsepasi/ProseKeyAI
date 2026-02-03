@@ -3,79 +3,69 @@ import SwiftUI
 struct GeminiSettingsView: View {
     @ObservedObject var appState: AppState
     @ObservedObject private var settings = AppSettings.shared
+    @Environment(\.dismiss) private var dismiss
     @State private var apiKey: String = ""
     @State private var modelName: String = ""
     @State private var suggested: GeminiModel = .custom
     @State private var showSaveConfirmation = false
+    @State private var showHelp = false
 
     var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 20) {
-                // Header
+        Form {
+            Section {
                 HStack {
                     Image("google")
                         .renderingMode(.template)
                         .resizable()
                         .aspectRatio(contentMode: .fit)
-                        .frame(width: 36, height: 36)
-                        .foregroundColor(Color(hex: "4285F4"))
+                        .frame(width: 28, height: 28)
+                        .foregroundStyle(Color(hex: "4285F4"))
 
-                    VStack(alignment: .leading) {
+                    VStack(alignment: .leading, spacing: 2) {
                         Text("Google Gemini")
-                            .font(.title2)
-                            .fontWeight(.bold)
-
+                            .font(.headline)
                         Text("Configure your Gemini API access")
                             .font(.subheadline)
-                            .foregroundColor(.secondary)
+                            .foregroundStyle(.secondary)
                     }
                 }
-                .padding(.bottom, 20)
+                .padding(.vertical, 4)
+            }
 
-                // API Key field
-                LabeledTextField(
-                    label: "API Key",
-                    placeholder: "Enter your Gemini API key",
-                    text: $apiKey,
-                    isSecure: true
-                )
+            Section("Credentials") {
+                SecureField("API Key", text: $apiKey)
+                    .textInputAutocapitalization(.never)
+                    .autocorrectionDisabled()
+                    .textContentType(.password)
+            }
 
-                // Free-form model name input
-                LabeledTextField(
-                    label: "Model",
-                    placeholder: "e.g. gemini-flash-latest",
-                    text: $modelName
-                )
-                .onChange(of: modelName) { newValue in
-                    if let matched = GeminiModel(rawValue: newValue) {
-                        suggested = matched
-                    } else {
-                        suggested = .custom
-                    }
-                }
-
-                // Suggested models (picker)
-                VStack(alignment: .leading, spacing: 8) {
-                    Text("Suggested Models")
-                        .font(.headline)
-                    Picker("Suggested Models", selection: $suggested) {
-                        ForEach(GeminiModel.allCases, id: \.self) { option in
-                            Text(option.displayName).tag(option)
+            Section("Model") {
+                TextField("Model", text: $modelName, prompt: Text("gemini-flash-latest"))
+                    .textInputAutocapitalization(.never)
+                    .autocorrectionDisabled()
+                    .onChangeCompat(of: modelName) { newValue in
+                        if let matched = GeminiModel(rawValue: newValue) {
+                            suggested = matched
+                        } else {
+                            suggested = .custom
                         }
                     }
-                    .pickerStyle(MenuPickerStyle())
-                    .onChange(of: suggested) { newValue in
-                        if newValue != .custom {
-                            modelName = newValue.rawValue
-                        }
-                    }
-                    .padding()
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .background(Color(.systemGray6))
-                    .cornerRadius(10)
-                }
 
-                Button(action: {
+                Picker("Suggested Models", selection: $suggested) {
+                    ForEach(GeminiModel.allCases, id: \.self) { option in
+                        Text(option.displayName).tag(option)
+                    }
+                }
+                .pickerStyle(.menu)
+                .onChangeCompat(of: suggested) { newValue in
+                    if newValue != .custom {
+                        modelName = newValue.rawValue
+                    }
+                }
+            }
+
+            Section {
+                Button("Save Changes") {
                     let resolvedModel: GeminiModel
                     let custom: String
                     if let match = GeminiModel(rawValue: modelName) {
@@ -92,53 +82,40 @@ struct GeminiSettingsView: View {
                     )
                     HapticsManager.shared.success()
                     showSaveConfirmation = true
-                }) {
-                    Text("Save Changes")
-                        .fontWeight(.bold)
-                        .padding(10)
-                        .frame(maxWidth: .infinity)
                 }
-                .buttonStyle(.borderedProminent)
+                .frame(maxWidth: .infinity, alignment: .center)
                 .tint(isFormValid ? Color(hex: "4285F4") : Color.gray)
                 .disabled(!isFormValid)
-
-                // Help text
-                VStack(alignment: .leading, spacing: 8) {
-                    Text("Getting a Gemini API Key:")
-                        .font(.headline)
-                        .padding(.top, 8)
-
-                    HStack(alignment: .top) {
-                        Image(systemName: "1.circle.fill")
-                            .foregroundColor(Color(hex: "4285F4"))
-                        Text("Visit Google AI Studio (ai.google.dev)")
-                    }
-
-                    HStack(alignment: .top) {
-                        Image(systemName: "2.circle.fill")
-                            .foregroundColor(Color(hex: "4285F4"))
-                        Text("Sign in with your Google account")
-                    }
-
-                    HStack(alignment: .top) {
-                        Image(systemName: "3.circle.fill")
-                            .foregroundColor(Color(hex: "4285F4"))
-                        Text("Go to API → Get API Key")
-                    }
-                }
-                .padding()
-                .frame(maxWidth: .infinity)
-                .background(Color(.systemGray6))
-                .cornerRadius(20)
             }
-            .padding()
+
+            Section {
+                Button("Set as Current Provider") {
+                    settings.currentProvider = "gemini"
+                    appState.setCurrentProvider("gemini")
+                    dismiss()
+                }
+                .frame(maxWidth: .infinity, alignment: .center)
+                .disabled(settings.currentProvider == "gemini")
+            }
         }
         .navigationTitle("Gemini Settings")
         .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button {
+                    showHelp = true
+                } label: {
+                    Label("Help", systemImage: "questionmark.circle")
+                }
+            }
+        }
+        .sheet(isPresented: $showHelp) {
+            ApiKeyHelpView(provider: "gemini")
+        }
         .onAppear(perform: syncFromSettings)
-        .onChange(of: settings.geminiApiKey) { _ in syncFromSettings() }
-        .onChange(of: settings.geminiModel) { _ in syncFromSettings() }
-        .onChange(of: settings.geminiCustomModel) { _ in syncFromSettings() }
+        .onChangeCompat(of: settings.geminiApiKey) { _ in syncFromSettings() }
+        .onChangeCompat(of: settings.geminiModel) { _ in syncFromSettings() }
+        .onChangeCompat(of: settings.geminiCustomModel) { _ in syncFromSettings() }
         .alert("Saved", isPresented: $showSaveConfirmation) {
             Button("OK", role: .cancel) {}
         } message: {

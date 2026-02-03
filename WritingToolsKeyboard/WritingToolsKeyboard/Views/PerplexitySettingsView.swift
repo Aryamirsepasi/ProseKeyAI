@@ -3,100 +3,87 @@ import SwiftUI
 struct PerplexitySettingsView: View {
     @ObservedObject var appState: AppState
     @ObservedObject private var settings = AppSettings.shared
+    @Environment(\.dismiss) private var dismiss
     @State private var apiKey: String = ""
     @State private var model: String = ""
     @State private var showSaveConfirmation = false
+    @State private var showHelp = false
 
     var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 20) {
-                // Header
+        Form {
+            Section {
                 HStack {
                     Image("perplexity")
                         .renderingMode(.template)
                         .resizable()
                         .aspectRatio(contentMode: .fit)
-                        .frame(width: 36, height: 36)
-                        .foregroundColor(Color(hex: "1FB8CD"))
-                    VStack(alignment: .leading) {
+                        .frame(width: 28, height: 28)
+                        .foregroundStyle(Color(hex: "1FB8CD"))
+                    VStack(alignment: .leading, spacing: 2) {
                         Text("Perplexity")
-                            .font(.title2)
-                            .fontWeight(.bold)
+                            .font(.headline)
                         Text("Configure your Perplexity API access")
                             .font(.subheadline)
-                            .foregroundColor(.secondary)
+                            .foregroundStyle(.secondary)
                     }
                 }
-                .padding(.bottom, 20)
+                .padding(.vertical, 4)
+            }
 
-                // API Key field
-                LabeledTextField(
-                    label: "API Key",
-                    placeholder: "Enter your Perplexity API key",
-                    text: $apiKey,
-                    isSecure: true
-                )
+            Section("Credentials") {
+                SecureField("API Key", text: $apiKey)
+                    .textInputAutocapitalization(.never)
+                    .autocorrectionDisabled()
+                    .textContentType(.password)
+            }
 
-                // Model field
-                LabeledTextField(
-                    label: "Model",
-                    placeholder: PerplexityConfig.defaultModel,
-                    text: $model
-                )
+            Section("Model") {
+                TextField("Model", text: $model, prompt: Text(PerplexityConfig.defaultModel))
+                    .textInputAutocapitalization(.never)
+                    .autocorrectionDisabled()
+            }
 
-                Button(action: {
+            Section {
+                Button("Save Changes") {
                     appState.savePerplexityConfig(
                         apiKey: apiKey,
                         model: model
                     )
                     HapticsManager.shared.success()
                     showSaveConfirmation = true
-                }) {
-                    Text("Save Changes")
-                        .fontWeight(.bold)
-                        .padding(10)
-                        .frame(maxWidth: .infinity)
                 }
-                .buttonStyle(.borderedProminent)
+                .frame(maxWidth: .infinity, alignment: .center)
                 .tint(isFormValid ? Color(hex: "1FB8CD") : Color.gray)
                 .disabled(!isFormValid)
-
-                // Optional help section
-                VStack(alignment: .leading, spacing: 8) {
-                    Text("Getting a Perplexity API Key:")
-                        .font(.headline)
-                        .padding(.top, 8)
-
-                    HStack(alignment: .top) {
-                        Image(systemName: "1.circle.fill")
-                            .foregroundColor(Color(hex: "1FB8CD"))
-                        Text("Visit perplexity.ai and create an account")
-                    }
-
-                    HStack(alignment: .top) {
-                        Image(systemName: "2.circle.fill")
-                            .foregroundColor(Color(hex: "1FB8CD"))
-                        Text("Navigate to your account/API keys page")
-                    }
-
-                    HStack(alignment: .top) {
-                        Image(systemName: "3.circle.fill")
-                            .foregroundColor(Color(hex: "1FB8CD"))
-                        Text("Create a new API key and copy it")
-                    }
-                }
-                .padding()
-                .frame(maxWidth: .infinity)
-                .background(Color(.systemGray6))
-                .cornerRadius(20)
             }
-            .padding()
+
+            Section {
+                Button("Set as Current Provider") {
+                    settings.currentProvider = "perplexity"
+                    appState.setCurrentProvider("perplexity")
+                    dismiss()
+                }
+                .frame(maxWidth: .infinity, alignment: .center)
+                .disabled(settings.currentProvider == "perplexity")
+            }
         }
         .navigationTitle("Perplexity Settings")
         .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button {
+                    showHelp = true
+                } label: {
+                    Label("Help", systemImage: "questionmark.circle")
+                }
+            }
+        }
+        .sheet(isPresented: $showHelp) {
+            ApiKeyHelpView(provider: "perplexity")
+        }
         .onAppear(perform: syncFromSettings)
-        .onChange(of: settings.perplexityApiKey) { _ in syncFromSettings() }
-        .onChange(of: settings.perplexityModel) { _ in syncFromSettings() }
+        .onChangeCompat(of: settings.perplexityApiKey) { _ in syncFromSettings() }
+        .onChangeCompat(of: settings.perplexityModel) { _ in syncFromSettings() }
         .alert("Saved", isPresented: $showSaveConfirmation) {
             Button("OK", role: .cancel) {}
         } message: {

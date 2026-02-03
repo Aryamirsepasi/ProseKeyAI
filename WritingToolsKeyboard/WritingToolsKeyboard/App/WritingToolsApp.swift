@@ -6,19 +6,35 @@ struct WritingToolsApp: App {
     
     var body: some Scene {
         WindowGroup {
-            TabView {
-                NavigationStack {
-                    SettingsView()
+            if #available(iOS 18.0, *) {
+                TabView {
+                    Tab("Home", systemImage: "house.fill") {
+                        NavigationStack {
+                            SettingsView()
+                        }
+                    }
+                    
+                    Tab("Commands", systemImage: "list.bullet.rectangle.fill") {
+                        NavigationStack {
+                            CommandsView(commandsManager: commandsManager)
+                        }
+                    }
                 }
-                .tabItem {
-                    Label("Home", systemImage: "house.fill")
-                }
-                
-                NavigationStack {
-                    CommandsView(commandsManager: commandsManager)
-                }
-                .tabItem {
-                    Label("Commands", systemImage: "list.bullet.rectangle.fill")
+            } else {
+                TabView {
+                    NavigationStack {
+                        SettingsView()
+                    }
+                    .tabItem {
+                        Label("Home", systemImage: "house.fill")
+                    }
+                    
+                    NavigationStack {
+                        CommandsView(commandsManager: commandsManager)
+                    }
+                    .tabItem {
+                        Label("Commands", systemImage: "list.bullet.rectangle.fill")
+                    }
                 }
             }
         }

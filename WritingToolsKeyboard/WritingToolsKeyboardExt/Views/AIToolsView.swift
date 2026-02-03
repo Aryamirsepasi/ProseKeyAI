@@ -1,13 +1,16 @@
 import SwiftUI
 import MarkdownUI
+import UIKit
 
 struct AIToolsView: View {
     @ObservedObject var vm: AIToolsViewModel
     
     // Keyboard height sized for 2 visible command rows
     private let keyboardHeight: CGFloat = KeyboardConstants.keyboardHeight
-    private let buttonRowHeight: CGFloat = 56   // (40 button + padding)
-    private let previewHeight: CGFloat = 48     // (32 text + padding)
+
+    @ScaledMetric(relativeTo: .body) private var actionButtonHeight: CGFloat = 40
+    @ScaledMetric(relativeTo: .body) private var previewRowHeight: CGFloat = 32
+    @ScaledMetric(relativeTo: .body) private var rowPadding: CGFloat = 8
     
     @State private var state: AIToolsUIState = .toolList
     @State private var isLoading = false
@@ -15,15 +18,26 @@ struct AIToolsView: View {
     @State private var chosenCommand: KeyboardCommand? = nil
     @State private var customPrompt: String = ""
     @State private var activeTask: Task<Void, Never>?
+    @State private var showFullAccessBanner = false
 
     @StateObject private var commandsManager = KeyboardCommandsManager()
     @ObservedObject private var clipboardManager = ClipboardHistoryManager.shared
     
-    private var gridHeight: CGFloat { keyboardHeight - buttonRowHeight - previewHeight }
+    private var buttonRowHeight: CGFloat { min(actionButtonHeight + (rowPadding * 2), 72) }
+    private var previewHeight: CGFloat { min(previewRowHeight + (rowPadding * 2), 64) }
+    private var gridHeight: CGFloat { max(0, keyboardHeight - buttonRowHeight - previewHeight) }
     private var hasSelection: Bool { !(vm.selectedText?.isEmpty ?? true) }
+    private var isGenerating: Bool {
+        if case .generating = state { return true }
+        return false
+    }
+    private var isBusy: Bool { isLoading || isGenerating }
+    private var markdownFontSize: CGFloat {
+        UIFont.preferredFont(forTextStyle: .body).pointSize
+    }
 
     var body: some View {
-        ZStack {
+        ZStack(alignment: .top) {
             VStack(spacing: 0) {
                 switch state {
                 case .toolList:
@@ -38,8 +52,17 @@ struct AIToolsView: View {
                     clipboardHistoryView
                 }
             }
+
+            if showFullAccessBanner {
+                FullAccessBannerView {
+                    showFullAccessBanner = false
+                }
+                .padding(.top, 4)
+                .transition(.move(edge: .top).combined(with: .opacity))
+            }
         }
         .frame(height: keyboardHeight)
+        .dynamicTypeSize(.xSmall ... .xxLarge)
         .errorBanner(error: $vm.currentError)
     }
     
@@ -48,38 +71,49 @@ struct AIToolsView: View {
             // Action buttons row — fixed 56 pt
             HStack(spacing: 6) {
                 Button(action: {
+                    guard vm.viewController?.hasFullAccess == true else {
+                        showFullAccessWarning()
+                        HapticsManager.shared.error()
+                        vm.currentError = .generic("Full Access required")
+                        return
+                    }
                     HapticsManager.shared.keyPress()
                     vm.handleCopiedText()
                 }) {
                     HStack(spacing: 4) {
-                        Image(systemName: "doc.on.clipboard").font(.system(size: 14))
+                        Image(systemName: "doc.on.clipboard").font(.caption)
                         Text("Use Copied", comment: "Button: use the text currently on the clipboard")
-                            .font(.system(size: 13, weight: .medium))
+                            .font(.footnote.weight(.semibold))
                     }
                     .frame(maxWidth: .infinity)
-                    .frame(height: 40)
+                    .frame(height: actionButtonHeight)
                 }
-                .background(Color.blue)
-                .foregroundColor(.white)
-                .cornerRadius(8)
-                .buttonStyle(PlainButtonStyle())
+                .background(Color.blue, in: .rect(cornerRadius: 8))
+                .foregroundStyle(.white)
+                .buttonStyle(.plain)
+                .disabled(isBusy)
                 
                 Button(action: {
+                    guard vm.viewController?.hasFullAccess == true else {
+                        showFullAccessWarning()
+                        HapticsManager.shared.error()
+                        return
+                    }
                     HapticsManager.shared.keyPress()
                     state = .clipboardHistory
                 }) {
                     HStack(spacing: 4) {
-                        Image(systemName: "clock.arrow.circlepath").font(.system(size: 14))
+                        Image(systemName: "clock.arrow.circlepath").font(.caption)
                         Text("History", comment: "Button to view clipboard history")
-                            .font(.system(size: 13, weight: .medium))
+                            .font(.footnote.weight(.semibold))
                     }
                     .frame(maxWidth: .infinity)
-                    .frame(height: 40)
+                    .frame(height: actionButtonHeight)
                 }
-                .background(Color.orange)
-                .foregroundColor(.white)
-                .cornerRadius(8)
-                .buttonStyle(PlainButtonStyle())
+                .background(Color.orange, in: .rect(cornerRadius: 8))
+                .foregroundStyle(.white)
+                .buttonStyle(.plain)
+                .disabled(isBusy)
                 
                 Button(action: {
                     guard hasSelection else {
@@ -92,52 +126,67 @@ struct AIToolsView: View {
                     state = .customPrompt
                 }) {
                     HStack(spacing: 4) {
-                        Image(systemName: "magnifyingglass").font(.system(size: 14))
+                        Image(systemName: "magnifyingglass").font(.caption)
                         Text("Ask AI", comment: "Button to ask AI with custom prompt")
-                            .font(.system(size: 13, weight: .medium))
+                            .font(.footnote.weight(.semibold))
                     }
                     .frame(maxWidth: .infinity)
-                    .frame(height: 40)
+                    .frame(height: actionButtonHeight)
                 }
-                .background(hasSelection ? Color.purple : Color.gray)
-                .foregroundColor(.white)
-                .cornerRadius(8)
-                .buttonStyle(PlainButtonStyle())
-                .disabled(!hasSelection)
+                .background(hasSelection ? Color.purple : Color.gray, in: .rect(cornerRadius: 8))
+                .foregroundStyle(.white)
+                .buttonStyle(.plain)
+                .disabled(!hasSelection || isBusy)
             }
             .padding(.horizontal, 8)
-            .padding(.top, 8)
-            .padding(.bottom, 8)
+            .padding(.top, rowPadding)
+            .padding(.bottom, rowPadding)
             
             // Selected text preview — fixed 48 pt
-            Group {
-                if let selectedText = vm.selectedText, !selectedText.isEmpty {
-                    ScrollView(.horizontal, showsIndicators: false) {
-                        Text(selectedText)
-                            .font(.system(size: 13))
-                            .foregroundColor(.secondary)
-                            .lineLimit(1)
+            HStack(spacing: 6) {
+                Group {
+                    if let selectedText = vm.selectedText, !selectedText.isEmpty {
+                        ScrollView(.horizontal) {
+                            Text(selectedText)
+                                .font(.footnote)
+                                .foregroundStyle(.secondary)
+                                .lineLimit(1)
+                                .padding(.vertical, 6)
+                                .padding(.horizontal, 10)
+                        }
+                        .scrollIndicators(.hidden)
+                    } else {
+                        Text("No text selected")
+                            .font(.footnote)
+                            .foregroundStyle(.secondary)
+                            .frame(maxWidth: .infinity)
                             .padding(.vertical, 6)
                             .padding(.horizontal, 10)
                     }
-                    .frame(height: 32)
-                    .background(Color(.systemGray6))
-                    .cornerRadius(6)
-                } else {
-                    Text("No text selected")
-                        .font(.system(size: 13))
-                        .foregroundColor(.secondary)
-                        .frame(height: 32)
-                        .frame(maxWidth: .infinity)
-                        .background(Color(.systemGray6))
-                        .cornerRadius(6)
                 }
+                .frame(height: previewRowHeight)
+                .frame(maxWidth: .infinity)
+                .background(Color(.systemGray6), in: .rect(cornerRadius: 6))
+
+                Button(action: {
+                    HapticsManager.shared.keyPress()
+                    vm.checkSelectedText()
+                }) {
+                    Image(systemName: "arrow.clockwise")
+                        .font(.footnote.weight(.semibold))
+                        .foregroundStyle(.blue)
+                        .frame(width: previewRowHeight, height: previewRowHeight)
+                        .background(Color(.systemGray6), in: .rect(cornerRadius: 6))
+                }
+                .buttonStyle(.plain)
+                .disabled(isBusy)
+                .accessibilityLabel("Refresh selection")
             }
             .padding(.horizontal, 8)
-            .padding(.bottom, 8)
+            .padding(.bottom, rowPadding)
             
             // Commands grid — now 152 pt to fit exactly 2 rows
-            ScrollView(.vertical, showsIndicators: true) {
+            ScrollView(.vertical) {
                 CommandsGridView(
                     commands: commandsManager.commands,
                     onCommandSelected: { cmd in
@@ -151,10 +200,11 @@ struct AIToolsView: View {
                         state = .generating(cmd)
                         processAICommand(cmd, userText: text)
                     },
-                    isDisabled: !hasSelection
+                    isDisabled: !hasSelection || isBusy
                 )
                 .padding(.horizontal, 8)
             }
+            .scrollIndicators(.visible)
             .frame(height: gridHeight) // 152
         }
     }
@@ -208,6 +258,10 @@ struct AIToolsView: View {
                 .scaleEffect(1.2)
                 .padding(.top, 8)
                 .accessibilityLabel("Processing")
+            Button("Cancel") {
+                cancelActiveTask()
+            }
+            .buttonStyle(.bordered)
             Spacer()
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -224,10 +278,11 @@ struct AIToolsView: View {
                     aiResult = ""
                 }) {
                     Image(systemName: "xmark.circle.fill")
-                        .font(.system(size: 20))
-                        .foregroundColor(.secondary)
+                        .font(.title3)
+                        .foregroundStyle(.secondary)
                 }
-                .buttonStyle(PlainButtonStyle())
+                .buttonStyle(.plain)
+                .accessibilityLabel("Close result")
             }
             .padding(.horizontal, 12)
             .padding(.top, 12)
@@ -237,13 +292,12 @@ struct AIToolsView: View {
             
             ScrollView {
                 Markdown(aiResult)
-                    .markdownTextStyle(\.text) { FontSize(14) }
+                    .markdownTextStyle(\.text) { FontSize(markdownFontSize) }
                     .padding(10)
                     .frame(maxWidth: .infinity, alignment: .leading)
             }
             .frame(height: 210)
-            .background(Color(.systemGray6))
-            .cornerRadius(8)
+            .background(Color(.systemGray6), in: .rect(cornerRadius: 8))
             .overlay(
                 RoundedRectangle(cornerRadius: 8)
                     .stroke(Color(.separator), lineWidth: 0.5)
@@ -259,35 +313,15 @@ struct AIToolsView: View {
                     HapticsManager.shared.success()
                 }) {
                     HStack(spacing: 4) {
-                        Image(systemName: "doc.on.doc").font(.system(size: 13))
-                        Text("Copy").font(.system(size: 13, weight: .medium))
+                        Image(systemName: "doc.on.doc").font(.footnote)
+                        Text("Copy").font(.footnote.weight(.semibold))
                     }
                     .frame(maxWidth: .infinity)
                     .frame(height: 36)
-                    .background(Color(.systemGray5))
-                    .foregroundColor(.primary)
-                    .cornerRadius(8)
+                    .background(Color(.systemGray5), in: .rect(cornerRadius: 8))
+                    .foregroundStyle(.primary)
                 }
-                .buttonStyle(PlainButtonStyle())
-                
-                
-                Button(action: {
-                    HapticsManager.shared.success()
-                    vm.viewController?.textDocumentProxy.insertText(aiResult)
-                    state = .toolList
-                    aiResult = ""
-                }) {
-                    HStack(spacing: 4) {
-                        Image(systemName: "text.insert").font(.system(size: 13))
-                        Text("Insert").font(.system(size: 13, weight: .medium))
-                    }
-                    .frame(maxWidth: .infinity)
-                    .frame(height: 36)
-                    .background(Color.blue)
-                    .foregroundColor(.white)
-                    .cornerRadius(8)
-                }
-                .buttonStyle(PlainButtonStyle())
+                .buttonStyle(.plain)
                 
                 Button(action: {
                     guard let text = vm.selectedText, let chosen = chosenCommand else { return }
@@ -298,16 +332,34 @@ struct AIToolsView: View {
                     processAICommand(chosen, userText: text)
                 }) {
                     HStack(spacing: 4) {
-                        Image(systemName: "arrow.clockwise").font(.system(size: 13))
-                        Text("Retry").font(.system(size: 13, weight: .medium))
+                        Image(systemName: "arrow.clockwise").font(.footnote)
+                        Text("Retry").font(.footnote.weight(.semibold))
                     }
                     .frame(maxWidth: .infinity)
                     .frame(height: 36)
-                    .background(Color.green)
-                    .foregroundColor(.white)
-                    .cornerRadius(8)
+                    .background(Color.green, in: .rect(cornerRadius: 8))
+                    .foregroundStyle(.white)
                 }
-                .buttonStyle(PlainButtonStyle())
+                .buttonStyle(.plain)
+                .accessibilityLabel("Retry command")
+
+                Button(action: {
+                    replaceSelection(with: aiResult)
+                    HapticsManager.shared.success()
+                    state = .toolList
+                    aiResult = ""
+                }) {
+                    HStack(spacing: 4) {
+                        Image(systemName: "rectangle.and.pencil.and.ellipsis").font(.footnote)
+                        Text("Replace").font(.footnote.weight(.semibold))
+                    }
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 36)
+                    .background(Color.indigo, in: .rect(cornerRadius: 8))
+                    .foregroundStyle(.white)
+                }
+                .buttonStyle(.plain)
+                .accessibilityLabel("Replace selected text")
             }
             .padding(.horizontal, 12)
             .padding(.bottom, 12)
@@ -354,6 +406,69 @@ struct AIToolsView: View {
                     HapticsManager.shared.error()
                 }
             }
+        }
+    }
+
+    private func cancelActiveTask() {
+        activeTask?.cancel()
+        activeTask = nil
+        isLoading = false
+        aiResult = ""
+        chosenCommand = nil
+        state = .toolList
+    }
+
+    private func replaceSelection(with text: String) {
+        guard let proxy = vm.viewController?.textDocumentProxy else { return }
+        if let selected = vm.selectedText, !selected.isEmpty {
+            for _ in selected {
+                proxy.deleteBackward()
+            }
+        }
+        proxy.insertText(text)
+    }
+
+    private func showFullAccessWarning() {
+        withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
+            showFullAccessBanner = true
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2.5) {
+            withAnimation(.easeOut(duration: 0.2)) {
+                showFullAccessBanner = false
+            }
+        }
+    }
+}
+
+private struct FullAccessBannerView: View {
+    let onDismiss: () -> Void
+
+    var body: some View {
+        HStack(spacing: 8) {
+            Image(systemName: "lock.fill")
+                .font(.footnote.weight(.semibold))
+                .foregroundStyle(.white)
+            Text("Full Access required for clipboard tools")
+                .font(.footnote.weight(.semibold))
+                .foregroundStyle(.white)
+                .lineLimit(1)
+            Spacer(minLength: 4)
+            Button(action: onDismiss) {
+                Image(systemName: "xmark.circle.fill")
+                    .font(.footnote)
+                    .foregroundStyle(.white.opacity(0.85))
+            }
+            .buttonStyle(.plain)
+            .accessibilityLabel("Dismiss full access notice")
+        }
+        .padding(.horizontal, 12)
+        .padding(.vertical, 8)
+        .background(Color.red, in: Capsule())
+        .frame(maxWidth: 300)
+        .shadow(color: .black.opacity(0.15), radius: 4, x: 0, y: 2)
+        .accessibilityElement(children: .combine)
+        .onAppear {
+            UIAccessibility.post(notification: .announcement, argument: "Full Access required for clipboard tools")
         }
     }
 }

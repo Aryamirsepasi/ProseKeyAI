@@ -1,6 +1,7 @@
 import Foundation
 import SwiftUI
 
+@MainActor
 class AppSettings: ObservableObject {
     static let shared = AppSettings()
 

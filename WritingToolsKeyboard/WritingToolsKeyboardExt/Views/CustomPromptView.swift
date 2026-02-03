@@ -16,18 +16,18 @@ struct CustomPromptView: View {
                 Button(action: onCancel) {
                     HStack(spacing: 4) {
                         Image(systemName: "chevron.left")
-                            .font(.system(size: 16, weight: .semibold))
+                            .font(.body.weight(.semibold))
                         Text("Back")
-                            .font(.system(size: 17))
+                            .font(.body)
                     }
-                    .foregroundColor(.blue)
+                    .foregroundStyle(.blue)
                 }
-                .buttonStyle(PlainButtonStyle())
+                .buttonStyle(.plain)
                 
                 Spacer()
                 
                 Text("Custom Prompt")
-                    .font(.system(size: 17, weight: .semibold))
+                    .font(.headline)
                 
                 Spacer()
                 
@@ -35,10 +35,10 @@ struct CustomPromptView: View {
                     let trimmed = prompt.trimmingCharacters(in: .whitespacesAndNewlines)
                     if !trimmed.isEmpty { onSubmit(trimmed) }
                 }
-                .font(.system(size: 17))
-                .foregroundColor(prompt.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? .gray : .blue)
+                .font(.body)
+                .foregroundStyle(prompt.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? .gray : .blue)
                 .disabled(prompt.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
-                .buttonStyle(PlainButtonStyle())
+                .buttonStyle(.plain)
             }
             .padding(.horizontal, 16)
             .padding(.vertical, 12)
@@ -49,17 +49,17 @@ struct CustomPromptView: View {
             Spacer()
             
             // Text preview - compact single row
-            ScrollView(.horizontal, showsIndicators: false) {
+            ScrollView(.horizontal) {
                 Text(selectedText)
-                    .font(.system(size: 14))
-                    .foregroundColor(.secondary)
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
                     .lineLimit(1)
                     .padding(.vertical, 6)
                     .padding(.horizontal, 10)
             }
+            .scrollIndicators(.hidden)
             .frame(maxWidth: .infinity)
-            .background(Color(.systemGray6))
-            .cornerRadius(6)
+            .background(Color(.systemGray6), in: .rect(cornerRadius: 6))
             .padding(.horizontal, 12)
             .padding(.top, 8)
             
@@ -67,7 +67,7 @@ struct CustomPromptView: View {
             
             // Text input field
             TextField("Type your custom instructions for the AI…", text: $prompt)
-                .font(.system(size: 15))
+                .font(.body)
                 .frame(height: 32)
                 .padding(.horizontal, 8)
                 .background(
@@ -339,8 +339,8 @@ struct KeyButton: View {
     var body: some View {
         Button(action: action) {
             Text(text == "space" ? "" : text)
-                .font(.system(size: text.count == 1 ? 18 : 14, weight: .medium))
-                .foregroundColor(.primary)
+                .font(text.count == 1 ? .title3.weight(.semibold) : .footnote.weight(.semibold))
+                .foregroundStyle(.primary)
                 .frame(maxWidth: .infinity)
                 .frame(height: 36)
                 .background(
@@ -353,7 +353,7 @@ struct KeyButton: View {
                         .stroke(Color(.systemGray4), lineWidth: 0.5)
                 )
         }
-        .buttonStyle(PlainButtonStyle())
+        .buttonStyle(.plain)
         .simultaneousGesture(
             DragGesture(minimumDistance: 0)
                 .onChanged { _ in
