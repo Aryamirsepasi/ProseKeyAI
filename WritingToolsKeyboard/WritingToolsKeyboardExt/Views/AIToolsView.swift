@@ -426,11 +426,43 @@ struct AIToolsView: View {
 
     private func replaceSelection(with text: String) {
         guard let proxy = vm.viewController?.textDocumentProxy else { return }
-        if let selected = vm.selectedText, !selected.isEmpty {
-            for _ in selected {
+        guard let selected = vm.selectedText, !selected.isEmpty else {
+            proxy.insertText(text)
+            return
+        }
+        
+        // Check if there's actual selected text (iOS 16+)
+        if #available(iOS 16.0, *), let actualSelection = proxy.selectedText, !actualSelection.isEmpty {
+            // Text is truly selected - deleteBackward will remove the selection
+            // Use UTF-16 count for accurate deletion since UIKit uses UTF-16 internally
+            for _ in 0..<actualSelection.utf16.count {
                 proxy.deleteBackward()
             }
+        } else {
+            // Fallback: text was combined from before+after cursor context
+            // We need to delete both before and after the cursor
+            let before = proxy.documentContextBeforeInput ?? ""
+            let after = proxy.documentContextAfterInput ?? ""
+            
+            // Delete text after cursor first (move forward then delete backward)
+            // We need to move cursor to end of "after" text, then delete backward
+            if !after.isEmpty {
+                // Adjust cursor position to end of after text
+                proxy.adjustTextPosition(byCharacterOffset: after.utf16.count)
+                // Now delete the after portion
+                for _ in 0..<after.utf16.count {
+                    proxy.deleteBackward()
+                }
+            }
+            
+            // Delete text before cursor
+            if !before.isEmpty {
+                for _ in 0..<before.utf16.count {
+                    proxy.deleteBackward()
+                }
+            }
         }
+        
         proxy.insertText(text)
     }
 
