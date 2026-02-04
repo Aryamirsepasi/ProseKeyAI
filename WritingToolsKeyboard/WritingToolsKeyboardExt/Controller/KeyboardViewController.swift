@@ -14,8 +14,8 @@ class KeyboardViewController: UIInputViewController {
   private let darwinName =
     "com.aryamirsepasi.writingtools.keyboardStatusChanged" as CFString
   
-  // Fixed keyboard height — now sized for exactly 2 command rows
-  private let keyboardHeight: CGFloat = KeyboardConstants.keyboardHeight
+  // Default keyboard height — sized for 2 command rows
+  private var currentKeyboardHeight: CGFloat = KeyboardConstants.keyboardHeight
 
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -64,6 +64,7 @@ class KeyboardViewController: UIInputViewController {
     super.viewWillLayoutSubviews()
     
     // Set height constraint before layout (Apple recommends controlling height via constraint).
+    // Use .defaultHigh priority to avoid Auto Layout conflicts with system constraints.
     if heightConstraint == nil {
       let constraint = NSLayoutConstraint(
         item: view!,
@@ -72,9 +73,9 @@ class KeyboardViewController: UIInputViewController {
         toItem: nil,
         attribute: .notAnAttribute,
         multiplier: 1.0,
-        constant: keyboardHeight
+        constant: currentKeyboardHeight
       )
-      constraint.priority = .required
+      constraint.priority = .defaultHigh
       view.addConstraint(constraint)
       heightConstraint = constraint
     }
@@ -148,10 +149,8 @@ class KeyboardViewController: UIInputViewController {
     guard hasFullAccess else { return nil }
 
     // iOS 16+ has direct selectedText API
-    if #available(iOS 16.0, *) {
-      if let selectedText = textDocumentProxy.selectedText, !selectedText.isEmpty {
-        return selectedText
-      }
+    if let selectedText = textDocumentProxy.selectedText, !selectedText.isEmpty {
+      return selectedText
     }
 
     // Fallback: Get context before and after cursor
@@ -164,6 +163,31 @@ class KeyboardViewController: UIInputViewController {
     }
 
     return nil
+  }
+  
+  /// Whether the keyboard switcher (globe) button should be displayed
+  var showsKeyboardSwitcher: Bool {
+    needsInputModeSwitchKey
+  }
+  
+  /// Switches to the next keyboard in the user's enabled keyboards list
+  func switchToNextKeyboard() {
+    advanceToNextInputMode()
+  }
+  
+  /// Updates the keyboard height with optional animation
+  func updateKeyboardHeight(_ height: CGFloat, animated: Bool = true) {
+    guard currentKeyboardHeight != height else { return }
+    currentKeyboardHeight = height
+    
+    if animated {
+      UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseInOut) {
+        self.heightConstraint?.constant = height
+        self.view.layoutIfNeeded()
+      }
+    } else {
+      heightConstraint?.constant = height
+    }
   }
 
   private func showFullAccessBanner() {

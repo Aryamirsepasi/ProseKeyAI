@@ -5,8 +5,10 @@ import UIKit
 struct AIToolsView: View {
     @ObservedObject var vm: AIToolsViewModel
     
-    // Keyboard height sized for 2 visible command rows
-    private let keyboardHeight: CGFloat = KeyboardConstants.keyboardHeight
+    /// Default keyboard height for most views (2 visible command rows)
+    private let defaultHeight: CGFloat = KeyboardConstants.keyboardHeight
+    /// Expanded height for views needing more space (e.g., CustomPromptView with inline keyboard)
+    private let expandedHeight: CGFloat = KeyboardConstants.expandedKeyboardHeight
 
     @ScaledMetric(relativeTo: .body) private var actionButtonHeight: CGFloat = 40
     @ScaledMetric(relativeTo: .body) private var previewRowHeight: CGFloat = 32
@@ -25,7 +27,17 @@ struct AIToolsView: View {
     
     private var buttonRowHeight: CGFloat { min(actionButtonHeight + (rowPadding * 2), 72) }
     private var previewHeight: CGFloat { min(previewRowHeight + (rowPadding * 2), 64) }
-    private var gridHeight: CGFloat { max(0, keyboardHeight - buttonRowHeight - previewHeight) }
+    private var gridHeight: CGFloat { max(0, defaultHeight - buttonRowHeight - previewHeight) }
+    
+    /// Dynamic keyboard height based on current state
+    private var currentHeight: CGFloat {
+        switch state {
+        case .customPrompt:
+            return expandedHeight
+        default:
+            return defaultHeight
+        }
+    }
     private var hasSelection: Bool { !(vm.selectedText?.isEmpty ?? true) }
     private var isGenerating: Bool {
         if case .generating = state { return true }
@@ -61,9 +73,19 @@ struct AIToolsView: View {
                 .transition(.move(edge: .top).combined(with: .opacity))
             }
         }
-        .frame(height: keyboardHeight)
+        .frame(height: currentHeight)
         .dynamicTypeSize(.xSmall ... .xxLarge)
         .errorBanner(error: $vm.currentError)
+        .onChange(of: state) { newState in
+            let newHeight: CGFloat
+            switch newState {
+            case .customPrompt:
+                newHeight = expandedHeight
+            default:
+                newHeight = defaultHeight
+            }
+            vm.viewController?.updateKeyboardHeight(newHeight)
+        }
     }
     
     private var toolListView: some View {
@@ -187,11 +209,28 @@ struct AIToolsView: View {
                 .buttonStyle(.plain)
                 .disabled(isBusy)
                 .accessibilityLabel("Refresh selection")
+                
+                // Keyboard switcher button (globe) - shown when user has multiple keyboards
+                if vm.viewController?.showsKeyboardSwitcher == true {
+                    Button(action: {
+                        HapticsManager.shared.keyPress()
+                        vm.viewController?.switchToNextKeyboard()
+                    }) {
+                        Image(systemName: "globe")
+                            .font(.footnote.weight(.semibold))
+                            .foregroundStyle(.blue)
+                            .frame(width: previewRowHeight, height: previewRowHeight)
+                            .background(Color(.systemGray6), in: .rect(cornerRadius: 6))
+                    }
+                    .buttonStyle(.plain)
+                    .accessibilityLabel("Switch keyboard")
+                    .accessibilityHint("Switch to the next keyboard")
+                }
             }
             .padding(.horizontal, 8)
             .padding(.bottom, rowPadding)
             
-            // Commands grid — now 152 pt to fit exactly 2 rows
+            // Commands grid — sized for 2 visible rows, scrollable from 3rd row
             ScrollView(.vertical) {
                 CommandsGridView(
                     commands: commandsManager.commands,
@@ -302,7 +341,7 @@ struct AIToolsView: View {
                     .padding(10)
                     .frame(maxWidth: .infinity, alignment: .leading)
             }
-            .frame(height: 210)
+            .frame(height: defaultHeight - 130) // Header (~40pt) + spacers (32pt) + buttons (58pt)
             .background(Color(.systemGray6), in: .rect(cornerRadius: 8))
             .overlay(
                 RoundedRectangle(cornerRadius: 8)
@@ -431,35 +470,12 @@ struct AIToolsView: View {
             return
         }
         
-        // Check if there's actual selected text (iOS 16+)
-        if #available(iOS 16.0, *), let actualSelection = proxy.selectedText, !actualSelection.isEmpty {
+        // iOS 16+ has direct selectedText API
+        if let actualSelection = proxy.selectedText, !actualSelection.isEmpty {
             // Text is truly selected - deleteBackward will remove the selection
             // Use UTF-16 count for accurate deletion since UIKit uses UTF-16 internally
             for _ in 0..<actualSelection.utf16.count {
                 proxy.deleteBackward()
-            }
-        } else {
-            // Fallback: text was combined from before+after cursor context
-            // We need to delete both before and after the cursor
-            let before = proxy.documentContextBeforeInput ?? ""
-            let after = proxy.documentContextAfterInput ?? ""
-            
-            // Delete text after cursor first (move forward then delete backward)
-            // We need to move cursor to end of "after" text, then delete backward
-            if !after.isEmpty {
-                // Adjust cursor position to end of after text
-                proxy.adjustTextPosition(byCharacterOffset: after.utf16.count)
-                // Now delete the after portion
-                for _ in 0..<after.utf16.count {
-                    proxy.deleteBackward()
-                }
-            }
-            
-            // Delete text before cursor
-            if !before.isEmpty {
-                for _ in 0..<before.utf16.count {
-                    proxy.deleteBackward()
-                }
             }
         }
         
@@ -470,7 +486,8 @@ struct AIToolsView: View {
         withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
             showFullAccessBanner = true
         }
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2.5) {
+        Task {
+            try? await Task.sleep(for: .seconds(2.5))
             withAnimation(.easeOut(duration: 0.2)) {
                 showFullAccessBanner = false
             }
@@ -511,7 +528,7 @@ private struct FullAccessBannerView: View {
     }
 }
 
-enum AIToolsUIState {
+enum AIToolsUIState: Equatable {
     case toolList
     case generating(KeyboardCommand)
     case result(KeyboardCommand)

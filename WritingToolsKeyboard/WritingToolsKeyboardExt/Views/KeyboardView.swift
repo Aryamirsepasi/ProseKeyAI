@@ -2,16 +2,13 @@ import SwiftUI
 
 struct KeyboardView: View {
   weak var viewController: KeyboardViewController?
-  @StateObject private var vm: AIToolsViewModel
+  @ObservedObject private var vm: AIToolsViewModel
   
-  init(viewController: KeyboardViewController?) {
-    self.viewController = viewController
-    _vm = StateObject(wrappedValue: AIToolsViewModel(viewController: viewController))
-  }
-
+  /// Initialize with an existing ViewModel instance from the KeyboardViewController.
+  /// This ensures a single ViewModel is shared and avoids duplicate instances.
   init(viewController: KeyboardViewController?, vm: AIToolsViewModel) {
     self.viewController = viewController
-    _vm = StateObject(wrappedValue: vm)
+    self.vm = vm
   }
 
   var body: some View {
