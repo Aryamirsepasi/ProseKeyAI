@@ -5,35 +5,58 @@ struct CommandsView: View {
     
     @State private var isShowingEditor = false
     @State private var editingCommand: KeyboardCommand? = nil
+    @State private var selectedTab: CommandsTab = .builtIn
+    @State private var activeAlert: ResetAlert?
     
     var body: some View {
         List {
             Section {
-                ForEach(commandsManager.builtInCommands) { cmd in
-                    commandRow(cmd)
+                Picker("Commands", selection: $selectedTab) {
+                    ForEach(CommandsTab.allCases) { tab in
+                        Text(tab.rawValue).tag(tab)
+                    }
                 }
-            } header: {
-                Text("Built-in Commands")
-            } footer: {
-                Text("These are the default commands available in the keyboard. You can edit them but not delete them.")
-                    .font(.footnote)
-                    .foregroundStyle(.secondary)
+                .pickerStyle(.segmented)
             }
             
-            Section {
-                ForEach(commandsManager.customCommands) { cmd in
-                    commandRow(cmd)
-                }
-            } header: {
-                Text("Custom Commands")
-            } footer: {
-                Text("These are your custom commands available in the keyboard.")
-                    .font(.footnote)
-                    .foregroundStyle(.secondary)
+            if selectedTab == .builtIn {
+                BuiltInCommandsSectionView(
+                    commands: commandsManager.builtInCommands,
+                    onEdit: { editingCommand = $0 },
+                    onReset: { activeAlert = .resetBuiltIn }
+                )
+            } else {
+                CustomCommandsSectionView(
+                    commands: commandsManager.customCommands,
+                    onEdit: { editingCommand = $0 },
+                    onDelete: { command in
+                        commandsManager.deleteCommand(command)
+                        postKeyboardCommandsDidChange()
+                    },
+                    onReset: { activeAlert = .deleteCustom }
+                )
             }
         }
         .listStyle(.insetGrouped)
         .navigationTitle("Keyboard Commands")
+        .alert(item: $activeAlert) { alert in
+            switch alert {
+            case .resetBuiltIn:
+                return Alert(
+                    title: Text("Reset built-in prompts?"),
+                    message: Text("This restores the default instructions for all built-in commands."),
+                    primaryButton: .destructive(Text("Reset Built-in Prompts"), action: resetBuiltInPrompts),
+                    secondaryButton: .cancel()
+                )
+            case .deleteCustom:
+                return Alert(
+                    title: Text("Delete custom commands?"),
+                    message: Text("This removes all custom commands from the keyboard."),
+                    primaryButton: .destructive(Text("Delete Custom Commands"), action: deleteCustomCommands),
+                    secondaryButton: .cancel()
+                )
+            }
+        }
         .toolbar {
             Button {
                 isShowingEditor = true
@@ -56,37 +79,124 @@ struct CommandsView: View {
         }
     }
     
-    private func commandRow(_ cmd: KeyboardCommand) -> some View {
+    private func resetBuiltInPrompts() {
+        commandsManager.resetBuiltInPromptsToDefaults()
+        postKeyboardCommandsDidChange()
+    }
+    
+    private func deleteCustomCommands() {
+        commandsManager.deleteAllCustomCommands()
+        postKeyboardCommandsDidChange()
+    }
+}
+
+private enum CommandsTab: String, CaseIterable, Identifiable {
+    case builtIn = "Built-in"
+    case custom = "Custom"
+    
+    var id: String { rawValue }
+}
+
+private enum ResetAlert: Identifiable {
+    case resetBuiltIn
+    case deleteCustom
+    
+    var id: Int {
+        switch self {
+        case .resetBuiltIn:
+            return 0
+        case .deleteCustom:
+            return 1
+        }
+    }
+}
+
+private struct BuiltInCommandsSectionView: View {
+    let commands: [KeyboardCommand]
+    let onEdit: (KeyboardCommand) -> Void
+    let onReset: () -> Void
+    
+    var body: some View {
+        Section {
+            ForEach(commands) { command in
+                CommandRowView(
+                    command: command,
+                    onEdit: { onEdit(command) },
+                    onDelete: nil
+                )
+            }
+            Button(role: .destructive, action: onReset) {
+                Label("Reset Built-in Prompts", systemImage: "arrow.uturn.backward.circle.fill")
+            }
+        } header: {
+            Text("Built-in Commands")
+        } footer: {
+            Text("These are the default commands available in the keyboard. You can edit them but not delete them.")
+                .font(.footnote)
+                .foregroundStyle(.secondary)
+        }
+    }
+}
+
+private struct CustomCommandsSectionView: View {
+    let commands: [KeyboardCommand]
+    let onEdit: (KeyboardCommand) -> Void
+    let onDelete: (KeyboardCommand) -> Void
+    let onReset: () -> Void
+    
+    var body: some View {
+        Section {
+            ForEach(commands) { command in
+                CommandRowView(
+                    command: command,
+                    onEdit: { onEdit(command) },
+                    onDelete: { onDelete(command) }
+                )
+            }
+            Button(role: .destructive, action: onReset) {
+                Label("Delete Custom Commands", systemImage: "trash")
+            }
+        } header: {
+            Text("Custom Commands")
+        } footer: {
+            Text("These are your custom commands available in the keyboard.")
+                .font(.footnote)
+                .foregroundStyle(.secondary)
+        }
+    }
+}
+
+private struct CommandRowView: View {
+    let command: KeyboardCommand
+    let onEdit: () -> Void
+    let onDelete: (() -> Void)?
+    
+    var body: some View {
         HStack {
-            Image(systemName: cmd.icon)
+            Image(systemName: command.icon)
                 .foregroundStyle(.blue)
             VStack(alignment: .leading) {
-                Text(cmd.displayName)
+                Text(command.displayName)
                     .font(.headline)
-                Text(cmd.prompt)
+                Text(command.prompt)
                     .font(.caption)
                     .foregroundStyle(.secondary)
                     .lineLimit(2)
             }
             Spacer()
             
-            // Edit
-            Button {
-                editingCommand = cmd
-            } label: {
-                Image(systemName: "pencil")
+            Button(action: onEdit) {
+                Label("Edit", systemImage: "pencil")
             }
+            .labelStyle(.iconOnly)
             .buttonStyle(.plain)
             .padding(.trailing, 8)
             
-            // Delete (only available for custom commands)
-            if !cmd.isBuiltIn {
-                Button(role: .destructive) {
-                    commandsManager.deleteCommand(cmd)
-                    postKeyboardCommandsDidChange()
-                } label: {
-                    Image(systemName: "trash")
+            if let onDelete {
+                Button(role: .destructive, action: onDelete) {
+                    Label("Delete", systemImage: "trash")
                 }
+                .labelStyle(.iconOnly)
                 .buttonStyle(.plain)
             }
         }
@@ -459,4 +569,8 @@ struct CommandEditorView: View {
             }
         }
     }
+}
+
+#Preview {
+    CommandsView(commandsManager: KeyboardCommandsManager())
 }

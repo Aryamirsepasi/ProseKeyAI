@@ -390,7 +390,6 @@ struct KeyboardStatusCard: View {
       }
     }
     .padding()
-    .background(Color(.systemGray6))
     .clipShape(.rect(cornerRadius: 16))
   }
 }
