@@ -5,20 +5,20 @@ struct AnthropicConfig: Codable, Sendable {
     var apiKey: String
     var model: String
     
-    static let defaultModel = "claude-3-5-sonnet-20240620"
+    static let defaultModel = "claude-haiku-4-5"
 }
 
 enum AnthropicModel: String, CaseIterable {
-    case claude3Haiku = "claude-3-7-sonnet-20250219"
-    case claude3Sonnet = "claude-sonnet-4-20250514"
-    case claude3Opus = "claude-opus-4-20250514"
+    case claude3Haiku = "claude-haiku-4-5"
+    case claude3Sonnet = "claude-sonnet-4-5"
+    case claude3Opus = "claude-opus-4-5"
     case custom
     
     var displayName: String {
         switch self {
-        case .claude3Haiku: return "Claude 3.7 Sonnet"
-        case .claude3Sonnet: return "Claude 4.0 Sonnet (Best for Most Users)"
-        case .claude3Opus: return "Claude 4.0 Opus (Most Capable, Expensive)"
+        case .claude3Haiku: return "Claude 4.5 Haiku"
+        case .claude3Sonnet: return "Claude 4.5 Sonnet (Best for Most Users)"
+        case .claude3Opus: return "Claude 4.5 Opus (Most Capable, Expensive)"
         case .custom: return "Custom"
         }
     }

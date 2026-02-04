@@ -1,3397 +1,3673 @@
 {
-  "sourceLanguage" : "en",
-  "strings" : {
-    "%@ Result" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@ Ergebnis"
+  "sourceLanguage": "en",
+  "strings": {
+    "%@ Result": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ Ergebnis"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@ Result"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ Result"
           }
         }
       }
     },
-    "%lld" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%lld"
+    "%lld": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%lld"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld"
           }
         }
       }
     },
-    "%lld languages supported" : {
-
-    },
-    "%lld." : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%lld."
+    "%lld languages supported": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld unterstützte Sprachen"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%lld."
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld languages supported"
           }
         }
       }
     },
-    "⚠️ If you just enabled Full Access, please close and reopen the keyboard, and restart the app, for the change to take effect." : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "⚠️ Falls Sie den Vollzugriff gerade erst aktiviert haben, schließen und öffnen Sie bitte die Tastatur erneut und starten Sie die App neu, damit die Änderung wirksam wird."
+    "%lld.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld."
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "⚠️ If you just enabled Full Access, please close and reopen the keyboard, and restart the app, for the change to take effect."
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld."
           }
         }
       }
     },
-    "1." : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "1."
+    "1. Open Settings app": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1. Öffnen Sie die Einstellungen-App"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "1."
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1. Open Settings app"
           }
         }
       }
     },
-    "1. Open Settings app" : {
-
-    },
-    "2." : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "2."
+    "2. Go to Apple Intelligence & Siri": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "2. Gehen Sie zu Apple Intelligence & Siri"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "2."
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "2. Go to Apple Intelligence & Siri"
           }
         }
       }
-    },
-    "2. Go to Apple Intelligence & Siri" : {
-
     },
-    "3." : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "3."
+    "3. Enable Apple Intelligence": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "3. Aktivieren Sie Apple Intelligence"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "3."
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "3. Enable Apple Intelligence"
           }
         }
       }
     },
-    "3. Enable Apple Intelligence" : {
-
-    },
-    "About" : {
-
-    },
-    "Acknowledge content" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Inhalt bestätigen"
+    "About": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Über"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Acknowledge content"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "About"
           }
         }
       }
     },
-    "Add commentary" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Kommentar hinzufügen"
+    "Acknowledge content": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Inhalt bestätigen"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Add commentary"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Acknowledge content"
           }
         }
       }
     },
-    "Add explanations" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Erklärungen hinzufügen"
+    "Add commentary": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kommentar hinzufügen"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Add explanations"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add commentary"
           }
         }
       }
     },
-    "Additional preservations (comma-separated)" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Zusätzliche Erhaltungen (kommagetrennt)"
+    "Add explanations": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Erklärungen hinzufügen"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Additional preservations (comma-separated)"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add explanations"
           }
         }
       }
-    },
-    "AI Provider" : {
-
     },
-    "AI Writing Tools" : {
-
-    },
-    "Allow Paste Permission" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Erlaubnis zum Einsetzen erteilen"
+    "Additional preservations (comma-separated)": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zusätzliche Erhaltungen (kommagetrennt)"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Allow Paste Permission"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Additional preservations (comma-separated)"
           }
         }
       }
     },
-    "Anthropic Claude" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Anthropic Claude"
+    "AI Provider": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "KI-Anbieter"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Anthropic Claude"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "AI Provider"
           }
         }
       }
     },
-    "Anthropic Settings" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Anthropic-Einstellungen"
+    "AI Writing Tools": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "KI-Schreibwerkzeuge"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Anthropic Settings"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "AI Writing Tools"
           }
         }
       }
     },
-    "API Key" : {
-
-    },
-    "API Key Configured" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "API-Key konfiguriert"
+    "Allow Paste Permission": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Erlaubnis zum Einsetzen erteilen"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "API Key Configured"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Allow Paste Permission"
           }
         }
       }
     },
-    "API Key Guide" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "API-Key Anleitung"
+    "Anthropic Claude": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Anthropic Claude"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "API Key Guide"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Anthropic Claude"
           }
         }
       }
-    },
-    "API key help" : {
-
     },
-    "API Key Help" : {
-
-    },
-    "API Key Required" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "API-Key erforderlich"
+    "Anthropic Settings": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Anthropic-Einstellungen"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "API Key Required"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Anthropic Settings"
           }
         }
       }
     },
-    "App Website" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "App Website"
+    "API Key": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "API-Schlüssel"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "App Website"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "API Key"
           }
         }
       }
     },
-    "Apple Foundation Models" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Apple Foundation Models"
+    "API key help": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hilfe zum API-Schlüssel"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Apple Foundation Models"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "API key help"
           }
         }
       }
     },
-    "Applying %@..." : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@ wird angewendet ..."
+    "API Key Help": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "API-Schlüssel-Hilfe"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Applying %@..."
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "API Key Help"
           }
         }
       }
     },
-    "Arya Mirsepasi" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Arya Mirsepasi"
+    "App Website": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "App Website"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "App Website"
           }
         }
       }
     },
-    "Ask AI" : {
-      "comment" : "Button to ask AI with custom prompt",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "KI fragen"
+    "Apple Foundation Models": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apple Foundation Models"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ask AI"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apple Foundation Models"
           }
         }
       }
-    },
-    "Automatically detect text or use copied content" : {
-
     },
-    "Availability Status" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Verfügbarkeitsstatus"
+    "Applying %@...": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ wird angewendet ..."
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Availability Status"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Applying %@..."
           }
         }
       }
     },
-    "Available" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Verfügbar"
+    "Arya Mirsepasi": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Arya Mirsepasi"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Available"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Arya Mirsepasi"
           }
         }
       }
     },
-    "Avoid Repeated Prompts" : {
-
-    },
-    "Back" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Zurück"
+    "Ask AI": {
+      "comment": "Button to ask AI with custom prompt",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "KI fragen"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Back"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ask AI"
           }
         }
       }
     },
-    "Base URL" : {
-
-    },
-    "Basic Information" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Basisinformationen"
+    "Automatically detect text or use copied content": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Text automatisch erkennen oder kopierten Inhalt verwenden"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Basic Information"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Automatically detect text or use copied content"
           }
         }
       }
     },
-    "Behavior Rules" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Verhaltensregeln"
+    "Availability Status": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Verfügbarkeitsstatus"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Behavior Rules"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Availability Status"
           }
         }
       }
     },
-    "Built-in Commands" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Integrierte Befehle"
+    "Available": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Verfügbar"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Built-in Commands"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Available"
           }
         }
       }
     },
-    "Cancel" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Abbrechen"
+    "Avoid Repeated Prompts": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wiederholte Abfragen vermeiden"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Cancel"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Avoid Repeated Prompts"
           }
         }
       }
     },
-    "Change" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ändern"
+    "Back": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zurück"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Change"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Back"
           }
         }
       }
     },
-    "Choose \"Allow Paste\" instead of \"Paste\" to avoid seeing this notification every time you use paste features." : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Wählen Sie „Einsetzen erlauben“ statt „Einsetzen“, um diese Benachrichtigung nicht jedes Mal zu sehen, wenn Sie Einfügefunktionen nutzen."
+    "Base URL": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Basis-URL"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Choose \"Allow Paste\" instead of \"Paste\" to avoid seeing this notification every time you use paste features."
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Base URL"
           }
         }
       }
-    },
-    "Choosing \"Allow Paste\" grants permanent access" : {
-
     },
-    "Clear" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Leeren"
+    "Basic Information": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Basisinformationen"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Clear"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Basic Information"
           }
         }
       }
     },
-    "Clipboard History" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Zwischenablage-Verlauf"
+    "Behavior Rules": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Verhaltensregeln"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Clipboard History"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Behavior Rules"
           }
         }
       }
     },
-    "Close result" : {
-
-    },
-    "Command Info" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Befehls-Info"
+    "Built-in Commands": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Integrierte Befehle"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Command Info"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Built-in Commands"
           }
         }
       }
     },
-    "Commands" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Befehle"
+    "Cancel": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Abbrechen"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Commands"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cancel"
           }
         }
       }
-    },
-    "Completes onboarding and opens the app" : {
-
     },
-    "Completes setup and closes onboarding" : {
-
-    },
-    "Concise" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Prägnant"
+    "Choosing \"Allow Paste\" grants permanent access": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wenn Sie \"Einsetzen erlauben\" wählen, wird dauerhafter Zugriff gewährt"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Concise"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choosing \"Allow Paste\" grants permanent access"
           }
         }
       }
     },
-    "Configure" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Konfigurieren"
+    "Clear": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Leeren"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Configure"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Clear"
           }
         }
       }
     },
-    "Configure your Anthropic API access" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Konfigurieren Sie Ihren Anthropic API-Zugriff"
+    "Clipboard history": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zwischenablageverlauf"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Configure your Anthropic API access"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Clipboard history"
           }
         }
       }
     },
-    "Configure your Gemini API access" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Konfigurieren Sie Ihren Gemini API-Zugriff"
+    "Clipboard History": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zwischenablage-Verlauf"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Configure your Gemini API access"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Clipboard History"
           }
         }
       }
     },
-    "Configure your Mistral API access" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Konfigurieren Sie Ihren Mistral API-Zugriff"
+    "Close result": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ergebnis schließen"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Configure your Mistral API access"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Close result"
           }
         }
       }
     },
-    "Configure your OpenAI API access" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Konfigurieren Sie Ihren OpenAI API-Zugriff"
+    "Command Info": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Befehls-Info"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Configure your OpenAI API access"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Command Info"
           }
         }
       }
     },
-    "Configure your OpenRouter API access" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Konfigurieren Sie Ihren OpenRouter API-Zugriff"
+    "Commands": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Befehle"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Configure your OpenRouter API access"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Commands"
           }
         }
       }
     },
-    "Configure your Perplexity API access" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Konfigurieren Sie Ihren Perplexity API-Zugriff"
+    "Completes onboarding and opens the app": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Schließt das Onboarding ab und öffnet die App"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Configure your Perplexity API access"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Completes onboarding and opens the app"
           }
         }
       }
-    },
-    "Continue" : {
-
     },
-    "Continues to the next onboarding step" : {
-
-    },
-    "Copy" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Kopieren"
+    "Completes setup and closes onboarding": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Schließt die Einrichtung ab und beendet das Onboarding"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Copy"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Completes setup and closes onboarding"
           }
         }
       }
     },
-    "Copy text to see it appear here" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Kopieren Sie Text, damit er hier erscheint"
+    "Configure your Anthropic API access": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Konfigurieren Sie Ihren Anthropic API-Zugriff"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Copy text to see it appear here"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Configure your Anthropic API access"
           }
         }
       }
     },
-    "Create a new API key and copy it" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Erstellen Sie einen neuen API-Key und kopieren Sie ihn"
+    "Configure your Gemini API access": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Konfigurieren Sie Ihren Gemini API-Zugriff"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Create a new API key and copy it"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Configure your Gemini API access"
           }
         }
       }
     },
-    "Create a new secret key" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Erstellen Sie einen neuen geheimen Schlüssel"
+    "Configure your Mistral API access": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Konfigurieren Sie Ihren Mistral API-Zugriff"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Create a new secret key"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Configure your Mistral API access"
           }
         }
       }
-    },
-    "Create personalized AI instructions for any task" : {
-
-    },
-    "Credentials" : {
-
     },
-    "Critical Rules" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Kritische Regeln"
+    "Configure your OpenAI API access": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Konfigurieren Sie Ihren OpenAI API-Zugriff"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Critical Rules"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Configure your OpenAI API access"
           }
         }
       }
     },
-    "Custom" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Benutzerdefiniert"
+    "Configure your OpenRouter API access": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Konfigurieren Sie Ihren OpenRouter API-Zugriff"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Custom"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Configure your OpenRouter API access"
           }
         }
       }
     },
-    "Custom Commands" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Eigene Befehle"
+    "Configure your Perplexity API access": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Konfigurieren Sie Ihren Perplexity API-Zugriff"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Custom Commands"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Configure your Perplexity API access"
           }
         }
       }
     },
-    "Custom Prompt" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Eigener Prompt"
+    "Continue": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Weiter"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Custom Prompt"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Continue"
           }
         }
       }
     },
-    "Custom Prompts" : {
-
-    },
-    "Define the role and main task for this command." : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Definieren Sie die Rolle und die Hauptaufgabe für diesen Befehl."
+    "Continues to the next onboarding step": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fährt mit dem nächsten Onboarding-Schritt fort"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Define the role and main task for this command."
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Continues to the next onboarding step"
           }
         }
       }
-    },
-    "Delete clipboard item" : {
-
     },
-    "Describe what the output should contain (e.g., 'only corrected text - no responses')" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Beschreiben Sie, was die Ausgabe enthalten soll (z. B. ‚nur korrigierten Text – keine Antworten‘)"
+    "Copy": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kopieren"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Describe what the output should contain (e.g., 'only corrected text - no responses')"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Copy"
           }
         }
       }
     },
-    "Discover what makes ProseKey AI special" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Entdecken Sie, was ProseKey AI besonders macht"
+    "Copy text to see it appear here": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kopieren Sie Text, damit er hier erscheint"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Discover what makes ProseKey AI special"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Copy text to see it appear here"
           }
         }
       }
     },
-    "Dismiss full access notice" : {
-
-    },
-    "Done" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Fertig"
+    "Create personalized AI instructions for any task": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Erstellen Sie personalisierte KI-Anweisungen für jede Aufgabe"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Done"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Create personalized AI instructions for any task"
           }
         }
       }
     },
-    "Double tap to dismiss" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Zum Schließen doppeltippen"
+    "Credentials": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Anmeldedaten"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Double tap to dismiss"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Credentials"
           }
         }
       }
     },
-    "Edit Command" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Befehl bearbeiten"
+    "Critical Rules": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kritische Regeln"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Edit Command"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Critical Rules"
           }
         }
       }
     },
-    "Enable" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Aktivieren"
+    "Custom": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Benutzerdefiniert"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Enable"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Custom"
           }
         }
       }
     },
-    "Enable Apple Intelligence" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Apple Intelligence aktivieren"
+    "Custom Commands": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eigene Befehle"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Enable Apple Intelligence"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Custom Commands"
           }
         }
       }
     },
-    "Enable Full Access" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Vollzugriff erlauben"
+    "Custom Prompt": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eigener Prompt"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Enable Full Access"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Custom Prompt"
           }
         }
       }
-    },
-    "Enable Full Access in Settings to use clipboard history." : {
-
     },
-    "Enable Haptic Feedback" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Haptisches Feedback aktivieren"
+    "Custom Prompts": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Benutzerdefinierte Prompts"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Enable Haptic Feedback"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Custom Prompts"
           }
         }
       }
     },
-    "Enable the Keyboard" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Tastatur aktivieren"
+    "Define the role and main task for this command.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Definieren Sie die Rolle und die Hauptaufgabe für diesen Befehl."
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Enable the Keyboard"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Define the role and main task for this command."
           }
         }
       }
     },
-    "Engage with requests" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Auf Anfragen eingehen"
+    "Delete": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Löschen"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Engage with requests"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete"
           }
         }
       }
     },
-    "Enhance your writing with AI" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Verbessern Sie Ihr Schreiben mit KI"
+    "Delete clipboard item": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zwischenablageeintrag löschen"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Enhance your writing with AI"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete clipboard item"
           }
         }
       }
     },
-    "Enter a custom prompt for your command. You can also use the Structured mode for guided prompt creation." : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Geben Sie einen eigenen Prompt für Ihren Befehl ein. Sie können auch den Strukturiert-Modus für eine geführte Prompt-Erstellung nutzen."
+    "Delete Custom Commands": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Benutzerdefinierte Befehle löschen"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Enter a custom prompt for your command. You can also use the Structured mode for guided prompt creation."
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete Custom Commands"
           }
         }
       }
     },
-    "Error: %@" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Fehler: %@"
+    "Delete custom commands?": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Benutzerdefinierte Befehle löschen?"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Error: %@"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete custom commands?"
           }
         }
       }
     },
-    "Everything you need to enhance your writing" : {
-
-    },
-    "Features" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Funktionen"
+    "Describe what the output should contain (e.g., 'only corrected text - no responses')": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Beschreiben Sie, was die Ausgabe enthalten soll (z. B. ‚nur korrigierten Text – keine Antworten‘)"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Features"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Describe what the output should contain (e.g., 'only corrected text - no responses')"
           }
         }
       }
     },
-    "Foundation Models" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Foundation Models"
+    "Dismiss full access notice": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hinweis zum Vollzugriff schließen"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Foundation Models"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dismiss full access notice"
           }
         }
       }
     },
-    "Foundation Models is currently unavailable." : {
-
-    },
-    "Foundation Models requires iOS 26.0 or later." : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Foundation Models benötigt iOS 26.0 oder neuer."
+    "Done": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fertig"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Foundation Models requires iOS 26.0 or later."
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Done"
           }
         }
       }
     },
-    "Friendly" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Freundlich"
+    "Double tap to dismiss": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zum Schließen doppeltippen"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Friendly"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Double tap to dismiss"
           }
         }
       }
     },
-    "Full access is required for the keyboard to access AI tools and use copy/paste features" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Der Vollzugriff ist erforderlich, damit die Tastatur auf KI-Tools zugreifen und Kopier-/Einfügefunktionen nutzen kann"
+    "Edit": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bearbeiten"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Full access is required for the keyboard to access AI tools and use copy/paste features"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Edit"
           }
         }
       }
-    },
-    "Full Access off" : {
-
-    },
-    "Full Access on" : {
-
-    },
-    "Full Access Required" : {
-
-    },
-    "Full Access required for clipboard tools" : {
-
     },
-    "Gemini Settings" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Gemini-Einstellungen"
+    "Edit Command": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Befehl bearbeiten"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Gemini Settings"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Edit Command"
           }
         }
       }
     },
-    "gemini-flash-latest" : {
-
-    },
-    "Generated Prompt Preview" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Vorschau des generierten Prompts"
+    "Enable": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aktivieren"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Generated Prompt Preview"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enable"
           }
         }
       }
     },
-    "Get %@ API Key" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@ API-Key erhalten"
+    "Enable Apple Intelligence in Settings to use this provider.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aktivieren Sie Apple Intelligence in den Einstellungen, um diesen Anbieter zu verwenden."
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Get %@ API Key"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enable Apple Intelligence in Settings to use this provider."
           }
         }
       }
     },
-    "Get started" : {
-
-    },
-    "Get Started" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Loslegen"
+    "Enable Full Access": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vollzugriff erlauben"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Get Started"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enable Full Access"
           }
         }
       }
     },
-    "Getting a Gemini API Key:" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Gemini API-Key erhalten:"
+    "Enable Full Access in Settings to use clipboard history.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aktivieren Sie Vollzugriff in den Einstellungen, um den Zwischenablageverlauf zu verwenden."
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Getting a Gemini API Key:"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enable Full Access in Settings to use clipboard history."
           }
         }
       }
     },
-    "Getting a Mistral API Key:" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Mistral API-Key erhalten:"
+    "Enable Haptic Feedback": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Haptisches Feedback aktivieren"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Getting a Mistral API Key:"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enable Haptic Feedback"
           }
         }
       }
     },
-    "Getting a Perplexity API Key:" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Perplexity API-Key erhalten:"
+    "Enable the Keyboard": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tastatur aktivieren"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Getting a Perplexity API Key:"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enable the Keyboard"
           }
         }
       }
     },
-    "Getting an OpenAI API Key:" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "OpenAI API-Key erhalten:"
+    "Engage with requests": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Auf Anfragen eingehen"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Getting an OpenAI API Key:"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Engage with requests"
           }
         }
       }
-    },
-    "Go back" : {
-
     },
-    "Go to %@ API Key Page" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Zur %@ API-Key Seite"
+    "Enhance your writing with AI": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Verbessern Sie Ihr Schreiben mit KI"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Go to %@ API Key Page"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enhance your writing with AI"
           }
         }
       }
     },
-    "Go to API → Get API Key" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Gehen Sie zu API → Get API Key"
+    "Enter a custom prompt for your command. You can also use the Structured mode for guided prompt creation.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Geben Sie einen eigenen Prompt für Ihren Befehl ein. Sie können auch den Strukturiert-Modus für eine geführte Prompt-Erstellung nutzen."
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Go to API → Get API Key"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enter a custom prompt for your command. You can also use the Structured mode for guided prompt creation."
           }
         }
       }
     },
-    "Go to Apple Intelligence & Siri" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Gehen Sie zu Apple Intelligence & Siri"
+    "Enter a custom prompt to process the selected text": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Geben Sie einen benutzerdefinierten Prompt ein, um den ausgewählten Text zu verarbeiten"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Go to Apple Intelligence & Siri"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enter a custom prompt to process the selected text"
           }
         }
       }
     },
-    "Go to platform.openai.com" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Besuchen Sie platform.openai.com"
+    "Enter an API key and model to save.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Geben Sie einen API-Schlüssel und ein Modell ein, um zu speichern."
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Go to platform.openai.com"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enter an API key and model to save."
           }
         }
       }
     },
-    "Google Gemini" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Google Gemini"
+    "Enter an API key, base URL, and model to save.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Geben Sie einen API-Schlüssel, eine Basis-URL und ein Modell ein, um zu speichern."
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Google Gemini"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enter an API key, base URL, and model to save."
           }
         }
       }
     },
-    "gpt-5-mini" : {
-
-    },
-    "Having Issues?" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Haben Sie Probleme?"
+    "Error: %@": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fehler: %@"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Having Issues?"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Error: %@"
           }
         }
       }
     },
-    "Help" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Hilfe"
+    "Everything you need to enhance your writing": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alles, was Sie brauchen, um Ihr Schreiben zu verbessern"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Help"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Everything you need to enhance your writing"
           }
         }
       }
     },
-    "History" : {
-      "comment" : "Button to view clipboard history",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Verlauf"
+    "Features": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Funktionen"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "History"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Features"
           }
         }
       }
     },
-    "Home" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Start"
+    "Foundation Models": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Foundation Models"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Home"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Foundation Models"
           }
         }
       }
     },
-    "How to Enable" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "So aktivieren Sie"
+    "Foundation Models is currently unavailable.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Foundation Models ist derzeit nicht verfügbar."
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "How to Enable"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Foundation Models is currently unavailable."
           }
         }
       }
     },
-    "How to Get Your %@ API Key" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "So erhalten Sie Ihren %@ API-Key"
+    "Full access is required for the keyboard to access AI tools and use copy/paste features": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Der Vollzugriff ist erforderlich, damit die Tastatur auf KI-Tools zugreifen und Kopier-/Einfügefunktionen nutzen kann"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "How to Get Your %@ API Key"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Full access is required for the keyboard to access AI tools and use copy/paste features"
           }
         }
       }
     },
-    "How your data is handled" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Wie Ihre Daten behandelt werden"
+    "Full Access off": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vollzugriff aus"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "How your data is handled"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Full Access off"
           }
         }
       }
-    },
-    "https://api.openai.com" : {
-
     },
-    "Icon" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Symbol"
+    "Full Access on": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vollzugriff an"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Icon"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Full Access on"
           }
         }
       }
     },
-    "If you just enabled Full Access, please close and reopen the keyboard, and restart the app, for the change to take effect." : {
-
-    },
-    "Important" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Wichtig"
+    "Full Access Required": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vollzugriff erforderlich"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Important"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Full Access Required"
           }
         }
       }
     },
-    "Important Notes:" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Wichtige Hinweise:"
+    "Full Access required for clipboard tools": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vollzugriff für Zwischenablage-Werkzeuge erforderlich"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Important Notes:"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Full Access required for clipboard tools"
           }
         }
       }
     },
-    "Input is content" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Eingabe ist Inhalt"
+    "Gemini Settings": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gemini-Einstellungen"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Input is content"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gemini Settings"
           }
         }
       }
     },
-    "Insert" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Einfügen"
+    "gemini-flash-latest": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "gemini-flash-latest"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Insert"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "gemini-flash-latest"
           }
         }
       }
-    },
-    "iOS will ask for permission when you first use clipboard features" : {
-
     },
-    "Key Points" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Kernpunkte"
+    "Generated Prompt Preview": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vorschau des generierten Prompts"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Key Points"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Generated Prompt Preview"
           }
         }
       }
     },
-    "Keyboard Commands" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Tastaturbefehle"
+    "Get started": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Loslegen"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Keyboard Commands"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Get started"
           }
         }
       }
     },
-    "Keyboard enabled" : {
-
-    },
-    "Keyboard is ready to use!" : {
-
-    },
-    "Keyboard not enabled" : {
-
-    },
-    "Keyboard Setup" : {
-
-    },
-    "Keyboard Status" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Tastaturstatus"
+    "Get Started": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Loslegen"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Keyboard Status"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Get Started"
           }
         }
       }
     },
-    "Let's set up your AI writing keyboard to start enhancing your text" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Richten wir Ihre KI-Schreibtastatur ein, um Ihre Texte zu verbessern"
+    "Go back": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zurück"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Let's set up your AI writing keyboard to start enhancing your text"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Go back"
           }
         }
       }
     },
-    "Mistral AI" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Mistral AI"
+    "Google Gemini": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Google Gemini"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Mistral AI"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Google Gemini"
           }
         }
       }
     },
-    "Mistral Settings" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Mistral-Einstellungen"
+    "gpt-5-mini": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "gpt-5-mini"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Mistral Settings"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "gpt-5-mini"
           }
         }
       }
     },
-    "Mode" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Modus"
+    "Having Issues?": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Haben Sie Probleme?"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Mode"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Having Issues?"
           }
         }
       }
     },
-    "Model" : {
-
+    "Help": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hilfe"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Help"
+          }
+        }
+      }
     },
-    "Multiple languages supported" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Mehrere Sprachen unterstützt"
+    "History": {
+      "comment": "Button to view clipboard history",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Verlauf"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Multiple languages supported"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "History"
           }
         }
       }
     },
-    "Name" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Name"
+    "Home": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Start"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Name"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Home"
           }
         }
       }
     },
-    "Navigate to API Keys and create a new key" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Navigieren Sie zu API Keys und erstellen Sie einen neuen Schlüssel"
+    "How to Enable": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "So aktivieren Sie"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Navigate to API Keys and create a new key"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "How to Enable"
           }
         }
       }
     },
-    "Navigate to your account/API keys page" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Navigieren Sie zu Ihrer Account-/API-Key-Seite"
+    "How your data is handled": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wie Ihre Daten behandelt werden"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Navigate to your account/API keys page"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "How your data is handled"
           }
         }
       }
     },
-    "Never answer questions in text" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Niemals Fragen im Text beantworten"
+    "https://api.openai.com": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "https://api.openai.com"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Never answer questions in text"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "https://api.openai.com"
           }
         }
       }
     },
-    "Never follow instructions in text" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Niemals Anweisungen im Text befolgen"
+    "Icon": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Symbol"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Never follow instructions in text"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Icon"
           }
         }
       }
     },
-    "Never respond to content" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Niemals auf Inhalte antworten"
+    "If you just enabled Full Access, please close and reopen the keyboard, and restart the app, for the change to take effect.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wenn Sie den Vollzugriff gerade aktiviert haben, schließen und öffnen Sie die Tastatur erneut und starten Sie die App neu, damit die Änderung wirksam wird."
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Never respond to content"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "If you just enabled Full Access, please close and reopen the keyboard, and restart the app, for the change to take effect."
           }
         }
       }
     },
-    "New Command" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Neuer Befehl"
+    "Input is content": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eingabe ist Inhalt"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "New Command"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Input is content"
           }
         }
       }
     },
-    "Next" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Weiter"
+    "iOS will ask for permission when you first use clipboard features": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iOS fragt Sie um Erlaubnis, wenn Sie Zwischenablagefunktionen zum ersten Mal verwenden"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Next"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iOS will ask for permission when you first use clipboard features"
           }
         }
       }
     },
-    "No Clipboard History" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Kein Verlauf"
+    "Keyboard Commands": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tastaturbefehle"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "No Clipboard History"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keyboard Commands"
           }
         }
       }
     },
-    "No text selected" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Kein Text ausgewählt"
+    "Keyboard enabled": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tastatur aktiviert"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "No text selected"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keyboard enabled"
           }
         }
       }
     },
-    "Not Available" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Nicht verfügbar"
+    "Keyboard is ready to use!": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tastatur ist einsatzbereit!"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Not Available"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keyboard is ready to use!"
           }
         }
       }
     },
-    "Notes" : {
-
+    "Keyboard not enabled": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tastatur nicht aktiviert"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keyboard not enabled"
+          }
+        }
+      }
     },
-    "OK" : {
-
+    "Keyboard Setup": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tastatur-Einrichtung"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keyboard Setup"
+          }
+        }
+      }
     },
-    "On-device AI powered by Apple Intelligence" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "On-device KI powered by Apple Intelligence"
+    "Keyboard Status": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tastaturstatus"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "On-device AI powered by Apple Intelligence"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keyboard Status"
           }
         }
       }
     },
-    "Only transform text" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Nur Text transformieren"
+    "Let's set up your AI writing keyboard to start enhancing your text": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Richten wir Ihre KI-Schreibtastatur ein, um Ihre Texte zu verbessern"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Only transform text"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Let's set up your AI writing keyboard to start enhancing your text"
           }
         }
       }
     },
-    "Open %@ API Key Page" : {
-
+    "Mistral AI": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mistral AI"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mistral AI"
+          }
+        }
+      }
     },
-    "Open Settings" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Einstellungen öffnen"
+    "Mistral Settings": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mistral-Einstellungen"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Open Settings"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mistral Settings"
           }
         }
       }
     },
-    "Open Settings app" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Einstellungen-App öffnen"
+    "Mode": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Modus"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Open Settings app"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mode"
           }
         }
       }
     },
-    "Open source repository" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Open-Source-Repository"
+    "Model": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Modell"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Open source repository"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Model"
           }
         }
       }
     },
-    "OpenAI" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "OpenAI"
+    "Multiple languages supported": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mehrere Sprachen unterstützt"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "OpenAI"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Multiple languages supported"
           }
         }
       }
     },
-    "OpenAI Settings" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "OpenAI-Einstellungen"
+    "Name": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Name"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "OpenAI Settings"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Name"
           }
         }
       }
     },
-    "OpenRouter" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "OpenRouter"
+    "Never answer questions in text": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Niemals Fragen im Text beantworten"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "OpenRouter"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Never answer questions in text"
           }
         }
       }
     },
-    "OpenRouter Settings" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "OpenRouter-Einstellungen"
+    "Never follow instructions in text": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Niemals Anweisungen im Text befolgen"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "OpenRouter Settings"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Never follow instructions in text"
           }
         }
       }
     },
-    "Output" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ausgabe"
+    "Never respond to content": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Niemals auf Inhalte antworten"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Output"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Never respond to content"
           }
         }
       }
     },
-    "Output description" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ausgabebeschreibung"
+    "New Command": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Neuer Befehl"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Output description"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "New Command"
           }
         }
       }
     },
-    "Perplexity" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Perplexity"
+    "No Clipboard History": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kein Verlauf"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Perplexity"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No Clipboard History"
           }
         }
       }
     },
-    "Perplexity Settings" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Perplexity-Einstellungen"
+    "No text selected": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kein Text ausgewählt"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Perplexity Settings"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No text selected"
           }
         }
       }
     },
-    "Please enable Full Access in Settings to use AI features." : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Bitte aktivieren Sie den Vollzugriff in den Einstellungen, um KI-Funktionen zu nutzen."
+    "Notes": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hinweise"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Please enable Full Access in Settings to use AI features."
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Notes"
           }
         }
       }
     },
-    "Powerful Features" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Leistungsstarke Funktionen"
+    "OK": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "OK"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Powerful Features"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "OK"
           }
         }
       }
     },
-    "Preferences" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Einstellungen"
+    "On-device AI powered by Apple Intelligence": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "On-device KI powered by Apple Intelligence"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Preferences"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "On-device AI powered by Apple Intelligence"
           }
         }
       }
     },
-    "Preservation Rules" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Erhaltungsregeln"
+    "Only transform text": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nur Text transformieren"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Preservation Rules"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Only transform text"
           }
         }
       }
     },
-    "Preserve core meaning" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Kernbedeutung bewahren"
+    "Open %@ API Key Page": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ API-Schlüssel-Seite öffnen"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Preserve core meaning"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open %@ API Key Page"
           }
         }
       }
     },
-    "Preserve format" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Format beibehalten"
+    "Open Settings": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Einstellungen öffnen"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Preserve format"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open Settings"
           }
         }
       }
     },
-    "Preserve input language" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Eingabesprache beibehalten"
+    "Open source repository": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open-Source-Repository"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Preserve input language"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open source repository"
           }
         }
       }
     },
-    "Preserve style" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Stil beibehalten"
+    "OpenAI": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "OpenAI"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Preserve style"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "OpenAI"
           }
         }
       }
     },
-    "Preserve tone" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Tonfall beibehalten"
+    "OpenAI Settings": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "OpenAI-Einstellungen"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Preserve tone"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "OpenAI Settings"
           }
         }
       }
     },
-    "Privacy Policy" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Impressum"
+    "OpenRouter": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "OpenRouter"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Privacy Policy"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "OpenRouter"
           }
         }
       }
     },
-    "Process longer text by copying it first" : {
-
+    "OpenRouter Settings": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "OpenRouter-Einstellungen"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "OpenRouter Settings"
+          }
+        }
+      }
     },
-    "Processing" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Verarbeitung läuft"
+    "Output": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ausgabe"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Processing"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Output"
           }
         }
       }
     },
-    "Professional" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Professionell"
+    "Output description": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ausgabebeschreibung"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Professional"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Output description"
           }
         }
       }
     },
-    "Prompt" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Prompt"
+    "Perplexity": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Perplexity"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Prompt"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Perplexity"
           }
         }
       }
     },
-    "Prompt Mode" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Prompt-Modus"
+    "Perplexity Settings": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Perplexity-Einstellungen"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Prompt Mode"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Perplexity Settings"
           }
         }
       }
     },
-    "Proofread" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Korrekturlesen"
+    "Please enable Full Access in Settings to use AI features.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bitte aktivieren Sie den Vollzugriff in den Einstellungen, um KI-Funktionen zu nutzen."
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Proofread"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Please enable Full Access in Settings to use AI features."
           }
         }
       }
     },
-    "Proofread, rewrite, summarize, and translate your text" : {
-
+    "Powerful Features": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Leistungsstarke Funktionen"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Powerful Features"
+          }
+        }
+      }
     },
-    "ProseKey AI" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "ProseKey AI"
+    "Preferences": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Einstellungen"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "ProseKey AI"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Preferences"
           }
         }
       }
     },
-    "ProseKey AI needs paste permission to access copied text for use in writing features." : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "ProseKey AI benötigt die Erlaubnis zum Einsetzen, um auf kopierten Text für Schreibfunktionen zuzugreifen."
+    "Preservation Rules": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Erhaltungsregeln"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "ProseKey AI needs paste permission to access copied text for use in writing features."
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Preservation Rules"
           }
         }
       }
     },
-    "Provider" : {
-
+    "Preserve core meaning": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kernbedeutung bewahren"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Preserve core meaning"
+          }
+        }
+      }
     },
-    "Providers" : {
-
+    "Preserve format": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Format beibehalten"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Preserve format"
+          }
+        }
+      }
     },
-    "Quick Tips:" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Kurztipps:"
+    "Preserve input language": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eingabesprache beibehalten"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Quick Tips:"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Preserve input language"
           }
         }
       }
     },
-    "Ready to use" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Bereit"
+    "Preserve style": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stil beibehalten"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ready to use"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Preserve style"
           }
         }
       }
     },
-    "Refresh selection" : {
-
+    "Preserve tone": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tonfall beibehalten"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Preserve tone"
+          }
+        }
+      }
     },
-    "Replace" : {
-
+    "Privacy Policy": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Impressum"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Privacy Policy"
+          }
+        }
+      }
     },
-    "Replace selected text" : {
-
+    "Process longer text by copying it first": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Verarbeiten Sie längeren Text, indem Sie ihn zuerst kopieren"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Process longer text by copying it first"
+          }
+        }
+      }
     },
-    "Requires iOS 26.0 or later" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Erfordert iOS 26.0 oder neuer"
+    "Processes the text currently on your clipboard": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Verarbeitet den Text, der sich derzeit in Ihrer Zwischenablage befindet"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Requires iOS 26.0 or later"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Processes the text currently on your clipboard"
           }
         }
       }
     },
-    "Restart Onboarding" : {
-
+    "Processing": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Verarbeitung läuft"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Processing"
+          }
+        }
+      }
     },
-    "Retry" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Wiederholen"
+    "Prompt": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prompt"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Retry"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prompt"
           }
         }
       }
     },
-    "Retry command" : {
-
+    "Prompt Mode": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prompt-Modus"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prompt Mode"
+          }
+        }
+      }
     },
-    "Returns to the previous onboarding step" : {
-
+    "Proofread, rewrite, summarize, and translate your text": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Korrigieren, überarbeiten, zusammenfassen und übersetzen Sie Ihren Text"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Proofread, rewrite, summarize, and translate your text"
+          }
+        }
+      }
     },
-    "Rewrite" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Umschreiben"
+    "ProseKey AI": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ProseKey AI"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Rewrite"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ProseKey AI"
           }
         }
       }
     },
-    "Role (e.g., 'proofreading assistant')" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Rolle (z. B. ‚Lektorats-Assistent‘)"
+    "Provider": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Anbieter"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Role (e.g., 'proofreading assistant')"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Provider"
           }
         }
       }
     },
-    "Save" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Speichern"
+    "Providers": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Anbieter"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Save"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Providers"
           }
         }
       }
     },
-    "Save Changes" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Änderungen speichern"
+    "Quick Tips:": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kurztipps:"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Save Changes"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quick Tips:"
           }
         }
       }
     },
-    "Saved" : {
-
+    "Ready to use": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bereit"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ready to use"
+          }
+        }
+      }
     },
-    "Select AI Provider" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "KI-Anbieter wählen"
+    "Refresh selection": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Auswahl aktualisieren"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Select AI Provider"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Refresh selection"
           }
         }
       }
     },
-    "Select API keys from settings" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "API-Keys in Einstellungen wählen"
+    "Replace": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ersetzen"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Select API keys from settings"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Replace"
           }
         }
       }
     },
-    "Set as Current Provider" : {
-
+    "Replace selected text": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ausgewählten Text ersetzen"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Replace selected text"
+          }
+        }
+      }
     },
-    "Setup required" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Einrichtung erforderlich"
+    "Requires iOS 26.0 or later": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Erfordert iOS 26.0 oder neuer"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Setup required"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Requires iOS 26.0 or later"
           }
         }
       }
     },
-    "Sign in with your Google account" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Mit Google-Konto anmelden"
+    "Reset Built-in Prompts": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Integrierte Prompts zurücksetzen"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Sign in with your Google account"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reset Built-in Prompts"
           }
         }
       }
     },
-    "Sign up or log in to your account" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Registrieren oder anmelden"
+    "Reset built-in prompts?": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Integrierte Prompts zurücksetzen?"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Sign up or log in to your account"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reset built-in prompts?"
           }
         }
       }
     },
-    "Skip" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Überspringen"
+    "Restart Onboarding": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Onboarding neu starten"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Skip"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Restart Onboarding"
           }
         }
       }
     },
-    "Skip onboarding" : {
-
+    "Retry": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wiederholen"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Retry"
+          }
+        }
+      }
     },
-    "Smart Text Selection" : {
-
+    "Retry command": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Befehl erneut ausführen"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Retry command"
+          }
+        }
+      }
     },
-    "Specify what aspects of the input text should be preserved." : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Geben Sie an, welche Aspekte des Eingabetextes beibehalten werden sollen."
+    "Returns to the previous onboarding step": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kehrt zum vorherigen Onboarding-Schritt zurück"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Specify what aspects of the input text should be preserved."
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Returns to the previous onboarding step"
           }
         }
       }
     },
-    "Start transforming your writing with AI" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Beginnen Sie mit der Transformation Ihrer Texte"
+    "Role (e.g., 'proofreading assistant')": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rolle (z. B. ‚Lektorats-Assistent‘)"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Start transforming your writing with AI"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Role (e.g., 'proofreading assistant')"
           }
         }
       }
     },
-    "Steps" : {
-
+    "Save": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Speichern"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Save"
+          }
+        }
+      }
     },
-    "Steps to enable Apple Intelligence:" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Schritte zum Aktivieren von Apple Intelligence:"
+    "Save Changes": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Änderungen speichern"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Steps to enable Apple Intelligence:"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Save Changes"
           }
         }
       }
     },
-    "Stop Repeated Notifications" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Wiederholte Benachrichtigungen stoppen"
+    "Set as Current Provider": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Als aktuellen Anbieter festlegen"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Stop Repeated Notifications"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Set as Current Provider"
           }
         }
       }
     },
-    "Submit" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Absenden"
+    "Settings Saved": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Einstellungen gespeichert"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Submit"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Settings Saved"
           }
         }
       }
     },
-    "Submit a new issue on the support page!" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Schreiben Sie uns auf der Support-Seite!"
+    "Setup required": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Einrichtung erforderlich"
           }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Setup required"
+          }
         }
       }
     },
-    "Suggested Models" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Vorgeschlagene Modelle"
+    "Skip": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Überspringen"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Suggested Models"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Skip"
           }
         }
       }
     },
-    "Summary" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Zusammenfassung"
+    "Skip onboarding": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Onboarding überspringen"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Summary"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Skip onboarding"
           }
         }
       }
     },
-    "Supported Languages" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Unterstützte Sprachen"
+    "Smart Text Selection": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Intelligente Textauswahl"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Supported Languages"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Smart Text Selection"
           }
         }
       }
     },
-    "Switch to ProseKey AI to verify setup" : {
-
+    "Specify what aspects of the input text should be preserved.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Geben Sie an, welche Aspekte des Eingabetextes beibehalten werden sollen."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Specify what aspects of the input text should be preserved."
+          }
+        }
+      }
     },
-    "Table" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Tabelle"
+    "Start transforming your writing with AI": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Beginnen Sie mit der Transformation Ihrer Texte"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Table"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Start transforming your writing with AI"
           }
         }
       }
     },
-    "Tap \"Allow Paste\"" : {
-
+    "Steps": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Schritte"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Steps"
+          }
+        }
+      }
     },
-    "Tap here to show the keyboard…" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Hier tippen, um die Tastatur anzuzeigen …"
+    "Steps to enable Apple Intelligence:": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Schritte zum Aktivieren von Apple Intelligence:"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Tap here to show the keyboard…"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Steps to enable Apple Intelligence:"
           }
         }
       }
     },
-    "Tap the text field below and switch to ProseKey AI using the globe key" : {
-
+    "Submit": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Absenden"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Submit"
+          }
+        }
+      }
     },
-    "Task (e.g., 'correct grammar and spelling')" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Aufgabe (z. B. ‚Grammatik und Rechtschreibung korrigieren')"
+    "Submit a new issue on the support page!": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Schreiben Sie uns auf der Support-Seite!"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Task (e.g., 'correct grammar and spelling')"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Submit a new issue on the support page!"
           }
         }
       }
     },
-    "Test Your Keyboard" : {
-
+    "Suggested Models": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vorgeschlagene Modelle"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Suggested Models"
+          }
+        }
+      }
     },
-    "The first time you use paste features, iOS will ask permission. Tap \"Allow Paste\" or \"Paste from [app]\" to enable the feature." : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Beim ersten Nutzen der Einsetzen-Funktion fragt iOS um Erlaubnis. Tippen Sie auf „Einsetzen erlauben“ oder „Einsetzen von [App]“, um die Funktion zu aktivieren."
+    "Supported Languages": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unterstützte Sprachen"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "The first time you use paste features, iOS will ask permission. Tap \"Allow Paste\" or \"Paste from [app]\" to enable the feature."
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Supported Languages"
           }
         }
       }
     },
-    "The model is still downloading or initializing. Please wait a few minutes and try again." : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Das Modell wird noch heruntergeladen oder initialisiert. Bitte warten Sie einige Minuten und versuchen Sie es erneut."
+    "Switch to ProseKey AI to verify setup": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wechseln Sie zu ProseKey AI, um die Einrichtung zu überprüfen"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "The model is still downloading or initializing. Please wait a few minutes and try again."
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Switch to ProseKey AI to verify setup"
           }
         }
       }
     },
-    "These are the default commands available in the keyboard. You can edit them but not delete them." : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Dies sind die Standardbefehle der Tastatur. Sie können diese bearbeiten, aber nicht löschen."
+    "Tap \"Allow Paste\"": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tippen Sie auf \"Einsetzen erlauben\""
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "These are the default commands available in the keyboard. You can edit them but not delete them."
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tap \"Allow Paste\""
           }
         }
       }
     },
-    "These are your custom commands available in the keyboard." : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Dies sind Ihre eigenen Befehle, die in der Tastatur verfügbar sind."
+    "Tap the text field below and switch to ProseKey AI using the globe key": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tippen Sie auf das Textfeld unten und wechseln Sie mit der Globus-Taste zu ProseKey AI"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "These are your custom commands available in the keyboard."
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tap the text field below and switch to ProseKey AI using the globe key"
           }
         }
       }
     },
-    "These ensure the AI only transforms text and doesn't engage with content." : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Diese stellen sicher, dass die KI nur Text transformiert und nicht auf den Inhalt eingeht."
+    "Task (e.g., 'correct grammar and spelling')": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aufgabe (z. B. ‚Grammatik und Rechtschreibung korrigieren')"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "These ensure the AI only transforms text and doesn't engage with content."
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Task (e.g., 'correct grammar and spelling')"
           }
         }
       }
     },
-    "This is a built-in command. While you can modify it, you cannot delete it." : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Dies ist ein integrierter Befehl. Sie können ihn ändern, aber nicht löschen."
+    "Test Your Keyboard": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Testen Sie Ihre Tastatur"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "This is a built-in command. While you can modify it, you cannot delete it."
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Test Your Keyboard"
           }
         }
       }
     },
-    "This is the JSON prompt that will be saved with your command." : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Dies ist der JSON-Prompt, der mit Ihrem Befehl gespeichert wird."
+    "The model is still downloading or initializing. Please wait a few minutes and try again.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Das Modell wird noch heruntergeladen oder initialisiert. Bitte warten Sie einige Minuten und versuchen Sie es erneut."
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "This is the JSON prompt that will be saved with your command."
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The model is still downloading or initializing. Please wait a few minutes and try again."
           }
         }
       }
     },
-    "Tip: Tap below to show the keyboard, then switch to “ProseKey AI” using the globe key. We’ll detect Full Access automatically." : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Tipp: Tippen Sie unten, um die Tastatur zu zeigen, und wechseln Sie dann über die Weltkugel-Taste zu „ProseKey AI“. Wir erkennen den Vollzugriff automatisch."
+    "These are the default commands available in the keyboard. You can edit them but not delete them.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dies sind die Standardbefehle der Tastatur. Sie können diese bearbeiten, aber nicht löschen."
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Tip: Tap below to show the keyboard, then switch to “ProseKey AI” using the globe key. We’ll detect Full Access automatically."
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "These are the default commands available in the keyboard. You can edit them but not delete them."
           }
         }
       }
     },
-    "Tip: Tap below to show the keyboard, then switch to “ProseKey AI” using the globe key. We’ll update your status automatically." : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Tipp: Tippen Sie unten, um die Tastatur zu zeigen, und wechseln Sie dann über die Weltkugel-Taste zu „ProseKey AI“. Wir aktualisieren Ihren Status automatisch."
+    "These are your custom commands available in the keyboard.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dies sind Ihre eigenen Befehle, die in der Tastatur verfügbar sind."
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Tip: Tap below to show the keyboard, then switch to “ProseKey AI” using the globe key. We’ll update your status automatically."
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "These are your custom commands available in the keyboard."
           }
         }
       }
     },
-    "Transform your writing with AI-powered tools" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Transformieren Sie Ihr Schreiben mit KI-gestützten Tools"
+    "These ensure the AI only transforms text and doesn't engage with content.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Diese stellen sicher, dass die KI nur Text transformiert und nicht auf den Inhalt eingeht."
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Transform your writing with AI-powered tools"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "These ensure the AI only transforms text and doesn't engage with content."
           }
         }
       }
     },
-    "Type something here…" : {
-
+    "This is a built-in command. While you can modify it, you cannot delete it.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dies ist ein integrierter Befehl. Sie können ihn ändern, aber nicht löschen."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This is a built-in command. While you can modify it, you cannot delete it."
+          }
+        }
+      }
     },
-    "Type your custom instructions for the AI…" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Geben Sie Ihre eigenen Anweisungen für die KI ein …"
+    "This is the JSON prompt that will be saved with your command.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dies ist der JSON-Prompt, der mit Ihrem Befehl gespeichert wird."
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Type your custom instructions for the AI…"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This is the JSON prompt that will be saved with your command."
           }
         }
       }
     },
-    "Unknown provider" : {
-
+    "This removes all custom commands from the keyboard.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dadurch werden alle benutzerdefinierten Befehle von der Tastatur entfernt."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This removes all custom commands from the keyboard."
+          }
+        }
+      }
     },
-    "Use Copied" : {
-      "comment" : "Button: use the text currently on the clipboard"
+    "This restores the default instructions for all built-in commands.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dadurch werden die Standardanweisungen für alle integrierten Befehle wiederhergestellt."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This restores the default instructions for all built-in commands."
+          }
+        }
+      }
     },
-    "Use Copied Text" : {
-
+    "Transform your writing with AI-powered tools": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Transformieren Sie Ihr Schreiben mit KI-gestützten Tools"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Transform your writing with AI-powered tools"
+          }
+        }
+      }
     },
-    "Use Text" : {
-      "comment" : "Button to use copied text",
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Text verwenden"
+    "Type something here…": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Geben Sie hier etwas ein…"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Use Text"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Type something here…"
           }
         }
       }
     },
-    "Using Text Selection" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Textauswahl verwenden"
+    "Type your custom instructions for the AI…": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Geben Sie Ihre eigenen Anweisungen für die KI ein …"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Using Text Selection"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Type your custom instructions for the AI…"
           }
         }
       }
     },
-    "View Details" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Details anzeigen"
+    "Unknown provider": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unbekannter Anbieter"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "View Details"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unknown provider"
           }
         }
       }
     },
-    "View on GitHub" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Auf GitHub anschauen"
+    "Use Copied": {
+      "comment": "Button: use the text currently on the clipboard",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kopiertes verwenden"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Use Copied"
           }
         }
       }
     },
-    "Visit console.mistral.ai" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Besuchen Sie console.mistral.ai"
+    "Use copied text": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kopierten Text verwenden"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Visit console.mistral.ai"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Use copied text"
           }
         }
       }
     },
-    "Visit Google AI Studio (ai.google.dev)" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Besuchen Sie Google AI Studio (ai.google.dev)"
+    "Use Copied Text": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kopierten Text verwenden"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Visit Google AI Studio (ai.google.dev)"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Use Copied Text"
           }
         }
       }
     },
-    "Visit perplexity.ai and create an account" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Besuchen Sie perplexity.ai und erstellen Sie ein Konto"
+    "View and select from previously copied text": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vorher kopierten Text anzeigen und auswählen"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Visit perplexity.ai and create an account"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "View and select from previously copied text"
           }
         }
       }
     },
-    "We never send your copied content to our servers." : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Wir senden Ihre kopierten Inhalte niemals an unsere Server."
+    "View on GitHub": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Auf GitHub anschauen"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "We never send your copied content to our servers."
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "View on GitHub"
           }
         }
       }
     },
-    "Welcome to ProseKey AI" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Willkommen bei ProseKey AI"
+    "We never send your copied content to our servers.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wir senden Ihre kopierten Inhalte niemals an unsere Server."
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Welcome to ProseKey AI"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "We never send your copied content to our servers."
           }
         }
       }
     },
-    "What This Enables:" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Was dies ermöglicht:"
+    "Welcome to ProseKey AI": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Willkommen bei ProseKey AI"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "What This Enables:"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Welcome to ProseKey AI"
           }
         }
       }
     },
-    "When the iOS permission dialog appears" : {
-
+    "When the iOS permission dialog appears": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wenn der iOS-Berechtigungsdialog erscheint"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "When the iOS permission dialog appears"
+          }
+        }
+      }
     },
-    "You're All Set!" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Alles bereit!"
+    "You're All Set!": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alles bereit!"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "You're All Set!"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You're All Set!"
           }
         }
       }
     },
-    "Your Anthropic settings have been updated." : {
-
+    "Your Anthropic settings have been updated.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ihre Anthropic-Einstellungen wurden aktualisiert."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your Anthropic settings have been updated."
+          }
+        }
+      }
     },
-    "Your device does not support Apple Intelligence. Foundation Models requires an iPhone 15 Pro or later, or a recent iPad." : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ihr Gerät unterstützt Apple Intelligence nicht. Foundation Models erfordert ein iPhone 15 Pro oder neuer, oder ein aktuelles iPad."
+    "Your device does not support Apple Intelligence. Foundation Models requires an iPhone 15 Pro or later, or a recent iPad.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ihr Gerät unterstützt Apple Intelligence nicht. Foundation Models erfordert ein iPhone 15 Pro oder neuer, oder ein aktuelles iPad."
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Your device does not support Apple Intelligence. Foundation Models requires an iPhone 15 Pro or later, or a recent iPad."
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your device does not support Apple Intelligence. Foundation Models requires an iPhone 15 Pro or later, or a recent iPad."
           }
         }
       }
     },
-    "Your Gemini settings have been updated." : {
-
+    "Your Gemini settings have been updated.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ihre Gemini-Einstellungen wurden aktualisiert."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your Gemini settings have been updated."
+          }
+        }
+      }
     },
-    "Your Mistral settings have been updated." : {
-
+    "Your Mistral settings have been updated.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ihre Mistral-Einstellungen wurden aktualisiert."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your Mistral settings have been updated."
+          }
+        }
+      }
     },
-    "Your OpenAI settings have been updated." : {
-
+    "Your OpenAI settings have been updated.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ihre OpenAI-Einstellungen wurden aktualisiert."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your OpenAI settings have been updated."
+          }
+        }
+      }
     },
-    "Your OpenRouter settings have been updated." : {
-
+    "Your OpenRouter settings have been updated.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ihre OpenRouter-Einstellungen wurden aktualisiert."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your OpenRouter settings have been updated."
+          }
+        }
+      }
     },
-    "Your Perplexity settings have been updated." : {
-
+    "Your Perplexity settings have been updated.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ihre Perplexity-Einstellungen wurden aktualisiert."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your Perplexity settings have been updated."
+          }
+        }
+      }
     },
-    "Your Privacy Matters" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ihre Privatsphäre ist wichtig"
+    "Your Privacy Matters": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ihre Privatsphäre ist wichtig"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Your Privacy Matters"
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your Privacy Matters"
           }
         }
       }
     }
   },
-  "version" : "1.1"
+  "version": "1.1"
 }

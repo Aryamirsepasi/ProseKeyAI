@@ -5,22 +5,22 @@ import AIProxy
 struct OpenRouterConfig: Codable, Sendable {
     var apiKey: String
     var model: String
-    static let defaultModel = "openai/gpt-4o"
+    static let defaultModel = "moonshotai/kimi-k2.5"
 }
 
 enum OpenRouterModel: String, CaseIterable {
-    case gpt4o = "openai/gpt-4o"
-    case deepseekR1 = "deepseek/deepseek-r1"
-    case deepseekChat = "deepseek/deepseek-chat"
-    case grok2Vision = "x-ai/grok-2-vision-1212"
+    case kimi = "moonshotai/kimi-k2.5"
+    case geminiflash = "google/gemini-3-flash-preview"
+    case minimax = "minimax/minimax-m2.1"
+    case mistralsmall = "mistralai/mistral-small-creative"
     case custom
     
     var displayName: String {
         switch self {
-        case .gpt4o: return "OpenAI GPT-4o"
-        case .deepseekR1: return "DeepSeek R1"
-        case .deepseekChat: return "DeepSeek Chat"
-        case .grok2Vision: return "Grok 2 Vision"
+        case .kimi: return "Kimi K2.5"
+        case .geminiflash: return "Gemini 3 Flash"
+        case .minimax: return "MiniMax M2.1"
+        case .mistralsmall: return "Mistral Small Creative"
         case .custom: return "Custom"
         }
     }

@@ -92,6 +92,8 @@ struct AIToolsView: View {
                 .foregroundStyle(.white)
                 .buttonStyle(.plain)
                 .disabled(isBusy)
+                .accessibilityLabel("Use copied text")
+                .accessibilityHint("Processes the text currently on your clipboard")
                 
                 Button(action: {
                     guard vm.viewController?.hasFullAccess == true else {
@@ -114,6 +116,8 @@ struct AIToolsView: View {
                 .foregroundStyle(.white)
                 .buttonStyle(.plain)
                 .disabled(isBusy)
+                .accessibilityLabel("Clipboard history")
+                .accessibilityHint("View and select from previously copied text")
                 
                 Button(action: {
                     guard hasSelection else {
@@ -137,6 +141,8 @@ struct AIToolsView: View {
                 .foregroundStyle(.white)
                 .buttonStyle(.plain)
                 .disabled(!hasSelection || isBusy)
+                .accessibilityLabel("Ask AI")
+                .accessibilityHint("Enter a custom prompt to process the selected text")
             }
             .padding(.horizontal, 8)
             .padding(.top, rowPadding)

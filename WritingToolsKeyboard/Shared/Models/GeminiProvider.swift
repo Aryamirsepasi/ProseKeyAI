@@ -7,18 +7,18 @@ struct GeminiConfig: Codable, Sendable {
 }
 
 enum GeminiModel: String, CaseIterable {
-    case twofashlite = "gemini-2.5-flash-lite"
-    case twoflash = "gemini-2.0-flash"
-    case twofiveflash = "gemini-2.5-flash"
-    case twofivepro = "gemini-2.5-pro"
+    case flashlite = "gemini-flash-lite-latest"
+    case flash = "gemini-flash-latest"
+    case prevflash = "gemini-3-flash-preview"
+    case pro = "gemini-3-pro-preview"
     case custom = "custom"
     
     var displayName: String {
         switch self {
-        case .twofashlite: return "Gemini 2.5 Flash Lite"
-        case .twoflash: return "Gemini 2.0 Flash"
-        case .twofiveflash: return "Gemini 2.5 Flash"
-        case .twofivepro: return "Gemini 2.5 Pro"
+        case .flashlite: return "Gemini 2.5 Flash Lite"
+        case .flash: return "Gemini 2.5 Flash"
+        case .prevflash: return "Gemini 3.0 Flash"
+        case .pro: return "Gemini 3.0 Pro"
         case .custom: return "Custom"
         }
     }

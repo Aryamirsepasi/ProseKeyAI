@@ -241,8 +241,8 @@ class AppSettings: ObservableObject {
 
         // Reload non-API-key properties
         let geminiModelStr = self.defaults.string(forKey: "gemini_model")
-            ?? GeminiModel.twoflash.rawValue
-        self.geminiModel = GeminiModel(rawValue: geminiModelStr) ?? .twoflash
+            ?? GeminiModel.flash.rawValue
+        self.geminiModel = GeminiModel(rawValue: geminiModelStr) ?? .flash
         self.geminiCustomModel = self.defaults.string(forKey: "gemini_custom_model") ?? ""
 
         self.openAIBaseURL = self.defaults.string(forKey: "openai_base_url")
@@ -281,8 +281,8 @@ class AppSettings: ObservableObject {
 
         // Load non-API-key properties from UserDefaults
         let geminiModelStr = self.defaults.string(forKey: "gemini_model")
-            ?? GeminiModel.twoflash.rawValue
-        self.geminiModel = GeminiModel(rawValue: geminiModelStr) ?? .twoflash
+            ?? GeminiModel.flash.rawValue
+        self.geminiModel = GeminiModel(rawValue: geminiModelStr) ?? .flash
         self.geminiCustomModel = self.defaults.string(forKey: "gemini_custom_model") ?? ""
 
         self.openAIBaseURL = self.defaults.string(forKey: "openai_base_url")

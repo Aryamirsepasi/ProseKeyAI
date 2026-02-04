@@ -44,27 +44,43 @@ struct PerplexitySettingsView: View {
             }
 
             Section {
-                Button("Save Changes") {
+                Button {
                     appState.savePerplexityConfig(
                         apiKey: apiKey,
                         model: model
                     )
                     HapticsManager.shared.success()
                     showSaveConfirmation = true
+                } label: {
+                    Text("Save Changes")
+                        .padding(5)
+                        .frame(maxWidth: .infinity)
                 }
-                .frame(maxWidth: .infinity, alignment: .center)
-                .tint(isFormValid ? Color(hex: "1FB8CD") : Color.gray)
+                .buttonStyle(.borderedProminent)
+                .tint(Color(hex: "1FB8CD"))
                 .disabled(!isFormValid)
-            }
+                .listRowInsets(EdgeInsets(top: 0, leading: 4, bottom: 8, trailing: 4))
+                .listRowBackground(Color.clear)
+                .listRowSeparator(.hidden)
 
-            Section {
-                Button("Set as Current Provider") {
+                Button {
                     settings.currentProvider = "perplexity"
                     appState.setCurrentProvider("perplexity")
                     dismiss()
+                } label: {
+                    Text("Set as Current Provider")
+                        .padding(5)
+                        .frame(maxWidth: .infinity)
                 }
-                .frame(maxWidth: .infinity, alignment: .center)
+                .buttonStyle(.bordered)
                 .disabled(settings.currentProvider == "perplexity")
+                .listRowInsets(EdgeInsets(top: 0, leading: 4, bottom: 0, trailing: 4))
+                .listRowBackground(Color.clear)
+                .listRowSeparator(.hidden)
+            } footer: {
+                if !isFormValid {
+                    Text("Enter an API key and model to save.")
+                }
             }
         }
         .navigationTitle("Perplexity Settings")
@@ -84,7 +100,7 @@ struct PerplexitySettingsView: View {
         .onAppear(perform: syncFromSettings)
         .onChangeCompat(of: settings.perplexityApiKey) { _ in syncFromSettings() }
         .onChangeCompat(of: settings.perplexityModel) { _ in syncFromSettings() }
-        .alert("Saved", isPresented: $showSaveConfirmation) {
+        .alert("Settings Saved", isPresented: $showSaveConfirmation) {
             Button("OK", role: .cancel) {}
         } message: {
             Text("Your Perplexity settings have been updated.")

@@ -71,27 +71,43 @@ struct MistralSettingsView: View {
             }
 
             Section {
-                Button("Save Changes") {
+                Button {
                     appState.saveMistralConfig(
                         apiKey: apiKey,
                         model: modelName
                     )
                     HapticsManager.shared.success()
                     showSaveConfirmation = true
+                } label: {
+                    Text("Save Changes")
+                        .padding(5)
+                        .frame(maxWidth: .infinity)
                 }
-                .frame(maxWidth: .infinity, alignment: .center)
-                .tint(isFormValid ? Color(hex: "FA520F") : Color.gray)
+                .buttonStyle(.borderedProminent)
+                .tint(Color(hex: "FA520F"))
                 .disabled(!isFormValid)
-            }
+                .listRowInsets(EdgeInsets(top: 0, leading: 4, bottom: 8, trailing: 4))
+                .listRowBackground(Color.clear)
+                .listRowSeparator(.hidden)
 
-            Section {
-                Button("Set as Current Provider") {
+                Button {
                     settings.currentProvider = "mistral"
                     appState.setCurrentProvider("mistral")
                     dismiss()
+                } label: {
+                    Text("Set as Current Provider")
+                        .padding(5)
+                        .frame(maxWidth: .infinity)
                 }
-                .frame(maxWidth: .infinity, alignment: .center)
+                .buttonStyle(.bordered)
                 .disabled(settings.currentProvider == "mistral")
+                .listRowInsets(EdgeInsets(top: 0, leading: 4, bottom: 0, trailing: 4))
+                .listRowBackground(Color.clear)
+                .listRowSeparator(.hidden)
+            } footer: {
+                if !isFormValid {
+                    Text("Enter an API key and model to save.")
+                }
             }
         }
         .navigationTitle("Mistral Settings")
@@ -111,7 +127,7 @@ struct MistralSettingsView: View {
         .onAppear(perform: syncFromSettings)
         .onChangeCompat(of: settings.mistralApiKey) { _ in syncFromSettings() }
         .onChangeCompat(of: settings.mistralModel) { _ in syncFromSettings() }
-        .alert("Saved", isPresented: $showSaveConfirmation) {
+        .alert("Settings Saved", isPresented: $showSaveConfirmation) {
             Button("OK", role: .cancel) {}
         } message: {
             Text("Your Mistral settings have been updated.")

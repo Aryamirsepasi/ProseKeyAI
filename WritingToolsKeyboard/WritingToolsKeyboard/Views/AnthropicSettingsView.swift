@@ -44,27 +44,43 @@ struct AnthropicSettingsView: View {
             }
 
             Section {
-                Button("Save Changes") {
+                Button {
                     appState.saveAnthropicConfig(
                         apiKey: apiKey,
                         model: model
                     )
                     HapticsManager.shared.success()
                     showSaveConfirmation = true
+                } label: {
+                    Text("Save Changes")
+                        .padding(5)
+                        .frame(maxWidth: .infinity)
                 }
-                .frame(maxWidth: .infinity, alignment: .center)
-                .tint(isFormValid ? Color(hex: "c15f3c") : Color.gray)
+                .buttonStyle(.borderedProminent)
+                .tint(Color(hex: "c15f3c"))
                 .disabled(!isFormValid)
-            }
+                .listRowInsets(EdgeInsets(top: 0, leading: 4, bottom: 8, trailing: 4))
+                .listRowBackground(Color.clear)
+                .listRowSeparator(.hidden)
 
-            Section {
-                Button("Set as Current Provider") {
+                Button {
                     settings.currentProvider = "anthropic"
                     appState.setCurrentProvider("anthropic")
                     dismiss()
+                } label: {
+                    Text("Set as Current Provider")
+                        .padding(5)
+                        .frame(maxWidth: .infinity)
                 }
-                .frame(maxWidth: .infinity, alignment: .center)
+                .buttonStyle(.bordered)
                 .disabled(settings.currentProvider == "anthropic")
+                .listRowInsets(EdgeInsets(top: 0, leading: 4, bottom: 0, trailing: 4))
+                .listRowBackground(Color.clear)
+                .listRowSeparator(.hidden)
+            } footer: {
+                if !isFormValid {
+                    Text("Enter an API key and model to save.")
+                }
             }
         }
         .navigationTitle("Anthropic Settings")
@@ -84,7 +100,7 @@ struct AnthropicSettingsView: View {
         .onAppear(perform: syncFromSettings)
         .onChangeCompat(of: settings.anthropicApiKey) { _ in syncFromSettings() }
         .onChangeCompat(of: settings.anthropicModel) { _ in syncFromSettings() }
-        .alert("Saved", isPresented: $showSaveConfirmation) {
+        .alert("Settings Saved", isPresented: $showSaveConfirmation) {
             Button("OK", role: .cancel) {}
         } message: {
             Text("Your Anthropic settings have been updated.")

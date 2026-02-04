@@ -65,7 +65,7 @@ struct GeminiSettingsView: View {
             }
 
             Section {
-                Button("Save Changes") {
+                Button {
                     let resolvedModel: GeminiModel
                     let custom: String
                     if let match = GeminiModel(rawValue: modelName) {
@@ -82,20 +82,36 @@ struct GeminiSettingsView: View {
                     )
                     HapticsManager.shared.success()
                     showSaveConfirmation = true
+                } label: {
+                    Text("Save Changes")
+                        .padding(5)
+                        .frame(maxWidth: .infinity)
                 }
-                .frame(maxWidth: .infinity, alignment: .center)
-                .tint(isFormValid ? Color(hex: "4285F4") : Color.gray)
+                .buttonStyle(.borderedProminent)
+                .tint(Color(hex: "4285F4"))
                 .disabled(!isFormValid)
-            }
+                .listRowInsets(EdgeInsets(top: 0, leading: 4, bottom: 8, trailing: 4))
+                .listRowBackground(Color.clear)
+                .listRowSeparator(.hidden)
 
-            Section {
-                Button("Set as Current Provider") {
+                Button {
                     settings.currentProvider = "gemini"
                     appState.setCurrentProvider("gemini")
                     dismiss()
+                } label: {
+                    Text("Set as Current Provider")
+                        .padding(5)
+                        .frame(maxWidth: .infinity)
                 }
-                .frame(maxWidth: .infinity, alignment: .center)
+                .buttonStyle(.bordered)
                 .disabled(settings.currentProvider == "gemini")
+                .listRowInsets(EdgeInsets(top: 0, leading: 4, bottom: 0, trailing: 4))
+                .listRowBackground(Color.clear)
+                .listRowSeparator(.hidden)
+            } footer: {
+                if !isFormValid {
+                    Text("Enter an API key and model to save.")
+                }
             }
         }
         .navigationTitle("Gemini Settings")
@@ -116,7 +132,7 @@ struct GeminiSettingsView: View {
         .onChangeCompat(of: settings.geminiApiKey) { _ in syncFromSettings() }
         .onChangeCompat(of: settings.geminiModel) { _ in syncFromSettings() }
         .onChangeCompat(of: settings.geminiCustomModel) { _ in syncFromSettings() }
-        .alert("Saved", isPresented: $showSaveConfirmation) {
+        .alert("Settings Saved", isPresented: $showSaveConfirmation) {
             Button("OK", role: .cancel) {}
         } message: {
             Text("Your Gemini settings have been updated.")

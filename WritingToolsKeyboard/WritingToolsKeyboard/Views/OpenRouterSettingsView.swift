@@ -13,8 +13,11 @@ struct OpenRouterSettingsView: View {
         Form {
             Section {
                 HStack {
-                    Image(systemName: "o.circle.fill")
-                        .font(.system(size: 28))
+                    Image("openrouter")
+                        .renderingMode(.template)
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: 28, height: 28)
                         .foregroundStyle(Color(hex: "7FADF2"))
                     VStack(alignment: .leading, spacing: 2) {
                         Text("OpenRouter")
@@ -41,27 +44,43 @@ struct OpenRouterSettingsView: View {
             }
 
             Section {
-                Button("Save Changes") {
+                Button {
                     appState.saveOpenRouterConfig(
                         apiKey: apiKey,
                         model: model
                     )
                     HapticsManager.shared.success()
                     showSaveConfirmation = true
+                } label: {
+                    Text("Save Changes")
+                        .padding(5)
+                        .frame(maxWidth: .infinity)
                 }
-                .frame(maxWidth: .infinity, alignment: .center)
-                .tint(isFormValid ? Color(hex: "7FADF2") : Color.gray)
+                .buttonStyle(.borderedProminent)
+                .tint(Color(hex: "7FADF2"))
                 .disabled(!isFormValid)
-            }
+                .listRowInsets(EdgeInsets(top: 0, leading: 4, bottom: 8, trailing: 4))
+                .listRowBackground(Color.clear)
+                .listRowSeparator(.hidden)
 
-            Section {
-                Button("Set as Current Provider") {
+                Button {
                     settings.currentProvider = "openrouter"
                     appState.setCurrentProvider("openrouter")
                     dismiss()
+                } label: {
+                    Text("Set as Current Provider")
+                        .padding(5)
+                        .frame(maxWidth: .infinity)
                 }
-                .frame(maxWidth: .infinity, alignment: .center)
+                .buttonStyle(.bordered)
                 .disabled(settings.currentProvider == "openrouter")
+                .listRowInsets(EdgeInsets(top: 0, leading: 4, bottom: 0, trailing: 4))
+                .listRowBackground(Color.clear)
+                .listRowSeparator(.hidden)
+            } footer: {
+                if !isFormValid {
+                    Text("Enter an API key and model to save.")
+                }
             }
         }
         .navigationTitle("OpenRouter Settings")
@@ -81,7 +100,7 @@ struct OpenRouterSettingsView: View {
         .onAppear(perform: syncFromSettings)
         .onChangeCompat(of: settings.openRouterApiKey) { _ in syncFromSettings() }
         .onChangeCompat(of: settings.openRouterModel) { _ in syncFromSettings() }
-        .alert("Saved", isPresented: $showSaveConfirmation) {
+        .alert("Settings Saved", isPresented: $showSaveConfirmation) {
             Button("OK", role: .cancel) {}
         } message: {
             Text("Your OpenRouter settings have been updated.")

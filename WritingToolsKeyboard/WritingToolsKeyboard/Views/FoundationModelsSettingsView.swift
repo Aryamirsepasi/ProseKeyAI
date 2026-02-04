@@ -30,6 +30,27 @@ struct FoundationModelsSettingsView: View {
             Section("Availability Status") {
                 availabilityStatusRow
             }
+            
+            Section {
+                Button {
+                    settings.currentProvider = "foundationmodels"
+                    appState.setCurrentProvider("foundationmodels")
+                    dismiss()
+                } label: {
+                    Text("Set as Current Provider")
+                        .padding(5)
+                        .frame(maxWidth: .infinity)
+                }
+                .buttonStyle(.borderedProminent)
+                .disabled(!provider.isAvailable || settings.currentProvider == "foundationmodels")
+                .listRowInsets(EdgeInsets(top: 0, leading: 4, bottom: 0, trailing: 4))
+                .listRowBackground(Color.clear)
+                .listRowSeparator(.hidden)
+            } footer: {
+                if !provider.isAvailable {
+                    Text("Enable Apple Intelligence in Settings to use this provider.")
+                }
+            }
 
             Section("Features") {
                 FeatureRow(icon: "checkmark.circle.fill", text: "No API key required")
@@ -97,15 +118,6 @@ struct FoundationModelsSettingsView: View {
                 }
             }
 
-            Section {
-                Button("Set as Current Provider") {
-                    settings.currentProvider = "foundationmodels"
-                    appState.setCurrentProvider("foundationmodels")
-                    dismiss()
-                }
-                .frame(maxWidth: .infinity, alignment: .center)
-                .disabled(settings.currentProvider == "foundationmodels")
-            }
         }
         .navigationTitle("Foundation Models")
         .navigationBarTitleDisplayMode(.inline)

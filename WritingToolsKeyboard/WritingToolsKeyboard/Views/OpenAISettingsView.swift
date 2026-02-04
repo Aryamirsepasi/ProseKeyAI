@@ -75,7 +75,7 @@ struct OpenAISettingsView: View {
             }
 
             Section {
-                Button("Save Changes") {
+                Button {
                     appState.saveOpenAIConfig(
                         apiKey: apiKey,
                         baseURL: baseURL,
@@ -83,20 +83,36 @@ struct OpenAISettingsView: View {
                     )
                     HapticsManager.shared.success()
                     showSaveConfirmation = true
+                } label: {
+                    Text("Save Changes")
+                        .padding(5)
+                        .frame(maxWidth: .infinity)
                 }
-                .frame(maxWidth: .infinity, alignment: .center)
-                .tint(isFormValid ? Color(hex: "412991") : Color.gray)
+                .buttonStyle(.borderedProminent)
+                .tint(Color(hex: "412991"))
                 .disabled(!isFormValid)
-            }
+                .listRowInsets(EdgeInsets(top: 0, leading: 4, bottom: 8, trailing: 4))
+                .listRowBackground(Color.clear)
+                .listRowSeparator(.hidden)
 
-            Section {
-                Button("Set as Current Provider") {
+                Button {
                     settings.currentProvider = "openai"
                     appState.setCurrentProvider("openai")
                     dismiss()
+                } label: {
+                    Text("Set as Current Provider")
+                        .padding(5)
+                        .frame(maxWidth: .infinity)
                 }
-                .frame(maxWidth: .infinity, alignment: .center)
+                .buttonStyle(.bordered)
                 .disabled(settings.currentProvider == "openai")
+                .listRowInsets(EdgeInsets(top: 0, leading: 4, bottom: 0, trailing: 4))
+                .listRowBackground(Color.clear)
+                .listRowSeparator(.hidden)
+            } footer: {
+                if !isFormValid {
+                    Text("Enter an API key, base URL, and model to save.")
+                }
             }
         }
         .navigationTitle("OpenAI Settings")
@@ -117,7 +133,7 @@ struct OpenAISettingsView: View {
         .onChangeCompat(of: settings.openAIApiKey) { _ in syncFromSettings() }
         .onChangeCompat(of: settings.openAIBaseURL) { _ in syncFromSettings() }
         .onChangeCompat(of: settings.openAIModel) { _ in syncFromSettings() }
-        .alert("Saved", isPresented: $showSaveConfirmation) {
+        .alert("Settings Saved", isPresented: $showSaveConfirmation) {
             Button("OK", role: .cancel) {}
         } message: {
             Text("Your OpenAI settings have been updated.")

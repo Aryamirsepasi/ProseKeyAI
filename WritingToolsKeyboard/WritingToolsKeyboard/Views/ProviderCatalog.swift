@@ -60,7 +60,7 @@ enum ProviderCatalog {
             ProviderInfo(
                 id: "openrouter",
                 name: "OpenRouter",
-                iconType: .system("o.circle.fill"),
+                iconType: .asset("openrouter"),
                 color: Color(hex: "7FADF2"),
                 requiresApiKey: true
             ),
