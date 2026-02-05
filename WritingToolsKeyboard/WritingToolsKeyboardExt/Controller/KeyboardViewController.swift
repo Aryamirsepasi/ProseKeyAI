@@ -165,6 +165,48 @@ class KeyboardViewController: UIInputViewController {
     return nil
   }
   
+  /// Replaces a specific substring in the text field with new text.
+  /// Finds the original text in the document, deletes it, and inserts the replacement.
+  /// Returns true if the text was found and replaced, false otherwise.
+  @discardableResult
+  func replaceText(_ originalText: String, with newText: String) -> Bool {
+      let proxy = textDocumentProxy
+
+      // Move cursor to end of document so documentContextBeforeInput contains everything
+      // adjustTextPosition uses character (grapheme cluster) offsets
+      if let after = proxy.documentContextAfterInput, !after.isEmpty {
+          proxy.adjustTextPosition(byCharacterOffset: after.count)
+      }
+
+      // Read the full document text (now all before cursor)
+      guard let fullText = proxy.documentContextBeforeInput, !fullText.isEmpty else {
+          return false
+      }
+
+      // Find the range of the original text in the document
+      guard let range = fullText.range(of: originalText, options: .backwards) else {
+          return false
+      }
+
+      // Calculate character (grapheme cluster) distances for cursor movement and deletion
+      let charsAfterMatch = fullText[range.upperBound...].count
+      let matchCharCount = fullText[range].count
+
+      // Move cursor back to right after the matched text
+      if charsAfterMatch > 0 {
+          proxy.adjustTextPosition(byCharacterOffset: -charsAfterMatch)
+      }
+
+      // Delete the matched text — deleteBackward() removes one grapheme cluster per call
+      for _ in 0..<matchCharCount {
+          proxy.deleteBackward()
+      }
+
+      // Insert the replacement
+      proxy.insertText(newText)
+      return true
+  }
+
   /// Whether the keyboard switcher (globe) button should be displayed
   var showsKeyboardSwitcher: Bool {
     needsInputModeSwitchKey

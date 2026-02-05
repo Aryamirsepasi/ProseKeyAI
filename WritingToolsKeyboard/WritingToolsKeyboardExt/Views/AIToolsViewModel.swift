@@ -1,10 +1,17 @@
 import Combine
 import UIKit
 
+enum TextSource {
+    case selection          // Real iOS text selection (proxy.selectedText)
+    case clipboard          // From "Use Copied" button
+    case fallbackDetection  // Auto-detected from documentContext
+}
+
 @MainActor
 class AIToolsViewModel: ObservableObject {
     @Published var selectedText: String?
     @Published var currentError: AIError?
+    @Published var textSource: TextSource = .selection
     
     weak var viewController: KeyboardViewController?
     
@@ -35,7 +42,18 @@ class AIToolsViewModel: ObservableObject {
             guard taskId == checkTextTaskId else { return }
             
             let docText = viewController?.getSelectedText() ?? ""
-            selectedText = docText.isEmpty ? nil : docText
+            if docText.isEmpty {
+                selectedText = nil
+            } else {
+                selectedText = docText
+                // Determine if this came from a real selection or fallback detection
+                if let proxy = viewController?.textDocumentProxy,
+                   let realSelection = proxy.selectedText, !realSelection.isEmpty {
+                    textSource = .selection
+                } else {
+                    textSource = .fallbackDetection
+                }
+            }
         }
     }
     
@@ -52,6 +70,7 @@ class AIToolsViewModel: ObservableObject {
             
             if !clipboardText.isEmpty {
                 selectedText = clipboardText
+                textSource = .clipboard
                 currentError = nil
                 ClipboardHistoryManager.shared.addItem(content: clipboardText)
             } else {

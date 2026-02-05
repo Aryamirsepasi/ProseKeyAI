@@ -464,22 +464,16 @@ struct AIToolsView: View {
     }
 
     private func replaceSelection(with text: String) {
-        guard let proxy = vm.viewController?.textDocumentProxy else { return }
-        guard let selected = vm.selectedText, !selected.isEmpty else {
-            proxy.insertText(text)
-            return
+        guard let viewController = vm.viewController else { return }
+
+        _ = TextReplacementEngine.apply(
+            replacementText: text,
+            originalText: vm.selectedText,
+            textSource: vm.textSource,
+            proxy: DocumentProxyWrapper(viewController.textDocumentProxy)
+        ) { original, replacement in
+            viewController.replaceText(original, with: replacement)
         }
-        
-        // iOS 16+ has direct selectedText API
-        if let actualSelection = proxy.selectedText, !actualSelection.isEmpty {
-            // Text is truly selected - deleteBackward will remove the selection
-            // Use UTF-16 count for accurate deletion since UIKit uses UTF-16 internally
-            for _ in 0..<actualSelection.utf16.count {
-                proxy.deleteBackward()
-            }
-        }
-        
-        proxy.insertText(text)
     }
 
     private func showFullAccessWarning() {
