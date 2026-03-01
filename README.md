@@ -53,4 +53,5 @@ The Windows/Linux versions are developed by Jesai Tarun (@theJayTea). The macOS 
 
 ## Credits
 - As previously said this project wouldn't be possible without the original WritingTools Project by Jesai Tarun @theJayTea. (https://github.com/theJayTea/WritingTools)
+- Huge Thanks to AIProxy Team (https://github.com/lzell/AIProxySwift) for offering the best way to add ai provider support to iOS apps. 
 - Suggestions and ideas of @Joaov41 made this project much better and more functional. Specifically they helped me with adding automatic text detection (under 200 characters) to the app.
