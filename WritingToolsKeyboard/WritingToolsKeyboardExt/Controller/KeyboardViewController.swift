@@ -16,6 +16,7 @@ class KeyboardViewController: UIInputViewController {
   
   // Default keyboard height — sized for 2 command rows
   private var currentKeyboardHeight: CGFloat = KeyboardConstants.keyboardHeight
+  private weak var fullAccessBannerView: UIView?
 
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -50,6 +51,11 @@ class KeyboardViewController: UIInputViewController {
       setupKeyboardView()
     }
     
+    // Reload settings if changed in the main app since last appearance
+    if AppSettings.shared.reloadIfNeeded() {
+      AppState.shared.reloadProviders()
+    }
+
     // Refresh status every time we appear, then notify app
     updateSharedStatusAndNotify()
 
@@ -233,6 +239,9 @@ class KeyboardViewController: UIInputViewController {
   }
 
   private func showFullAccessBanner() {
+    // Prevent stacking multiple banners
+    guard fullAccessBannerView == nil else { return }
+
     let bannerHeight: CGFloat = 30
     let banner = UIView(
       frame: CGRect(x: 0, y: 0, width: view.bounds.width, height: bannerHeight)
@@ -255,6 +264,7 @@ class KeyboardViewController: UIInputViewController {
     ])
 
     view.addSubview(banner)
+    fullAccessBannerView = banner
 
     UIView.animate(
       withDuration: 0.3,
@@ -262,8 +272,9 @@ class KeyboardViewController: UIInputViewController {
       options: .curveEaseOut
     ) {
       banner.alpha = 0
-    } completion: { _ in
+    } completion: { [weak self] _ in
       banner.removeFromSuperview()
+      self?.fullAccessBannerView = nil
     }
   }
 }

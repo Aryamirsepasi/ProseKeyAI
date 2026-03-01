@@ -45,7 +45,8 @@ class MistralProvider: ObservableObject, AIProvider {
         }
         
         let config = self.config
-        let task = Task.detached(priority: .userInitiated) { () throws -> String in
+        let task: Task<String, Error>
+        task = Task.detached(priority: .userInitiated) { () throws -> String in
             try Task.checkCancellation()
             
             let mistralService = AIProxy.mistralDirectService(unprotectedAPIKey: config.apiKey)
@@ -71,6 +72,7 @@ class MistralProvider: ObservableObject, AIProvider {
                         if let content = chunk.choices.first?.delta.content {
                             compiledResponse += content
                         }
+                        #if DEBUG
                         if let usage = chunk.usage {
                             print("""
                                     Used:
@@ -79,6 +81,7 @@ class MistralProvider: ObservableObject, AIProvider {
                                      \(usage.totalTokens ?? 0) total tokens
                                     """)
                         }
+                        #endif
                     }
                     return compiledResponse
                     
@@ -102,12 +105,16 @@ class MistralProvider: ObservableObject, AIProvider {
                 }
                 
             } catch AIProxyError.unsuccessfulRequest(let statusCode, let responseBody) {
+                #if DEBUG
                 print("Received non-200 status code: \(statusCode) with response body: \(responseBody)")
+                #endif
                 throw NSError(domain: "MistralAPI",
                               code: statusCode,
                               userInfo: [NSLocalizedDescriptionKey: "API error: \(responseBody)"])
             } catch {
+                #if DEBUG
                 print("Could not create mistral chat completion: \(error.localizedDescription)")
+                #endif
                 throw error
             }
         }

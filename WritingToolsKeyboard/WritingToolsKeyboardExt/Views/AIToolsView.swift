@@ -76,6 +76,10 @@ struct AIToolsView: View {
         .frame(height: currentHeight)
         .dynamicTypeSize(.xSmall ... .xxLarge)
         .errorBanner(error: $vm.currentError)
+        .onDisappear {
+            activeTask?.cancel()
+            activeTask = nil
+        }
         .onChange(of: state) { newState in
             let newHeight: CGFloat
             switch newState {

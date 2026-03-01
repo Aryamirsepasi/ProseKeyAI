@@ -10,7 +10,7 @@ enum GeminiModel: String, CaseIterable {
     case flashlite = "gemini-flash-lite-latest"
     case flash = "gemini-flash-latest"
     case prevflash = "gemini-3-flash-preview"
-    case pro = "gemini-3-pro-preview"
+    case pro = "gemini-3.1-pro-preview"
     case custom = "custom"
     
     var displayName: String {
@@ -18,7 +18,7 @@ enum GeminiModel: String, CaseIterable {
         case .flashlite: return "Gemini 2.5 Flash Lite"
         case .flash: return "Gemini 2.5 Flash"
         case .prevflash: return "Gemini 3.0 Flash"
-        case .pro: return "Gemini 3.0 Pro"
+        case .pro: return "Gemini 3.1 Pro"
         case .custom: return "Custom"
         }
     }
@@ -47,17 +47,20 @@ class GeminiProvider: ObservableObject, AIProvider {
         }
         
         let config = self.config
-        let task = Task.detached(priority: .userInitiated) { () throws -> String in
+        let task: Task<String, Error>
+        task = Task.detached(priority: .userInitiated) { () throws -> String in
             try Task.checkCancellation()
             
             let geminiService = AIProxy.geminiDirectService(unprotectedAPIKey: config.apiKey)
             
-            let finalPrompt = systemPrompt.map { "\($0)\n\n\(userPrompt)" } ?? userPrompt
-            
-            var parts: [GeminiGenerateContentRequestBody.Content.Part] = [.text(finalPrompt)]
+            var parts: [GeminiGenerateContentRequestBody.Content.Part] = [.text(userPrompt)]
             
             for imageData in images {
                 parts.append(.inline(data: imageData, mimeType: "image/jpeg"))
+            }
+            
+            let systemInstructionParam: GeminiGenerateContentRequestBody.SystemInstruction? = systemPrompt.map {
+                .init(parts: [.text($0)])
             }
             
             let requestBody = GeminiGenerateContentRequestBody(
@@ -68,7 +71,8 @@ class GeminiProvider: ObservableObject, AIProvider {
                     .init(category: .hateSpeech, threshold: .none),
                     .init(category: .sexuallyExplicit, threshold: .none),
                     .init(category: .civicIntegrity, threshold: .none)
-                ]
+                ],
+                systemInstruction: systemInstructionParam
             )
             
             do {
@@ -89,19 +93,27 @@ class GeminiProvider: ObservableObject, AIProvider {
                     case .text(let text):
                         return text
                     case .functionCall(name: let functionName, args: let arguments):
+                        #if DEBUG
                         print("Function call received: \(functionName) with args: \(arguments ?? [:])")
+                        #endif
                     case .inlineData(mimeType: _, base64Data: _):
+                        #if DEBUG
                         print("Image generation?")
+                        #endif
                     }
                 }
                 
                 throw NSError(domain: "GeminiAPI", code: -1, userInfo: [NSLocalizedDescriptionKey: "No text content in response."])
                 
             } catch AIProxyError.unsuccessfulRequest(let statusCode, let responseBody) {
+                #if DEBUG
                 print("AIProxy error (\(statusCode)): \(responseBody)")
+                #endif
                 throw NSError(domain: "GeminiAPI", code: statusCode, userInfo: [NSLocalizedDescriptionKey: "API error: \(responseBody)"])
             } catch {
+                #if DEBUG
                 print("Gemini request failed: \(error.localizedDescription)")
+                #endif
                 throw error
             }
         }

@@ -59,7 +59,8 @@ class OpenRouterProvider: ObservableObject, AIProvider {
         }
         
         let config = self.config
-        let task = Task.detached(priority: .userInitiated) { () throws -> String in
+        let task: Task<String, Error>
+        task = Task.detached(priority: .userInitiated) { () throws -> String in
             try Task.checkCancellation()
             
             let openRouterService = AIProxy.openRouterDirectService(unprotectedAPIKey: config.apiKey)
@@ -108,14 +109,18 @@ class OpenRouterProvider: ObservableObject, AIProvider {
                     return response.choices.first?.message.content ?? ""
                 }
             } catch AIProxyError.unsuccessfulRequest(let statusCode, let responseBody) {
+                #if DEBUG
                 print("OpenRouter error (\(statusCode)): \(responseBody)")
+                #endif
                 throw NSError(
                     domain: "OpenRouterAPI",
                     code: statusCode,
                     userInfo: [NSLocalizedDescriptionKey: "API error: \(responseBody)"]
                 )
             } catch {
+                #if DEBUG
                 print("OpenRouter request failed: \(error.localizedDescription)")
+                #endif
                 throw error
             }
         }

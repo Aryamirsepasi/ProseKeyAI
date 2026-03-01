@@ -1,5 +1,5 @@
 import XCTest
-@testable import WritingToolsKeyboard
+@testable import ProseKey_AI
 
 @MainActor
 final class KeyboardCommandsManagerTests: XCTestCase {

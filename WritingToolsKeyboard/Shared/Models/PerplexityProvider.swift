@@ -60,7 +60,8 @@ final class PerplexityProvider: ObservableObject, AIProvider {
         }
         
         let config = self.config
-        let task = Task.detached(priority: .userInitiated) { () throws -> String in
+        let task: Task<String, Error>
+        task = Task.detached(priority: .userInitiated) { () throws -> String in
             try Task.checkCancellation()
             
             let service = AIProxy.perplexityDirectService(
@@ -107,14 +108,18 @@ final class PerplexityProvider: ObservableObject, AIProvider {
                     return response.choices.first?.message?.content ?? ""
                 }
             } catch AIProxyError.unsuccessfulRequest(let status, let responseBody) {
+                #if DEBUG
                 print("Perplexity error (\(status)): \(responseBody)")
+                #endif
                 throw NSError(
                     domain: "PerplexityAPI",
                     code: status,
                     userInfo: [NSLocalizedDescriptionKey: "API error: \(responseBody)"]
                 )
             } catch {
+                #if DEBUG
                 print("Perplexity request failed: \(error.localizedDescription)")
+                #endif
                 throw error
             }
         }

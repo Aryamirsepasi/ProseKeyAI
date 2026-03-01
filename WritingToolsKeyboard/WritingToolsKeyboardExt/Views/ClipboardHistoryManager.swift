@@ -105,7 +105,9 @@ class ClipboardHistoryManager: ObservableObject {
             
             items = loadedItems
         } catch {
+            #if DEBUG
             print("Failed to load clipboard history: \(error)")
+            #endif
             items = []
         }
     }
@@ -116,7 +118,9 @@ class ClipboardHistoryManager: ObservableObject {
             let data = try encoder.encode(items)
             defaults?.set(data, forKey: storageKey)
         } catch {
+            #if DEBUG
             print("Failed to save clipboard history: \(error)")
+            #endif
         }
     }
     

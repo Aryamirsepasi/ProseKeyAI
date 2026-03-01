@@ -47,7 +47,8 @@ class OpenAIProvider: ObservableObject, AIProvider {
             }
             
             let config = self.config
-            let task = Task.detached(priority: .userInitiated) { () throws -> String in
+            let task: Task<String, Error>
+            task = Task.detached(priority: .userInitiated) { () throws -> String in
                 try Task.checkCancellation()
                 
                 let baseURL = config.baseURL.isEmpty ? OpenAIConfig.defaultBaseURL : config.baseURL
@@ -120,7 +121,6 @@ class OpenAIProvider: ObservableObject, AIProvider {
                     throw error
                 }
             }
-            
             currentTask = task
             return try await task.value
         }

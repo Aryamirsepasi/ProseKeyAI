@@ -35,20 +35,9 @@
             parallelizable = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "2A9BFD8D2D1F3CD000A8F121"
-               BuildableName = "WritingToolsKeyboardTests.xctest"
-               BlueprintName = "WritingToolsKeyboardTests"
-               ReferencedContainer = "container:ProseKey AI.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO"
-            parallelizable = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "2A9BFD972D1F3CD000A8F121"
-               BuildableName = "WritingToolsKeyboardUITests.xctest"
-               BlueprintName = "WritingToolsKeyboardUITests"
+               BlueprintIdentifier = "4B7F56BC58D94113BD3AEF85"
+               BuildableName = "ProseKey AITests.xctest"
+               BlueprintName = "ProseKey AITests"
                ReferencedContainer = "container:ProseKey AI.xcodeproj">
             </BuildableReference>
          </TestableReference>

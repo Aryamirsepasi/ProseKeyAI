@@ -127,7 +127,9 @@ enum AIError: LocalizedError {
             
             // HTTP status codes
             if nsError.domain == "GeminiAPI" || nsError.domain == "OpenAIAPI" || 
-               nsError.domain == "MistralAPI" || nsError.domain == "AnthropicAPI" {
+               nsError.domain == "MistralAPI" || nsError.domain == "AnthropicAPI" ||
+               nsError.domain == "OpenRouterAPI" || nsError.domain == "PerplexityAPI" ||
+               nsError.domain == "FoundationModelsAPI" {
                 switch nsError.code {
                 case 401:
                     return .unauthorized

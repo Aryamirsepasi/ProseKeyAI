@@ -128,7 +128,8 @@ class FoundationModelsProvider: ObservableObject, AIProvider {
             currentTask = nil
         }
 
-        let task = Task.detached(priority: .userInitiated) { () throws -> String in
+        let task: Task<String, Error>
+        task = Task.detached(priority: .userInitiated) { () throws -> String in
             try Task.checkCancellation()
 
             // Check availability

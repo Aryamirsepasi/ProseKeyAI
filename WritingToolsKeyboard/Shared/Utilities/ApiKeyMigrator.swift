@@ -46,7 +46,9 @@ final class ApiKeyMigrator {
                     // Clear from UserDefaults after successful migration
                     defaults.removeObject(forKey: udKey)
                 } else {
+                    #if DEBUG
                     print("ApiKeyMigrator: Failed to migrate \(udKey) to Keychain")
+                    #endif
                     allSucceeded = false
                 }
             }
@@ -54,14 +56,14 @@ final class ApiKeyMigrator {
 
         if allSucceeded {
             defaults.set(true, forKey: migrationKey)
-            defaults.synchronize()
+            #if DEBUG
             print("ApiKeyMigrator: Migration completed successfully")
+            #endif
         }
     }
 
     /// For debugging/testing: resets migration state
     func resetMigration() {
         defaults?.removeObject(forKey: migrationKey)
-        defaults?.synchronize()
     }
 }

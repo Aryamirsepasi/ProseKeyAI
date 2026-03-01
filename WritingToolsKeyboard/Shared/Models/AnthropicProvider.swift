@@ -10,15 +10,15 @@ struct AnthropicConfig: Codable, Sendable {
 
 enum AnthropicModel: String, CaseIterable {
     case claude3Haiku = "claude-haiku-4-5"
-    case claude3Sonnet = "claude-sonnet-4-5"
-    case claude3Opus = "claude-opus-4-5"
+    case claude3Sonnet = "claude-sonnet-4-6"
+    case claude3Opus = "claude-opus-4-6"
     case custom
     
     var displayName: String {
         switch self {
         case .claude3Haiku: return "Claude 4.5 Haiku"
-        case .claude3Sonnet: return "Claude 4.5 Sonnet (Best for Most Users)"
-        case .claude3Opus: return "Claude 4.5 Opus (Most Capable, Expensive)"
+        case .claude3Sonnet: return "Claude 4.6 Sonnet (Best for Most Users)"
+        case .claude3Opus: return "Claude 4.6 Opus (Most Capable, Expensive)"
         case .custom: return "Custom"
         }
     }
@@ -57,7 +57,8 @@ class AnthropicProvider: ObservableObject, AIProvider {
         }
         
         let config = self.config
-        let task = Task.detached(priority: .userInitiated) { () throws -> String in
+        let task: Task<String, Error>
+        task = Task.detached(priority: .userInitiated) { () throws -> String in
             try Task.checkCancellation()
             
             let anthropicService = AIProxy.anthropicDirectService(unprotectedAPIKey: config.apiKey)
@@ -81,7 +82,7 @@ class AnthropicProvider: ObservableObject, AIProvider {
             
             let systemPromptParam = systemPrompt.map { AnthropicSystemPrompt.text($0) }
             let requestBody = AnthropicMessageRequestBody(
-                maxTokens: 1024,
+                maxTokens: 4096,
                 messages: messages,
                 model: config.model.isEmpty ? AnthropicConfig.defaultModel : config.model,
                 system: systemPromptParam
